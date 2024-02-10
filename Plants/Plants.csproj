@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Plants-6e430a45-0d48-4617-ac2a-94d74f3522cb</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
+    <ProjectReference Include="..\Plans.Services\Plans.Services.csproj" />
+    <ProjectReference Include="..\Plants.Data\Plants.Data.csproj" />
+    <ProjectReference Include="..\Plants.Services.Data\Plants.Services.Data.csproj" />
+    <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.OpenMeteoApi.csproj" />
+  </ItemGroup>
+
+</Project>
