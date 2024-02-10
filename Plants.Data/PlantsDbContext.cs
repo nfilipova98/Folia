@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class PlantsDbContext : IdentityDbContext<ApplicationUser>
+    public class PlantsDbContext : IdentityDbContext
     {
         public PlantsDbContext(DbContextOptions<PlantsDbContext> options) 
             : base(options)
