@@ -1,28 +1,36 @@
 using Plants.Data;
+using Plants.Data.Models.User;
+using Plans.Services.EmailSenderService;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Plants.Data.Models.User;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<PlantsDbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+//Identity service
 builder.Services.AddDefaultIdentity<ApplicationUser>
-    (options => options.SignIn.RequireConfirmedAccount = true
-    )
+    (options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PlantsDbContext>();
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-});
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+//Validation AntiForgery Filter
+builder.Services.AddControllersWithViews(options => 
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+
+//Email Sender service
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 var app = builder.Build();
 
