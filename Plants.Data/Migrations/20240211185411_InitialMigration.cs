@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace Plants.Data.Migrations
+﻿namespace Plants.Data.Migrations
 {
     using Microsoft.EntityFrameworkCore.Migrations;
 

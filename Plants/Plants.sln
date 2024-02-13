@@ -15,11 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Data.Models", "..\..
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C43365C8-82B2-4188-842E-7C09621E2CCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plans.Services", "..\Plans.Services\Plans.Services.csproj", "{4D64059F-5B96-41DB-A16C-FA775FA532D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services", "..\Plans.Services\Plants.Services.csproj", "{4D64059F-5B96-41DB-A16C-FA775FA532D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plants.Services.Data", "..\Plants.Services.Data\Plants.Services.Data.csproj", "{ABB4B7C1-BD36-490F-8A40-AD2A78A7216C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.Data", "..\Plants.Services.Data\Plants.Services.Data.csproj", "{ABB4B7C1-BD36-490F-8A40-AD2A78A7216C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plants.Services.OpenMeteoApi", "..\Plants.Services.OpenMeteoApi\Plants.Services.OpenMeteoApi.csproj", "{30557F61-3AD1-4690-98DF-4368190D932A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.OpenMeteoApi", "..\Plants.Services.OpenMeteoApi\Plants.Services.OpenMeteoApi.csproj", "{30557F61-3AD1-4690-98DF-4368190D932A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plants.Services.Mapping", "..\Plants.Services.Mapping\Plants.Services.Mapping.csproj", "{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{30557F61-3AD1-4690-98DF-4368190D932A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30557F61-3AD1-4690-98DF-4368190D932A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30557F61-3AD1-4690-98DF-4368190D932A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{4D64059F-5B96-41DB-A16C-FA775FA532D2} = {C43365C8-82B2-4188-842E-7C09621E2CCE}
 		{ABB4B7C1-BD36-490F-8A40-AD2A78A7216C} = {C43365C8-82B2-4188-842E-7C09621E2CCE}
 		{30557F61-3AD1-4690-98DF-4368190D932A} = {C43365C8-82B2-4188-842E-7C09621E2CCE}
+		{5F9D92A9-F77E-49F8-8AEF-878A9430B11E} = {C43365C8-82B2-4188-842E-7C09621E2CCE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E442B171-44C8-4851-9D75-5D994786C5D3}

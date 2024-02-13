@@ -1,10 +1,11 @@
-﻿namespace Plans.Services.EmailSenderService
+﻿namespace Plants.Services.EmailSenderService
 {
-    using Microsoft.Extensions.Logging;
     using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using SendGrid.Helpers.Mail;
+
     using SendGrid;
+    using SendGrid.Helpers.Mail;
 
     public class EmailSender : IEmailSender
     {
@@ -33,15 +34,13 @@
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("Joe@contoso.com", "Password Recovery"),
+                From = new EmailAddress("nfilipova@students.softuni.bg", "Plants Team 🌱"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
             };
             msg.AddTo(new EmailAddress(toEmail));
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
             var response = await client.SendEmailAsync(msg);
             _logger.LogInformation(response.IsSuccessStatusCode
