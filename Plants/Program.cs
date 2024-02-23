@@ -5,12 +5,10 @@ using Plants.Services.BlobService.Interfaces;
 using Plants.Services.EmailSenderService;
 
 using Azure.Storage.Blobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using Plants.Services.AutoMapperService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +22,15 @@ builder.Services.AddDbContext<PlantsDbContext>(options =>
 	options.UseSqlServer(connectionString));
 
 //AutoMapper
-builder.Services.AddAutoMapper(typeof(Program));
+//builder.Services.AddAutoMapper(typeof(Program));
 
-var mapperConfig = new MapperConfiguration(mc =>
-{
-	mc.AddProfile(new AutoMapperProfile());
-});
+//var mapperConfig = new MapperConfiguration(mc =>
+//{
+//	mc.AddProfile(new AutoMapperProfile());
+//});
 
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
+//IMapper mapper = mapperConfig.CreateMapper();
+//builder.Services.AddSingleton(mapper);
 
 //Identity service
 builder.Services.AddDefaultIdentity<ApplicationUser>
