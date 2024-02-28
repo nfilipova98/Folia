@@ -37,7 +37,7 @@
   <ItemGroup>
     <Folder Include="Areas\Administration\Models\" />
     <Folder Include="Areas\Administration\Views\" />
-    <Folder Include="Views\Blob\" />
+    <Folder Include="Areas\Administration\Views\Blob\" />
     <Folder Include="Areas\Administration\Views\Admin\" />
   </ItemGroup>
 

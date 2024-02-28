@@ -1,19 +1,19 @@
 ﻿@{
-	var controllers = new string[]
-	{
-		"Home",
-		"Explore",
-		"Favorites",
-		"MyPlants",
-		"About",
-		"Contacts"
-	};
+    var controllerDisplayNames = new Dictionary<string, string>
+    {
+        { "Home", "Home" },
+        { "Explore", "Explore" },
+        { "Favorites", "Favorites" },
+        { "MyPlants", "My Plants" },
+        { "About", "About" },
+        { "Contacts", "Contacts" }
+    };
 
-	var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
 
-	foreach (var controllerName in controllers)
-	{
-		var isActive = (currentController == controllerName) ? "active" : "";
-		<li><a asp-controller="@controllerName" asp-action="Index" class="@isActive">@controllerName</a></li>
-	}
+    foreach (var (controllerName, displayName) in controllerDisplayNames)
+    {
+        var isActive = (currentController == controllerName) ? "active" : "";
+        <li><a asp-controller="@controllerName" asp-action="Index" class="@isActive">@displayName</a></li>
+    }
 }
