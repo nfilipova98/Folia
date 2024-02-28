@@ -1,0 +1,34 @@
+﻿@{
+	ViewData["Title"] = "Explore";
+}
+
+<body>
+	<div class="container">
+		<div class="site-content-warp" style="padding-left: 0; padding-bottom: 10px;">
+			<div>
+				<!-- Search bar -->
+				<div class="search-bar" style="padding-bottom: 10px; padding-top: 10px;">
+					<input type="text" placeholder="Search...">
+					<button type="submit">Search</button>
+				</div>
+			</div>
+			<!-- Page start -->
+			<div class="row">
+				@for (int i = 0; i < 6; i++)
+				{
+					<div class="col-md-4">
+						<div class="portfolio-item">
+							<img src="img/portfolio/@(i % 3 + 2).jpg" alt="#">
+							<div class="pi-info">
+								<h5>Ice Cold Love</h5>
+								<p>Nature Photography</p>
+								<a href="#"><img src="img/arrow-right.png" alt=""></a>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- Main section end -->
+</body>

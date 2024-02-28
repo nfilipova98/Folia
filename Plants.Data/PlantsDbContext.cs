@@ -28,7 +28,7 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+           // modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new PlantConfiguration());
             modelBuilder.ApplyConfiguration(new PetConfiguration());
         }
