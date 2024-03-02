@@ -9,14 +9,16 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class PlantsDbContext : IdentityDbContext<ApplicationUser>
+	public class PlantsDbContext : IdentityDbContext<ApplicationUser>
     {
-        public PlantsDbContext(DbContextOptions<PlantsDbContext> options)
+		private readonly IServiceProvider _serviceProvider;
+
+		public PlantsDbContext(DbContextOptions<PlantsDbContext> options)
             : base(options)
         {
-        }
+		}
 
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+		public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<UserConfiguration> UserConfigurations { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -24,13 +26,19 @@
         public DbSet<Plant> Plants { get; set; }
         public DbSet<Pet> Pets { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			base.OnConfiguring(optionsBuilder);
+			optionsBuilder.EnableSensitiveDataLogging();
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-           // modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+			modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new PlantConfiguration());
             modelBuilder.ApplyConfiguration(new PetConfiguration());
         }
-    }
+	}
 }

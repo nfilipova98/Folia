@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Plants.Data;
 
@@ -12,15 +11,13 @@ using Plants.Data;
 namespace Plants.Data.Migrations
 {
     [DbContext(typeof(PlantsDbContext))]
-    [Migration("20240212140414_PlantSeed")]
-    partial class PlantSeed
+    partial class PlantsDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -212,8 +209,8 @@ namespace Plants.Data.Migrations
                     b.Property<int>("PetsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PetsId", "UsersId");
 
@@ -222,162 +219,7 @@ namespace Plants.Data.Migrations
                     b.ToTable("PetUserConfiguration");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlantId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Plants.Data.Models.Pet.Pet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pets");
-                });
-
-            modelBuilder.Entity("Plants.Data.Models.Plant.Plant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Difficulty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Humidity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("KidSafe")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Lifestyle")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Outdoor")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ScientificName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Plants");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Difficulty = 0,
-                            Humidity = 2,
-                            ImageUrl = "",
-                            KidSafe = false,
-                            Lifestyle = 2,
-                            Name = "Swiss cheese plant",
-                            Outdoor = true,
-                            ScientificName = "Monstera"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Difficulty = 0,
-                            Humidity = 1,
-                            ImageUrl = "",
-                            KidSafe = true,
-                            Lifestyle = 2,
-                            Name = "Spider plant",
-                            Outdoor = false,
-                            ScientificName = "Chlorophytum comosum"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Difficulty = 0,
-                            Humidity = 2,
-                            ImageUrl = "",
-                            KidSafe = true,
-                            Lifestyle = 2,
-                            Name = "Rubber fig",
-                            Outdoor = false,
-                            ScientificName = "Ficus elastica"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Difficulty = 0,
-                            Humidity = 1,
-                            ImageUrl = "",
-                            KidSafe = true,
-                            Lifestyle = 2,
-                            Name = "Areca palm",
-                            Outdoor = true,
-                            ScientificName = "Dypsis lutescens"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Difficulty = 0,
-                            Humidity = 2,
-                            ImageUrl = "",
-                            KidSafe = true,
-                            Lifestyle = 1,
-                            Name = "Watermelon Peperomia",
-                            Outdoor = false,
-                            ScientificName = "Peperomia argyreia"
-                        });
-                });
-
-            modelBuilder.Entity("Plants.Data.Models.User.ApplicationUser", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -438,8 +280,8 @@ namespace Plants.Data.Migrations
                     b.Property<string>("UserPictureUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsersConfigurationId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsersConfigurationId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -451,10 +293,10 @@ namespace Plants.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("ApplicationUser", (string)null);
+                    b.ToTable("ApplicationUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.City", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -470,7 +312,8 @@ namespace Plants.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(165)
+                        .HasColumnType("nvarchar(165)");
 
                     b.HasKey("Id");
 
@@ -479,7 +322,7 @@ namespace Plants.Data.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.Country", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -489,20 +332,18 @@ namespace Plants.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.UserConfiguration", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.UserConfiguration", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
@@ -530,6 +371,299 @@ namespace Plants.Data.Migrations
                     b.ToTable("UserConfigurations");
                 });
 
+            modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PlantId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Plants.Data.Models.Pet.Pet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Cat"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Dog"
+                        });
+                });
+
+            modelBuilder.Entity("Plants.Data.Models.Plant.Plant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Humidity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsTrending")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("KidSafe")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Lifestyle")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.Property<bool>("Outdoor")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ScientificName")
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Difficulty = 0,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = false,
+                            Lifestyle = 2,
+                            Name = "Swiss cheese plant",
+                            Outdoor = true,
+                            ScientificName = "Monstera minima"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Difficulty = 0,
+                            Humidity = 1,
+                            ImageUrl = "",
+                            IsTrending = false,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Spider plant",
+                            Outdoor = false,
+                            ScientificName = "Chlorophytum comosum"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Difficulty = 0,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = false,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Rubber fig",
+                            Outdoor = false,
+                            ScientificName = "Ficus elastica"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Difficulty = 0,
+                            Humidity = 1,
+                            ImageUrl = "",
+                            IsTrending = false,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Areca palm",
+                            Outdoor = true,
+                            ScientificName = "Dypsis lutescens"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Difficulty = 0,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = false,
+                            KidSafe = true,
+                            Lifestyle = 1,
+                            Name = "Watermelon Peperomia",
+                            Outdoor = false,
+                            ScientificName = "Peperomia argyreia"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Difficulty = 0,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Snake Plant",
+                            Outdoor = false,
+                            ScientificName = "Dracaena Trifasciata"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Difficulty = 0,
+                            Humidity = 1,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Buddhist Pine",
+                            Outdoor = true,
+                            ScientificName = "Podocarpus Macrophyllus"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Difficulty = 1,
+                            Humidity = 1,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = false,
+                            Lifestyle = 2,
+                            Name = "Cherry Laurel Novita",
+                            Outdoor = true,
+                            ScientificName = "Prunus Laurocerasus Novita"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Difficulty = 1,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Vanuatu Fan Palm",
+                            Outdoor = true,
+                            ScientificName = "Licuala grandis"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Difficulty = 0,
+                            Humidity = 0,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Peruvian apple cactus",
+                            Outdoor = true,
+                            ScientificName = "Cereus Peruvianus"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Difficulty = 1,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Boston Fern",
+                            Outdoor = true,
+                            ScientificName = "Nephrolepis exaltata"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Difficulty = 1,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "Kentia Palm",
+                            Outdoor = true,
+                            ScientificName = "Howea forsteriana"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Difficulty = 0,
+                            Humidity = 1,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = true,
+                            Lifestyle = 2,
+                            Name = "ZZ Plant",
+                            Outdoor = true,
+                            ScientificName = "Zamioculcas"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Difficulty = 1,
+                            Humidity = 2,
+                            ImageUrl = "",
+                            IsTrending = true,
+                            KidSafe = false,
+                            Lifestyle = 2,
+                            Name = "Heart of Jesus",
+                            Outdoor = false,
+                            ScientificName = "Caladium Bicolour"
+                        });
+                });
+
             modelBuilder.Entity("ApplicationUserPlant", b =>
                 {
                     b.HasOne("Plants.Data.Models.Plant.Plant", null)
@@ -538,7 +672,7 @@ namespace Plants.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UsersLikedPlantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -547,7 +681,7 @@ namespace Plants.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserPlant1", b =>
                 {
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("OwnersId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -571,7 +705,7 @@ namespace Plants.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -580,7 +714,7 @@ namespace Plants.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -595,7 +729,7 @@ namespace Plants.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -604,7 +738,7 @@ namespace Plants.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -634,35 +768,16 @@ namespace Plants.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Plants.Data.Models.User.UserConfiguration", null)
+                    b.HasOne("Plants.Data.Models.ApplicationUser.UserConfiguration", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
                 {
-                    b.HasOne("Plants.Data.Models.Plant.Plant", "Plant")
-                        .WithMany("Comments")
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plant");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Plants.Data.Models.User.City", b =>
-                {
-                    b.HasOne("Plants.Data.Models.User.Country", "Country")
+                    b.HasOne("Plants.Data.Models.ApplicationUser.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,15 +786,15 @@ namespace Plants.Data.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.UserConfiguration", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.UserConfiguration", b =>
                 {
-                    b.HasOne("Plants.Data.Models.User.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", "ApplicationUser")
                         .WithOne("UserConfiguration")
-                        .HasForeignKey("Plants.Data.Models.User.UserConfiguration", "ApplicationUserId")
+                        .HasForeignKey("Plants.Data.Models.ApplicationUser.UserConfiguration", "ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Plants.Data.Models.User.City", "City")
+                    b.HasOne("Plants.Data.Models.ApplicationUser.City", "City")
                         .WithMany("Users")
                         .HasForeignKey("CityId");
 
@@ -688,26 +803,45 @@ namespace Plants.Data.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.Plant.Plant", b =>
+            modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
                 {
-                    b.Navigation("Comments");
+                    b.HasOne("Plants.Data.Models.ApplicationUser.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Plants.Data.Models.Plant.Plant", "Plant")
+                        .WithMany("Comments")
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plant");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.ApplicationUser", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("UserConfiguration");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.City", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.User.Country", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Country", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("Plants.Data.Models.Plant.Plant", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

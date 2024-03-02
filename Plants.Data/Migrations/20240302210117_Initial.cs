@@ -1,9 +1,14 @@
-﻿namespace Plants.Data.Migrations
-{
-    using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace Plants.Data.Migrations
+{
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,13 +33,13 @@
                 name: "AspNetUsers");
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUser",
+                name: "ApplicationUsers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Tier = table.Column<int>(type: "int", nullable: false),
                     UserPictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UsersConfigurationId = table.Column<int>(type: "int", nullable: true),
+                    UsersConfigurationId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserConfigurationIsNull = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,7 +58,7 @@
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,7 +67,7 @@
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,7 +80,7 @@
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,9 +93,15 @@
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
+                    ScientificName = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Humidity = table.Column<int>(type: "int", nullable: false),
+                    Difficulty = table.Column<int>(type: "int", nullable: false),
+                    Lifestyle = table.Column<int>(type: "int", nullable: false),
+                    KidSafe = table.Column<bool>(type: "bit", nullable: false),
+                    Outdoor = table.Column<bool>(type: "bit", nullable: false),
+                    IsTrending = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,7 +114,7 @@
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(165)", maxLength: 165, nullable: false),
                     Humidity = table.Column<int>(type: "int", nullable: true),
                     CountryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -129,9 +140,9 @@
                 {
                     table.PrimaryKey("PK_ApplicationUsersLikedPlants", x => new { x.LikedPlantsId, x.UsersLikedPlantId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUsersLikedPlants_ApplicationUser_UsersLikedPlantId",
+                        name: "FK_ApplicationUsersLikedPlants_ApplicationUsers_UsersLikedPlantId",
                         column: x => x.UsersLikedPlantId,
-                        principalTable: "ApplicationUser",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -153,9 +164,9 @@
                 {
                     table.PrimaryKey("PK_ApplicationUsersOwnedPlants", x => new { x.OwnersId, x.PlantsOwnedId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUsersOwnedPlants_ApplicationUser_OwnersId",
+                        name: "FK_ApplicationUsersOwnedPlants_ApplicationUsers_OwnersId",
                         column: x => x.OwnersId,
-                        principalTable: "ApplicationUser",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -172,20 +183,19 @@
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_ApplicationUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "ApplicationUser",
+                        name: "FK_Comments_ApplicationUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -197,35 +207,34 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlantsInfo",
+                name: "PetPlant",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PlantId = table.Column<int>(type: "int", nullable: false),
-                    Humidity = table.Column<int>(type: "int", nullable: false),
-                    Difficulty = table.Column<int>(type: "int", nullable: false),
-                    Lifestyle = table.Column<int>(type: "int", nullable: false),
-                    KidSafe = table.Column<bool>(type: "bit", nullable: false),
-                    Outdoor = table.Column<bool>(type: "bit", nullable: false)
+                    PetsId = table.Column<int>(type: "int", nullable: false),
+                    PlantsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlantsInfo", x => x.Id);
+                    table.PrimaryKey("PK_PetPlant", x => new { x.PetsId, x.PlantsId });
                     table.ForeignKey(
-                        name: "FK_PlantsInfo_Plants_PlantId",
-                        column: x => x.PlantId,
+                        name: "FK_PetPlant_Pets_PetsId",
+                        column: x => x.PetsId,
+                        principalTable: "Pets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetPlant_Plants_PlantsId",
+                        column: x => x.PlantsId,
                         principalTable: "Plants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsersConfigurations",
+                name: "UserConfigurations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: true),
                     Kids = table.Column<bool>(type: "bit", nullable: false),
@@ -234,42 +243,18 @@
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersConfigurations", x => x.Id);
+                    table.PrimaryKey("PK_UserConfigurations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsersConfigurations_ApplicationUser_ApplicationUserId",
+                        name: "FK_UserConfigurations_ApplicationUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
-                        principalTable: "ApplicationUser",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsersConfigurations_Cities_CityId",
+                        name: "FK_UserConfigurations_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PetPlantInfo",
-                columns: table => new
-                {
-                    PetsId = table.Column<int>(type: "int", nullable: false),
-                    PlantsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PetPlantInfo", x => new { x.PetsId, x.PlantsId });
-                    table.ForeignKey(
-                        name: "FK_PetPlantInfo_Pets_PetsId",
-                        column: x => x.PetsId,
-                        principalTable: "Pets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PetPlantInfo_PlantsInfo_PlantsId",
-                        column: x => x.PlantsId,
-                        principalTable: "PlantsInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -277,7 +262,7 @@
                 columns: table => new
                 {
                     PetsId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,21 +274,51 @@
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PetUserConfiguration_UsersConfigurations_UsersId",
+                        name: "FK_PetUserConfiguration_UserConfigurations_UsersId",
                         column: x => x.UsersId,
-                        principalTable: "UsersConfigurations",
+                        principalTable: "UserConfigurations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Pets",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Cat" },
+                    { 2, "Dog" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Plants",
+                columns: new[] { "Id", "Difficulty", "Humidity", "ImageUrl", "IsTrending", "KidSafe", "Lifestyle", "Name", "Outdoor", "ScientificName" },
+                values: new object[,]
+                {
+                    { 1, 0, 2, "", true, false, 2, "Swiss cheese plant", true, "Monstera minima" },
+                    { 2, 0, 1, "", false, true, 2, "Spider plant", false, "Chlorophytum comosum" },
+                    { 3, 0, 2, "", false, true, 2, "Rubber fig", false, "Ficus elastica" },
+                    { 4, 0, 1, "", false, true, 2, "Areca palm", true, "Dypsis lutescens" },
+                    { 5, 0, 2, "", false, true, 1, "Watermelon Peperomia", false, "Peperomia argyreia" },
+                    { 6, 0, 2, "", true, true, 2, "Snake Plant", false, "Dracaena Trifasciata" },
+                    { 7, 0, 1, "", true, true, 2, "Buddhist Pine", true, "Podocarpus Macrophyllus" },
+                    { 8, 1, 1, "", true, false, 2, "Cherry Laurel Novita", true, "Prunus Laurocerasus Novita" },
+                    { 9, 1, 2, "", true, true, 2, "Vanuatu Fan Palm", true, "Licuala grandis" },
+                    { 10, 0, 0, "", true, true, 2, "Peruvian apple cactus", true, "Cereus Peruvianus" },
+                    { 11, 1, 2, "", true, true, 2, "Boston Fern", true, "Nephrolepis exaltata" },
+                    { 12, 1, 2, "", true, true, 2, "Kentia Palm", true, "Howea forsteriana" },
+                    { 13, 0, 1, "", true, true, 2, "ZZ Plant", true, "Zamioculcas" },
+                    { 14, 1, 2, "", true, false, 2, "Heart of Jesus", false, "Caladium Bicolour" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "ApplicationUser",
+                table: "ApplicationUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "ApplicationUser",
+                table: "ApplicationUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
@@ -324,18 +339,18 @@
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ApplicationUserId",
+                table: "Comments",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_PlantId",
                 table: "Comments",
                 column: "PlantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PetPlantInfo_PlantsId",
-                table: "PetPlantInfo",
+                name: "IX_PetPlant_PlantsId",
+                table: "PetPlant",
                 column: "PlantsId");
 
             migrationBuilder.CreateIndex(
@@ -344,51 +359,45 @@
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlantsInfo_PlantId",
-                table: "PlantsInfo",
-                column: "PlantId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersConfigurations_ApplicationUserId",
-                table: "UsersConfigurations",
+                name: "IX_UserConfigurations_ApplicationUserId",
+                table: "UserConfigurations",
                 column: "ApplicationUserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersConfigurations_CityId",
-                table: "UsersConfigurations",
+                name: "IX_UserConfigurations_CityId",
+                table: "UserConfigurations",
                 column: "CityId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserClaims_ApplicationUser_UserId",
+                name: "FK_AspNetUserClaims_ApplicationUsers_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId",
-                principalTable: "ApplicationUser",
+                principalTable: "ApplicationUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserLogins_ApplicationUser_UserId",
+                name: "FK_AspNetUserLogins_ApplicationUsers_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId",
-                principalTable: "ApplicationUser",
+                principalTable: "ApplicationUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserRoles_ApplicationUser_UserId",
+                name: "FK_AspNetUserRoles_ApplicationUsers_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId",
-                principalTable: "ApplicationUser",
+                principalTable: "ApplicationUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserTokens_ApplicationUser_UserId",
+                name: "FK_AspNetUserTokens_ApplicationUsers_UserId",
                 table: "AspNetUserTokens",
                 column: "UserId",
-                principalTable: "ApplicationUser",
+                principalTable: "ApplicationUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -397,19 +406,19 @@
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUserClaims_ApplicationUser_UserId",
+                name: "FK_AspNetUserClaims_ApplicationUsers_UserId",
                 table: "AspNetUserClaims");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUserLogins_ApplicationUser_UserId",
+                name: "FK_AspNetUserLogins_ApplicationUsers_UserId",
                 table: "AspNetUserLogins");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUserRoles_ApplicationUser_UserId",
+                name: "FK_AspNetUserRoles_ApplicationUsers_UserId",
                 table: "AspNetUserRoles");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUserTokens_ApplicationUser_UserId",
+                name: "FK_AspNetUserTokens_ApplicationUsers_UserId",
                 table: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
@@ -422,25 +431,22 @@
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "PetPlantInfo");
+                name: "PetPlant");
 
             migrationBuilder.DropTable(
                 name: "PetUserConfiguration");
 
             migrationBuilder.DropTable(
-                name: "PlantsInfo");
+                name: "Plants");
 
             migrationBuilder.DropTable(
                 name: "Pets");
 
             migrationBuilder.DropTable(
-                name: "UsersConfigurations");
+                name: "UserConfigurations");
 
             migrationBuilder.DropTable(
-                name: "Plants");
-
-            migrationBuilder.DropTable(
-                name: "ApplicationUser");
+                name: "ApplicationUsers");
 
             migrationBuilder.DropTable(
                 name: "Cities");

@@ -4,33 +4,45 @@
 
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Metadata.Builders;
-	using Microsoft.AspNetCore.Identity;
 
 	public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 	{
-		private UserManager<ApplicationUser> _userManager;
+		//private async Task<ApplicationUser> CreateAdminProfileAsync()
+		//{
+		//	var adminUserId = Guid.NewGuid().ToString();
 
-		public ApplicationUserConfiguration(UserManager<ApplicationUser> userManager)
-		{
-			_userManager = userManager;
-		}
+		//	var adminRole = new IdentityRole
+		//	{
+		//		Name = "Admin",
+		//		NormalizedName = "ADMIN"
+		//	};
 
-		private async Task<ApplicationUser> CreateAdminProfileAsync()
-		{
-			var admin = new ApplicationUser()
-			{
-				UserName = "nfilipova@students.softuni.bg",
-				NormalizedUserName = "nfilipova@students.softuni.bg".ToUpper(),
-				Tier = Models.Enums.Tier.Blossom,
-				UserConfigurationIsNull = true
-			};
+		//	await _roleManager.CreateAsync(adminRole);
 
-			var password = _userManager.PasswordHasher.HashPassword(admin, "X9U6h1GPq4WzZfloaKRwPD");
+		//	var existingAdmin = await _userManager.FindByEmailAsync("nfilipova@students.softuni.bg");
 
-			await _userManager.CreateAsync(admin, password);
+		//	var adminUser = new ApplicationUser
+		//	{
+		//		Id = adminUserId,
+		//		UserName = "nfilipova@students.softuni.bg",
+		//		NormalizedUserName = "nfilipova@students.softuni.bg".ToUpper(),
+		//		EmailConfirmed = true,
+		//		Tier = Models.Enums.Tier.Blossom,
+		//		UserConfigurationIsNull = true
+		//	};
 
-			return admin;
-		}
+		//	var result = await _userManager.CreateAsync(adminUser, "X9U6h1GPq4WzZfloaKRwPD");
+
+		//	if (result.Succeeded)
+		//	{
+		//		await _userManager.AddToRoleAsync(adminUser, "Admin");
+		//		return adminUser;
+		//	}
+		//	else
+		//	{
+		//		var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+		//		throw new ApplicationException($"Error creating admin user: {errors}");
+		//	}
 
 		public void Configure(EntityTypeBuilder<ApplicationUser> builder)
 		{
@@ -49,9 +61,6 @@
 				.HasOne(x => x.UserConfiguration)
 				.WithOne(x => x.ApplicationUser)
 				.HasForeignKey<UserConfiguration>(x => x.ApplicationUserId);
-
-			builder
-				.HasData(CreateAdminProfileAsync());
 		}
 	}
 }
