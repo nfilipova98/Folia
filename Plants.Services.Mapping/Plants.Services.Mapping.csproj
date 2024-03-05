@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
-    <ProjectReference Include="..\Plans.Services\Plants.Services.csproj" />
-    <ProjectReference Include="..\Plants.Services.Data\Plants.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

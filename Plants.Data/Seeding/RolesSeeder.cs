@@ -1,4 +1,4 @@
-﻿namespace Plants.Data.Configuration
+﻿namespace Plants.Data.Seeding
 {
     using System;
     using System.Linq;

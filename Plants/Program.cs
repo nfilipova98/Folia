@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Plants.Data;
 namespace Plants.Web
 {
 	using Data;
-	using Data.Configuration;
 	using Data.Models.ApplicationUser;
+	using Data.Seeding;
 	using Services.BlobService;
 	using Services.BlobService.Interfaces;
 	using Services.EmailSenderService;
@@ -24,7 +27,6 @@ namespace Plants.Web
 			app.Run();
 		}
 
-		// Add services to the container.
 		//AutoMapper
 		//builder.Services.AddAutoMapper(typeof(Program));
 
@@ -35,6 +37,7 @@ namespace Plants.Web
 
 		//IMapper mapper = mapperConfig.CreateMapper();
 		//builder.Services.AddSingleton(mapper);
+
 		private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 		{
 			//Db context
@@ -88,16 +91,14 @@ namespace Plants.Web
 				new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
 			}
 
-			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseMigrationsEndPoint();
+				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 			}
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
@@ -113,8 +114,6 @@ namespace Plants.Web
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 			app.MapRazorPages();
-
-			//app.Run();
 		}
 	}
 }

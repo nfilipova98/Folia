@@ -1,14 +1,12 @@
-﻿namespace Plants.Data.Configuration
+﻿namespace Plants.Data.Seeding
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-	using Plants.Data;
 
-	public class ApplicationDbContextSeeder : ISeeder
+    public class ApplicationDbContextSeeder : ISeeder
     {
         public async Task SeedAsync(PlantsDbContext dbContext, IServiceProvider serviceProvider)
         {

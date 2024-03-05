@@ -11,8 +11,6 @@
 
 	public class PlantsDbContext : IdentityDbContext<ApplicationUser>
     {
-		private readonly IServiceProvider _serviceProvider;
-
 		public PlantsDbContext(DbContextOptions<PlantsDbContext> options)
             : base(options)
         {
@@ -25,12 +23,6 @@
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<Pet> Pets { get; set; }
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			base.OnConfiguring(optionsBuilder);
-			optionsBuilder.EnableSensitiveDataLogging();
-		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

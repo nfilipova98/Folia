@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Administration\Views\Admin\**" />
+    <Compile Remove="Areas\Administration\Views\Blob\**" />
+    <Content Remove="Areas\Administration\Views\Admin\**" />
+    <Content Remove="Areas\Administration\Views\Blob\**" />
+    <EmbeddedResource Remove="Areas\Administration\Views\Admin\**" />
+    <EmbeddedResource Remove="Areas\Administration\Views\Blob\**" />
+    <None Remove="Areas\Administration\Views\Admin\**" />
+    <None Remove="Areas\Administration\Views\Blob\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.2" />
@@ -30,15 +41,13 @@
     <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
     <ProjectReference Include="..\Plans.Services\Plants.Services.csproj" />
     <ProjectReference Include="..\Plants.Data\Plants.Data.csproj" />
-    <ProjectReference Include="..\Plants.Services.Data\Plants.Services.Data.csproj" />
+    <ProjectReference Include="..\Plants.Services.Constants\Plants.Services.Constants.csproj" />
     <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.OpenMeteoApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Models\" />
     <Folder Include="Areas\Administration\Views\" />
-    <Folder Include="Areas\Administration\Views\Blob\" />
-    <Folder Include="Areas\Administration\Views\Admin\" />
   </ItemGroup>
 
   <ItemGroup>

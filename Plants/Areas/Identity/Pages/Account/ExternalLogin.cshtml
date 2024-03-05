@@ -4,19 +4,16 @@
 	ViewData["Title"] = "Register";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
-<h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
-<p></p>
-<p></p>
-
-<p id="external-login-description" class="text-info">
-	You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-	Please enter an email address for this site below and click the Register button to finish
-	logging in.
-</p>
-
 <div class="site-content-warp" style="padding-left: 0">
 	<div class="page-section">
+		<h1 class="text-center">@ViewData["Title"]</h1>
+		<p></p>
+		<p></p>
+		<h2 class="text-center" id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
+		<p></p>
+		<p></p>
+		<p></p>
+		<p></p>
 		<div class="row d-flex align-items-center justify-content-center">
 			<div class="col-md-4">
 				<form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">

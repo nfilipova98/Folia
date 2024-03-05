@@ -1,6 +1,6 @@
 ﻿namespace Plants.Services.Constants
 {
-	public static class GlobalConstants
+	public class GlobalConstants
 	{
 		public static class PlantConstants
 		{

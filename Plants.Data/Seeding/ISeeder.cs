@@ -1,6 +1,6 @@
-﻿namespace Plants.Data.Configuration
+﻿namespace Plants.Data.Seeding
 {
-	using System;
+    using System;
     using System.Threading.Tasks;
 
     public interface ISeeder
