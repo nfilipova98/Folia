@@ -1,19 +1,28 @@
 ﻿@{
-    var controllerDisplayNames = new Dictionary<string, string>
-    {
-        { "Home", "Home" },
-        { "Explore", "Explore" },
-        { "Favorites", "Favorites" },
-        { "MyPlants", "My Plants" },
-        { "About", "About" },
-        { "Contacts", "Contacts" }
-    };
+	var controllers = new List<List<string>>
+	{
+		new List<string> { "Home", "Index", "Home" },
+		new List<string> { "Plant", "Favorites", "Favorites" },
+		new List<string> { "Plant", "MyPlants", "My Plants" },
+		new List<string> { "Plant", "Explore", "Explore" },
+		new List<string> { "About", "Index", "About" },
+		new List<string> { "Contacts", "Index", "Contacts" },
+	};
 
-    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+	var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+	var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
 
-    foreach (var (controllerName, displayName) in controllerDisplayNames)
-    {
-        var isActive = (currentController == controllerName) ? "active" : "";
-        <li><a asp-controller="@controllerName" asp-action="Index" class="@isActive">@displayName</a></li>
-    }
+	@foreach (var controller in controllers)
+	{
+		var controllerName = controller[0];
+		var actionName = controller[1];
+		var displayName = controller[2];
+
+		var isActive =
+				string.Equals(controllerName, currentController) &&
+				string.Equals(actionName, currentAction)
+					? "active" : "";
+
+		<li><a asp-controller="@controllerName" asp-action="@actionName" class="@isActive">@displayName</a></li>
+	}
 }

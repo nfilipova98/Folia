@@ -5,26 +5,26 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <div style="font-family: 'Open Sans', serif; font-weight: 500">
-	<div class="container">
-		@if (SignInManager.IsSignedIn(User))
-		{
-			<a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
 
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<div class="d-flex align-items-center">
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
 			</form>
 
-			var userId = UserManager.GetUserId(User);
-			var profileUrl = Url.Page("/Profile", new { userId });
+			@{
+				var userId = UserManager.GetUserId(User);
+				var profileUrl = Url.Page("/Profile", new { userId });
+			}
+			<a href=""><img src="~/img/tiers/3.png"></a>
+		</div>
+	}
+	else
+	{
+		<a asp-area="Identity" asp-page="/Account/Register">REGISTER</a>
+		<a asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
 
-			<a href="@profileUrl"><img src="~/img/tiers/3.png"></a>
-		}
-		else
-		{
-			<a asp-area="Identity" asp-page="/Account/Register">REGISTER</a>
-			<a asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
-
-			<a href=""><img src="~/img/tiers/0.png"></a>
-		}
-	</div>
+		<a href=""><img src="~/img/tiers/0.png"></a>
+	}
 </div>

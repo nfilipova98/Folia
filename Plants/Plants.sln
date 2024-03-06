@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.OpenMeteoAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.Mapping", "..\Plants.Services.Mapping\Plants.Services.Mapping.csproj", "{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plants.Services.Constants", "..\Plants.Services.Constants\Plants.Services.Constants.csproj", "{6457BC8C-B7ED-4ADB-A715-194E27550E5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.Constants", "..\Plants.Services.Constants\Plants.Services.Constants.csproj", "{6457BC8C-B7ED-4ADB-A715-194E27550E5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

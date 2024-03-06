@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Plants.Data;
 namespace Plants.Web
 {
 	using Data;
@@ -93,7 +90,7 @@ namespace Plants.Web
 
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseDeveloperExceptionPage();
+				//app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 			}
 			else
@@ -104,6 +101,8 @@ namespace Plants.Web
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+
+			app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
 
 			app.UseRouting();
 
