@@ -1,4 +1,4 @@
-﻿namespace Plants.Services.EmailSenderService
+﻿namespace Plants.Services.APIs.EmailSenderService
 {
     public class AuthMessageSenderOptions
     {

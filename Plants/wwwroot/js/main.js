@@ -91,17 +91,8 @@ $(window).on('load', function() {
 		}
 		
 	}
-	site_scrollbar();
 
-	$(document).on('click', '.favorite-btn-img', function () {
-		$(this).toggleClass('clicked');
-		var $img = $(this).find('img');
-		if ($(this).hasClass('clicked')) {
-			$img.attr('src', '~/img/heart-filled'); // Change 'path_to_clicked_image' to the path of the clicked image
-		} else {
-			$img.attr('src', '~/img/heart-outlin'); // Change 'path_to_default_image' to the path of the default image
-		}
-	});
+	site_scrollbar();
 
 	/*------------------
 		Video Popup

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Plants.Data;
 
@@ -11,9 +12,11 @@ using Plants.Data;
 namespace Plants.Data.Migrations
 {
     [DbContext(typeof(PlantsDbContext))]
-    partial class PlantsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311013613_TierPointsAdded")]
+    partial class TierPointsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -510,21 +513,21 @@ namespace Plants.Data.Migrations
                         {
                             Id = 1,
                             Difficulty = 0,
-                            Humidity = 1,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/0.jpg",
+                            Humidity = 2,
+                            ImageUrl = "",
                             IsTrending = true,
-                            KidSafe = true,
+                            KidSafe = false,
                             Lifestyle = 2,
-                            Name = "Buddhist Pine",
+                            Name = "Swiss cheese plant",
                             Outdoor = true,
-                            ScientificName = "Podocarpus Macrophyllus"
+                            ScientificName = "Monstera minima"
                         },
                         new
                         {
                             Id = 2,
                             Difficulty = 0,
                             Humidity = 1,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/13.jpg",
+                            ImageUrl = "",
                             IsTrending = false,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -537,7 +540,7 @@ namespace Plants.Data.Migrations
                             Id = 3,
                             Difficulty = 0,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/10.jpg",
+                            ImageUrl = "",
                             IsTrending = false,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -550,7 +553,7 @@ namespace Plants.Data.Migrations
                             Id = 4,
                             Difficulty = 0,
                             Humidity = 1,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/12.jpg",
+                            ImageUrl = "",
                             IsTrending = false,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -563,7 +566,7 @@ namespace Plants.Data.Migrations
                             Id = 5,
                             Difficulty = 0,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/11.jpg",
+                            ImageUrl = "",
                             IsTrending = false,
                             KidSafe = true,
                             Lifestyle = 1,
@@ -576,7 +579,7 @@ namespace Plants.Data.Migrations
                             Id = 6,
                             Difficulty = 0,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/1.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -588,21 +591,21 @@ namespace Plants.Data.Migrations
                         {
                             Id = 7,
                             Difficulty = 0,
-                            Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/8.jpg",
+                            Humidity = 1,
+                            ImageUrl = "",
                             IsTrending = true,
-                            KidSafe = false,
+                            KidSafe = true,
                             Lifestyle = 2,
-                            Name = "Swiss cheese plant",
+                            Name = "Buddhist Pine",
                             Outdoor = true,
-                            ScientificName = "Monstera minima"
+                            ScientificName = "Podocarpus Macrophyllus"
                         },
                         new
                         {
                             Id = 8,
                             Difficulty = 1,
                             Humidity = 1,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/2.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = false,
                             Lifestyle = 2,
@@ -615,7 +618,7 @@ namespace Plants.Data.Migrations
                             Id = 9,
                             Difficulty = 1,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/3.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -628,7 +631,7 @@ namespace Plants.Data.Migrations
                             Id = 10,
                             Difficulty = 0,
                             Humidity = 0,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/4.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -641,7 +644,7 @@ namespace Plants.Data.Migrations
                             Id = 11,
                             Difficulty = 1,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/5.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -654,7 +657,7 @@ namespace Plants.Data.Migrations
                             Id = 12,
                             Difficulty = 1,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/6.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -667,7 +670,7 @@ namespace Plants.Data.Migrations
                             Id = 13,
                             Difficulty = 0,
                             Humidity = 1,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/7.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = true,
                             Lifestyle = 2,
@@ -680,7 +683,7 @@ namespace Plants.Data.Migrations
                             Id = 14,
                             Difficulty = 1,
                             Humidity = 2,
-                            ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/9.jpg",
+                            ImageUrl = "",
                             IsTrending = true,
                             KidSafe = false,
                             Lifestyle = 2,

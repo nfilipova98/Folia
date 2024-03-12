@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
+    <ProjectReference Include="..\Plans.Services\Plants.Services.csproj" />
+    <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.APIs.csproj" />
   </ItemGroup>
 
 </Project>

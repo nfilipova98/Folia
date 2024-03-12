@@ -17,28 +17,28 @@
 //        Task<ApplicationUserModel?> GetApplicationUserByIdAsync(int id);
 //        Task<IEnumerable<ApplicationUserModel>> GetAllApplicationUsersAsync();
 
-//		Task AddUserConfigurationAsync(UserConfigurationModel model);
-//		Task DeleteUserConfigurationAsync(int id);
-//		Task EditUserConfigurationAsync(UserConfigurationModel model);
+//        Task AddUserConfigurationAsync(UserConfigurationModel model);
+//        Task DeleteUserConfigurationAsync(int id);
+//        Task EditUserConfigurationAsync(UserConfigurationModel model);
 
-//		Task AddCommentAsync(CommentModel model);
+//        Task AddCommentAsync(CommentModel model);
 //        Task DeleteCommentAsync(int id);
 //        Task EditCommentAsync(CommentModel model);
 
-//		Task AddCityAsync(CityModel model);
-//		Task DeleteCityAsync(int id);
-//		Task EditCityAsync(CityModel model);
+//        Task AddCityAsync(CityModel model);
+//        Task DeleteCityAsync(int id);
+//        Task EditCityAsync(CityModel model);
 
-//		Task AddCountryAsync(CountryModel model);
-//		Task DeleteCountryAsync(int id);
-//		Task EditCountryAsync(CountryModel model);
+//        Task AddCountryAsync(CountryModel model);
+//        Task DeleteCountryAsync(int id);
+//        Task EditCountryAsync(CountryModel model);
 
-//		Task AddPetAsync(PetModel model);
-//		Task DeletePetAsync(int id);
-//		Task EditPetAsync(PetModel model);
+//        Task AddPetAsync(PetModel model);
+//        Task DeletePetAsync(int id);
+//        Task EditPetAsync(PetModel model);
 
-//		Task AddEnumAsync(EnumModel model);
-//		Task DeleteEnumAsync(int id);
+//        Task AddEnumAsync(EnumModel model);
+//        Task DeleteEnumAsync(int id);
 
-//	}
+//    }
 //}

@@ -1,11 +1,13 @@
-﻿using Plants.Controllers;
-
-namespace Plants.Areas.Administration.Controllers
+﻿namespace Plants.Areas.Administration.Controllers
 {
+    using Plants.Controllers;
+
     using Microsoft.AspNetCore.Authorization;
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class AdminController : BaseController
     {
+
     }
 }

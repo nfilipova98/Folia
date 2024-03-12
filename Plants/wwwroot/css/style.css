@@ -753,27 +753,17 @@ Hero section
     }
 
     .hs-item:hover .hs-info {
-        opacity: 1; /* Change opacity to 1 on hover */
+        opacity: 1;
     }
 
         .hs-item:hover .hs-info h5,
         .hs-item:hover .hs-info p {
-            opacity: 1; /* Set opacity to 1 (fully visible) for text on hover */
+            opacity: 1;
         }
 
-.favorite-btn img {
-    background: url(../img/icons/heart-outline.png);
-    transition: transform 0.3s ease; /* Add transition effect */
-}
-
-.favorite-btn.clicked img {
-    background: url(../img/icons//heart-filled.png);
-    transform: scale(1.2); /* Scale the heart icon when clicked */
-}
-
-.hs-item .hs-info p {
-    margin-bottom: 5px;
-}
+    .hs-item .hs-info p {
+        margin-bottom: 5px;
+    }
 
 .nicescroll-rails.nicescroll-rails-hr,
 #ascrail2000-hr {

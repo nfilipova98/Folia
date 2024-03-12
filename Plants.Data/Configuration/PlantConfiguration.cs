@@ -13,15 +13,15 @@
 			new Plant
 			{
 				Id = 1,
-				Name = "Swiss cheese plant",
-				ScientificName = "Monstera minima",
+				Name = "Buddhist Pine",
+				ScientificName = "Podocarpus Macrophyllus",
 				Difficulty = Difficulty.Easy,
-				Humidity = Humidity.High,
-				KidSafe = false,
+				Humidity = Humidity.Moderate,
+				KidSafe = true,
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = ""
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/0.jpg",
 			},
 			new Plant
 			{
@@ -34,7 +34,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = false,
 				IsTrending = false,
-				ImageUrl = ""
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/13.jpg"
 			},
 			new Plant
 			{
@@ -47,7 +47,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = false,
 				IsTrending = false,
-				ImageUrl = ""
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/10.jpg"
 			},
 			new Plant
 			{
@@ -60,7 +60,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = false,
-				ImageUrl = ""
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/12.jpg"
 			},
 			new Plant
 			{
@@ -73,7 +73,7 @@
 				Lifestyle = Lifestyle.InBetween,
 				Outdoor = false,
 				IsTrending = false,
-				ImageUrl = ""
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/11.jpg"
 			},
 			new Plant
 			{
@@ -86,20 +86,20 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = false,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/1.jpg",
 			},
 			new Plant
 			{
 				Id = 7,
-				Name = "Buddhist Pine",
-				ScientificName = "Podocarpus Macrophyllus",
+				Name = "Swiss cheese plant",
+				ScientificName = "Monstera minima",
 				Difficulty = Difficulty.Easy,
-				Humidity = Humidity.Moderate,
-				KidSafe = true,
+				Humidity = Humidity.High,
+				KidSafe = false,
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/8.jpg"
 			},
 			new Plant
 			{
@@ -112,7 +112,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/2.jpg",
 			},
 			new Plant
 			{
@@ -125,7 +125,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/3.jpg",
 			},
 			new Plant
 			{
@@ -138,7 +138,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/4.jpg",
 			},
 			new Plant
 			{
@@ -151,7 +151,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/5.jpg",
 			},
 			new Plant
 			{
@@ -164,7 +164,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/6.jpg",
 			},
 			new Plant
 			{
@@ -177,7 +177,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = true,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/7.jpg",
 			},
 			new Plant
 			{
@@ -190,7 +190,7 @@
 				Lifestyle = Lifestyle.Traveller,
 				Outdoor = false,
 				IsTrending = true,
-				ImageUrl = "",
+				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/9.jpg",
 			},
 		};
 

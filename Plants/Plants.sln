@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services", "..\Plans.Services\Plants.Services.csproj", "{4D64059F-5B96-41DB-A16C-FA775FA532D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.OpenMeteoApi", "..\Plants.Services.OpenMeteoApi\Plants.Services.OpenMeteoApi.csproj", "{30557F61-3AD1-4690-98DF-4368190D932A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.APIs", "..\Plants.Services.OpenMeteoApi\Plants.Services.APIs.csproj", "{30557F61-3AD1-4690-98DF-4368190D932A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plants.Services.Mapping", "..\Plants.Services.Mapping\Plants.Services.Mapping.csproj", "{5F9D92A9-F77E-49F8-8AEF-878A9430B11E}"
 EndProject

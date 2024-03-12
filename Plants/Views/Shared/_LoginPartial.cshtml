@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Plants.Data.Models.ApplicationUser
+@using System.Security.Claims
+@inject IRepository repository
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -12,12 +13,11 @@
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
 				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
 			</form>
-
 			@{
-				var userId = UserManager.GetUserId(User);
-				var profileUrl = Url.Page("/Profile", new { userId });
+				var user = await repository.FindByIdAsync<ApplicationUser>(User.FindFirstValue(ClaimTypes.NameIdentifier));
+				var tier = (int)user.Tier;
 			}
-			<a href=""><img src="~/img/tiers/3.png"></a>
+			<a href=""><img src="~/img/tiers/@(tier).png"></a>
 		</div>
 	}
 	else

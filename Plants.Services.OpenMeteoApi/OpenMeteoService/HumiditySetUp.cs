@@ -1,6 +1,6 @@
-﻿namespace Plants.Services.OpenMeteoApi
+﻿namespace Plants.Services.APIs.OpenMeteoService
 {
-    using static ApiConstants;
+    using static Constants.GlobalConstants.ApiConstants;
 
     using OpenMeteo;
 

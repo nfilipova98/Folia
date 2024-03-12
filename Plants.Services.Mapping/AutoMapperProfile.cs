@@ -2,11 +2,11 @@
 {
 	using AutoMapper;
 
-	public class AutoMapperProfile : Profile
+    public class AutoMapperProfile : Profile
 	{
 		public AutoMapperProfile()
 		{
-			
+
 		}
 	}
 }

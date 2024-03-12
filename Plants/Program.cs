@@ -1,19 +1,20 @@
 namespace Plants.Web
 {
-	using Data;
-	using Data.Models.ApplicationUser;
-	using Data.Seeding;
-	using Services.BlobService;
-	using Services.BlobService.Interfaces;
-	using Services.EmailSenderService;
+    using Data;
+    using Data.Models.ApplicationUser;
+    using Data.Seeding;
+    using Services.APIs.EmailSenderService;
+    using Services.Mapping;
+    using Services.RepositoryService;
+    using Services.PlantService;
 
-	using Azure.Storage.Blobs;
-	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI.Services;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.EntityFrameworkCore;
+    using Azure.Storage.Blobs;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -23,17 +24,6 @@ namespace Plants.Web
 			Configure(app);
 			app.Run();
 		}
-
-		//AutoMapper
-		//builder.Services.AddAutoMapper(typeof(Program));
-
-		//var mapperConfig = new MapperConfiguration(mc =>
-		//{
-		//	mc.AddProfile(new AutoMapperProfile());
-		//});
-
-		//IMapper mapper = mapperConfig.CreateMapper();
-		//builder.Services.AddSingleton(mapper);
 
 		private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 		{
@@ -49,8 +39,16 @@ namespace Plants.Web
 			.AddRoles<IdentityRole>()
 			.AddEntityFrameworkStores<PlantsDbContext>();
 
-			//Email Sender service
-			services.AddTransient<IEmailSender, EmailSender>();
+			//AutoMapper
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+
+			//Local services
+			services.AddScoped<IRepository, Repository>();
+			//services.AddScoped<IApplicationUserService, ApplicationUserService>();
+			services.AddScoped<IPlantService, PlantService>();
+
+            //Email Sender service
+            services.AddTransient<IEmailSender, EmailSender>();
 			services.Configure<AuthMessageSenderOptions>(configuration);
 
 			//Login Services
@@ -70,7 +68,7 @@ namespace Plants.Web
 			string blobString = configuration["BlobConnectionString"];
 
 			services.AddSingleton(x => new BlobServiceClient(blobString));
-			services.AddSingleton<IBlobService, BlobService>();
+			//services.AddSingleton<IBlobService, BlobService>();
 
 			//Filters
 			services.AddDatabaseDeveloperPageExceptionFilter();
@@ -90,7 +88,7 @@ namespace Plants.Web
 
 			if (app.Environment.IsDevelopment())
 			{
-				//app.UseDeveloperExceptionPage();
+				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 			}
 			else

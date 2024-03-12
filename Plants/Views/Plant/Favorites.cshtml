@@ -1,35 +1,68 @@
-﻿@{
+﻿@model IEnumerable<PlantHomeViewModel>
+@{
 	ViewData["Title"] = "Favorites";
 }
 
-<body>
-	<div class="container">
-		<div class="site-content-warp" style="padding-left: 0;">
-			<!-- Page start -->
-			<div class="page-section portfolio-page">
-				<div class="portfolio-section">
-					<div class="row">
-						@for (int i = 0; i < 20; i++)
-						{
-							<div class="col-md-4">
-								<div class="portfolio-item">
-									<img src="/img/portfolio/@(i % 3 + 2).jpg" alt="#">
-									<p></p>
-									<div style="display: flex; justify-content: space-between;">
-										<h5 class="text-left">Ice Cold Love</h5>
-										<div style="display: flex; justify-content: space-between;">
-											<a href="#"><img src="~/img/icons/heart-filled.png" alt=""></a>
-											<a href="#"><img src="~/img/icons/see-more.png" alt=""></a>
-										</div>
+<div class="container">
+	<div class="site-content-warp" style="padding-left: 0;">
+		<div class="page-section portfolio-page">
+			<div class="portfolio-section">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="portfolio-item">
+							<img src="/img/portfolio/1.jpg" alt="#">
+							<p></p>
+							<div style="display: flex; justify-content: space-between;">
+								<h5 class="text-left">@item.Name</h5>
+								<div style="display: flex; justify-content: space-between;">
+									<div class="hs-info">
+										<a href="LikeButton" class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
 									</div>
-									<p>Nature Photography</p>
 								</div>
 							</div>
-						}
-					</div>
+						</div>
+					}
 				</div>
-				<!-- Page end -->
+				<nav>
+					<div class="pagination-container d-flex justify-content-center">
+						<ul class="pagination">
+							<li class="page-item">
+								<a class="page-link" href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+							</li>
+							<li class="page-item"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>
+							<li class="page-item">
+								<a class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<p></p>
 			</div>
 		</div>
 	</div>
-</body>
+</div>
+
+@section scripts {
+	<script>
+		$(document).on('click', '.favorite-btn', function () {
+			$(this).toggleClass('clicked');
+			var $img = $(this).find('img');
+			if ($(this).hasClass('clicked')) {
+				$img.attr('src', '/img/icons/heart-filled.png');
+			} else {
+				$img.attr('src', '/img/icons/heart-outline.png');
+			}
+
+			var isLiked = !$button.hasClass('clicked');
+		});
+	</script>
+}
