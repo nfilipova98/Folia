@@ -184,17 +184,18 @@
 
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<IActionResult> DeleteConfirmed(ImageModel file, int id)
+		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var plant = await _plantService.DeleteAsync(id);
-			var result = await _plantService.DeleteFileAsync(file, id);
+			var url = plant.ImageUrl;
+			var result = await _plantService.DeleteFileAsync(url, id);
 
 			if (result == false)
 			{
 
 			}
 
-			return RedirectToAction();
+			return RedirectToAction("Index", "Home");
 		}
 	}
 }

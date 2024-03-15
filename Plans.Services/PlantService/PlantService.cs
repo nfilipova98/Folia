@@ -73,11 +73,18 @@
 			return _mapper.Map<PlantDeleteViewModel>(plant);
 		}
 
-		public async Task<bool> DeleteFileAsync(ImageModel model, int id)
+		public async Task<bool> DeleteFileAsync(string url, int id)
 		{
-			var filePath = model.ImageUrl;
+			//iztrii ot bazata 
 
-			var blobClient = GetBlobClient(model.FormFile.FileName);
+			var fileName = Path.GetFileName(url);
+
+			if (fileName == null)
+			{
+
+			}
+
+			var blobClient = GetBlobClient(fileName);
 			var isDeleted = await blobClient.DeleteIfExistsAsync();
 
 			return isDeleted;

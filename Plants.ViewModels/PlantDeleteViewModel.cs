@@ -11,5 +11,8 @@
 
         [Required(ErrorMessage = RequiredErrorMessage)]
         public string Name { get; set; } = string.Empty;
-    }
+
+		[Required(ErrorMessage = RequiredErrorMessage)]
+		public string ImageUrl { get; set; }
+	}
 }

@@ -8,6 +8,6 @@
 	public interface IBlobService
 	{
 		Task<IActionResult> UploadFileAsync(ImageModel file, PlantEditOrAddViewModel model);
-		Task<bool> DeleteFileAsync(ImageModel model, int id);
+		Task<bool> DeleteFileAsync(string fileName, int id);
 	}
 }
