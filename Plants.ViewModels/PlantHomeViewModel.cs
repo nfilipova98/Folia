@@ -22,5 +22,7 @@
 
 		[Required(ErrorMessage = RequiredErrorMessage)]
 		public required string ImageUrl { get; set; }
+
+		public int? UserId { get; set; }
 	}
 }

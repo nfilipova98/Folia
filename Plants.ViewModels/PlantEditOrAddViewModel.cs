@@ -1,18 +1,15 @@
 ﻿namespace Plants.Models
 {
-    using Data.Models.Enums;
+	using Data.Models.Enums;
     using static Services.Constants.GlobalConstants.ErrorMessages;
     using static Services.Constants.GlobalConstants.PlantConstants;
 
     using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel;
 
-    [Serializable]
+	[Serializable]
     public class PlantEditOrAddViewModel
     {
-        [Required(ErrorMessage = RequiredErrorMessage)]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = RequiredErrorMessage)]
 		[StringLength(PlantNameMaxLenght, MinimumLength = PlantNameMinLenght,
             ErrorMessage = StringLenghtErrorMessage)]
@@ -45,6 +42,6 @@
 
         public string? ImageUrl { get; set; }
 
-        public ICollection<PetViewModel>? Pets { get; set; }
+		public ICollection<int>? Pets { get; set; }
 	}
 }

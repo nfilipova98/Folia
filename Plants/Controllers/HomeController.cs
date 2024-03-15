@@ -1,41 +1,28 @@
 namespace Plants.Controllers
 {
 	using Models;
-
-	using Data.Models.ApplicationUser;
-	using Data.Models.Plant;
-	using Services.RepositoryService;
+	using Services.Home;
 	using Utilities;
 
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.EntityFrameworkCore;
 	using System.Diagnostics;
 	using System.Security.Claims;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
+	using Plants.Data.Models.ApplicationUser;
 
 	public class HomeController : BaseController
 	{
-		private IRepository _repository;
+		private IHomeService _service;
 
-		public HomeController(IRepository repository)
+		public HomeController(IHomeService service)
 		{
-			_repository = repository;
+			_service = service;
 		}
 
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
-			var plants = await _repository.AllReadOnly<Plant>()
-				.Where(x => x.IsTrending == true)
-				.Select(x => new PlantHomeViewModel
-				{
-					Id = x.Id,
-					Name = x.Name,
-					ScientificName = x.ScientificName,
-					ImageUrl = x.ImageUrl
-				})
-				.OrderBy(x => x.Id)
-				.ToListAsync();
+			var plants = await _service.GetTrendingPlants();
 
 			return View(plants);
 		}
@@ -46,28 +33,8 @@ namespace Plants.Controllers
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{
-			var plant = await _repository.FindByIdAsync<Plant>(id);
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)?? string.Empty;
-			var user = await _repository.FindByIdAsync<ApplicationUser>(userId);
-
-			if (plant == null || user == null)
-			{
-				return NotFound();
-			}
-
-			var usersPlants = user.LikedPlants
-				.FirstOrDefault(x => x.Id == plant.Id);
-
-			if (isLiked && usersPlants == null)
-			{
-				user.LikedPlants.Add(plant);
-			}
-			else
-			{
-				user.LikedPlants.Remove(plant);
-			}
-
-			await _repository.SaveChangesAsync();
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+			await _service.LikeButton(id, isLiked, userId);
 
 			return Ok();
 		}

@@ -1,0 +1,32 @@
+﻿@model PetViewModel
+
+@{
+	ViewData["Title"] = "Add Pet";
+}
+
+<div class="site-content-warp" style="padding-left: 0">
+	<div class="page-section" style="padding-top: 15px">
+		<div class="row">
+			<h1 class="text-center" style="font-family:'Playfair Display';">@ViewBag.Title</h1>
+			<p></p>
+			<p></p>
+			<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+				<form asp-action="Add" method="post">
+					<div class="mb-3">
+						<label asp-for="@Model.Name" class="form-label-add-edit"><em>PLANT NAME</em></label>
+						<input asp-for="@Model.Name" class="form-control" />
+						<span asp-validation-for="@Model.Name" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="CREATE" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+

@@ -1,33 +1,31 @@
 ﻿namespace Plants.Controllers
 {
-	using Data.Models.Plant;
-	using Models;
-	using Services.APIs.BlobService;
-	using Services.PlantService;
-	using Services.RepositoryService;
-	using Utilities;
+    using Models;
+    using Services.APIs.Models;
+	using Services.Pet;
+    using Services.PlantService;
+    using Utilities;
 
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-	using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
 
-    public class PlantController : BaseController
+	public class PlantController : BaseController
 	{
-		private readonly IRepository _repository;
 		private readonly IPlantService _plantService;
+		private readonly IPetService _petService;
 
-		public PlantController(IRepository repository, IPlantService plantService)
+		public PlantController(IPlantService plantService, IPetService petService)
 		{
-			_repository = repository;
 			_plantService = plantService;
+			_petService = petService;
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Favorites()
 		{
-			var model = new List<PlantEditOrAddViewModel>();
+			var model = new List<PlantHomeViewModel>();
 
 			return View(model);
 		}
@@ -35,22 +33,9 @@
 		[HttpPost]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
-		public async Task<IActionResult> Favorites(PlantEditOrAddViewModel model)
+		public async Task<IActionResult> Favorites(PlantHomeViewModel model)
 		{
-			var plants = await _repository.AllReadOnly<Plant>()
-				.Select(x => new PlantEditOrAddViewModel
-				{
-					Name = model.Name,
-					ScientificName = model.ScientificName,
-					Lifestyle = model.Lifestyle,
-					Outdoor = model.Outdoor,
-					Difficulty = model.Difficulty,
-					Humidity = model.Humidity,
-					IsTrending = model.IsTrending,
-					KidSafe = model.KidSafe
-				})
-				.OrderBy(x => x.Id)
-				.ToListAsync();
+			var plants = await _plantService.GetAllPlantsAsync();
 
 			return View(plants);
 		}
@@ -65,11 +50,9 @@
 		[AllowAnonymous]
 		public async Task<IActionResult> Explore()
 		{
-			var model = await _repository
-				.AllReadOnly<Plant>()
-				.ToListAsync();
+			var plants = await _plantService.GetFavoritePlantsAsync();
 
-			return View(model);
+			return View(plants);
 		}
 
 		[HttpGet]
@@ -83,6 +66,7 @@
 
 		[HttpPost]
 		[AllowAnonymous]
+		//vij dali da e asinhronno
 		public async Task<IActionResult> Add(PlantEditOrAddViewModel model)
 		{
 			if (!ModelState.IsValid)
@@ -92,16 +76,16 @@
 
 			TempData["PlantInfo"] = JsonConvert.SerializeObject(model);
 
-			return RedirectToAction(nameof(UploadFile), new { fromAddAction = true });
+			return RedirectToAction(nameof(UploadFile));
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
-		public IActionResult UploadFile(bool? fromAddAction)
+		public IActionResult UploadFile()
 		{
-			if (fromAddAction != true)
+			if (TempData["PlantInfo"] == null)
 			{
-				return NotFound();
+				return BadRequest();
 			}
 
 			return View();
@@ -111,9 +95,9 @@
 		[AllowAnonymous]
 		public async Task<IActionResult> UploadFile(ImageModel file)
 		{
-			if (file == null || file.FormFile == null || file.FormFile.Length == 0)
+			if (file == null || file.FormFile == null || file.FormFile.Length == 0 || !file.FormFile.ContentType.StartsWith("image"))
 			{
-				ModelState.AddModelError("Image", "Please upload an image.");
+				ModelState.AddModelError(nameof(ImageModel.FormFile), "Please upload an image.");
 				return View();
 			}
 
@@ -124,130 +108,91 @@
 				return NotFound();
 			}
 
-			var fileName = Guid.NewGuid().ToString();
-			using var fileStream = file.FormFile.OpenReadStream();
-			var fileUrl = await _plantService.UploadFileAsync(file, model.Id);
+			await _plantService.UploadFileAsync(file, model);
 
-			if (fileUrl == string.Empty)
-			{
-
-			}
-
-			var plant = new Plant()
-			{
-				Id = model.Id,
-				Name = model.Name,
-				ScientificName = model.ScientificName,
-				Difficulty = model.Difficulty,
-				KidSafe = model.KidSafe,
-				Outdoor = model.Outdoor,
-				Humidity = model.Humidity,
-				IsTrending = false,
-				Lifestyle = model.Lifestyle,
-				ImageUrl = fileUrl,
-			};
-
-			await _repository.AddAsync(plant);
-			await _repository.SaveChangesAsync();
-
-			return RedirectToAction("Home", "Index");
+			return RedirectToAction("Index", "Home");
 		}
+
+		//[HttpGet]
+		//[AllowAnonymous]
+		//public async Task<IActionResult> Edit(int id)
+		//{
+		//	var plant = await _repository
+		//		.FindByIdAsync<Plant>(id);
+
+		//	if (plant == null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	var model = new PlantEditOrAddViewModel()
+		//	{
+		//		Name = plant.Name,
+		//		ScientificName = plant.ScientificName,
+		//		Lifestyle = plant.Lifestyle,
+		//		Outdoor = plant.Outdoor,
+		//		Difficulty = plant.Difficulty,
+		//		Humidity = plant.Humidity,
+		//		IsTrending = plant.IsTrending,
+		//		KidSafe = plant.KidSafe
+		//	};
+
+		//	return View(model);
+		//}
+
+		//[HttpPost]
+		//[AllowAnonymous]
+		//public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
+		//{
+		//	var plantToEdit = await _repository
+		//		.FindByIdAsync<Plant>(id);
+
+		//	if (plantToEdit == null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	if (!ModelState.IsValid)
+		//	{
+		//		return View(model);
+		//	}
+
+		//	//vij za pets
+
+		//	plantToEdit.Name = model.Name;
+		//	plantToEdit.ScientificName = model.ScientificName;
+		//	plantToEdit.Lifestyle = model.Lifestyle;
+		//	plantToEdit.Outdoor = model.Outdoor;
+		//	plantToEdit.Difficulty = model.Difficulty;
+		//	plantToEdit.Humidity = model.Humidity;
+		//	plantToEdit.IsTrending = model.IsTrending;
+		//	plantToEdit.KidSafe = model.KidSafe;
+
+		//	await _repository.SaveChangesAsync();
+
+		//	return RedirectToAction("Home", "Index");
+		//}
 
 		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Edit(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
-			var plant = await _repository
-				.FindByIdAsync<Plant>(id);
+			var plant = await _plantService.DeleteAsync(id);
 
-			if (plant == null)
-			{
-				return NotFound();
-			}
-
-			var model = new PlantEditOrAddViewModel()
-			{
-				Name = plant.Name,
-				ScientificName = plant.ScientificName,
-				Lifestyle = plant.Lifestyle,
-				Outdoor = plant.Outdoor,
-				Difficulty = plant.Difficulty,
-				Humidity = plant.Humidity,
-				IsTrending = plant.IsTrending,
-				KidSafe = plant.KidSafe
-			};
-
-			return View(model);
+			return View(plant);
 		}
 
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
+		public async Task<IActionResult> DeleteConfirmed(ImageModel file, int id)
 		{
-			var plantToEdit = await _repository
-				.FindByIdAsync<Plant>(id);
+			var plant = await _plantService.DeleteAsync(id);
+			var result = await _plantService.DeleteFileAsync(file, id);
 
-			if (plantToEdit == null)
+			if (result == false)
 			{
-				return NotFound();
+
 			}
-
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
-
-			//vij za pets
-
-			plantToEdit.Name = model.Name;
-			plantToEdit.ScientificName = model.ScientificName;
-			plantToEdit.Lifestyle = model.Lifestyle;
-			plantToEdit.Outdoor = model.Outdoor;
-			plantToEdit.Difficulty = model.Difficulty;
-			plantToEdit.Humidity = model.Humidity;
-			plantToEdit.IsTrending = model.IsTrending;
-			plantToEdit.KidSafe = model.KidSafe;
-
-			await _repository.SaveChangesAsync();
-
-			return RedirectToAction("Home", "Index");
-		}
-
-		[HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Delete(int id)
-		{
-			var plant = await _repository
-				.FindByIdAsync<Plant>(id);
-
-			if (plant == null)
-			{
-				return NotFound();
-			}
-
-			var model = new PlantDeleteViewModel
-			{
-				Id = plant.Id,
-				Name = plant.Name
-			};
-
-			return View(model);
-		}
-
-		[HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var plant = await _repository
-				.FindByIdAsync<Plant>(id);
-
-			if (plant == null)
-			{
-				return NotFound();
-			}
-
-			//_repository..Remove(plant);
-			await _repository.SaveChangesAsync();
 
 			return RedirectToAction();
 		}

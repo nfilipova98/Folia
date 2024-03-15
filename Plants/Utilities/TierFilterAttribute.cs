@@ -30,8 +30,7 @@
 			}
 			else
 			{
-				var getUser = await _repository
-					.FindByIdAsync<ApplicationUser>(userId);
+				var getUser = await _repository.FindByIdAsync<ApplicationUser>(userId);
 
 				var tierName = getUser?.Tier;
 				var tierPoint = getUser?.TierPoints;

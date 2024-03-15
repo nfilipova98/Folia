@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
-    <ProjectReference Include="..\Plants.ViewModels\Plants.ViewModels.csproj" />
+    <ProjectReference Include="..\Plants.Services.Constants\Plants.Services.Constants.csproj" />
   </ItemGroup>
 
 </Project>

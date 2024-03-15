@@ -1,5 +1,7 @@
 ﻿namespace Plants.Services.APIs.EmailSenderService
 {
+    using Models;
+
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;

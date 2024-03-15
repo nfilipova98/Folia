@@ -1,4 +1,4 @@
-﻿@using Plants.Data.Models.Enums
+﻿@using Microsoft.OpenApi.Extensions
 @model PlantEditOrAddViewModel
 
 @{
@@ -28,7 +28,7 @@
 						<select asp-for="@Model.Difficulty" class="form-select">
 							@foreach (Difficulty value in Enum.GetValues(typeof(Difficulty)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>
@@ -46,7 +46,7 @@
 						<select asp-for="@Model.Humidity" class="form-select">
 							@foreach (Humidity value in Enum.GetValues(typeof(Humidity)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>
@@ -74,11 +74,17 @@
 						</select>
 						<span asp-validation-for="@Model.IsTrending" class="text-danger"></span>
 					</div>
-					<div class="mb-3">
-						<label asp-for="@Model.Pets" class="form-label-add-edit"><em>PETS</em></label>
-						<input asp-for="@Model.Pets" class="form-control" />
-						<span asp-validation-for="@Model.Pets" class="text-danger"></span>
-					</div>
+				@* 	<div class="mb-3">
+						<label asp-for="@Model.PetIds" class="form-label-add-edit"><em>PETS</em></label>
+						<select asp-for="@Model.PetIds" class="form-control" aria-required="true">
+							<option disabled selected value=""></option>
+							@foreach (var item in Model.Pets)
+							{
+								<option value="@item.Id">@item.Name</option>
+							}
+						</select>
+						<span asp-validation-for="@Model.PetIds" class="text-danger"></span>
+					</div> *@
 					<div class="mb-3">
 						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="CREATE 1/2" />
 					</div>

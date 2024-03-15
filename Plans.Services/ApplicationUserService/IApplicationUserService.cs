@@ -1,8 +1,6 @@
-﻿//namespace Plants.Services.ApplicationUserService
-//{
-//    using APIs.BlobService.Interfaces;
-
-//    public interface IApplicationUserService : IBlobService
-//    {
-//    }
-//}
+﻿namespace Plants.Services.ApplicationUserService
+{
+    public interface IApplicationUserService
+    {
+    }
+}

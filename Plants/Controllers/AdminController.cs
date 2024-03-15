@@ -1,44 +1,41 @@
-﻿//namespace Plants.Controllers
-//{
-//	using Data.Models.ApplicationUser;
+﻿namespace Plants.Controllers
+{
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
 
-//	using Microsoft.AspNet.Identity;
-//	using Microsoft.AspNetCore.Authorization;
-//	using Microsoft.AspNetCore.Mvc;
-//	using Microsoft.Extensions.DependencyInjection;
+	[Authorize(Roles ="Admin")]
+	public class AdminController : BaseController
+	{
+		private readonly IServiceProvider _serviceProvider;
 
-//	public class AdminController : BaseController
-//	{
-//		private readonly IServiceProvider _serviceProvider;
+		public AdminController(IServiceProvider serviceProvider)
+		{
+			_serviceProvider = serviceProvider;
+		}
 
-//		public AdminController(IServiceProvider serviceProvider)
-//		{
-//			_serviceProvider = serviceProvider;
-//		}
+		[AllowAnonymous]
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-//		[AllowAnonymous]
-//		public IActionResult Index()
-//		{
-//			return View();
-//		}
+		//[HttpPost]
+		//public async Task<IActionResult> AssignUserToRole(string userId, string roleName)
+		//{
+		//	var manager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+		//	var roleresult = await manager.AddToRoleAsync(userId, "roleName");
 
-//		[HttpPost]
-//		public async Task<IActionResult> AssignUserToRole(string userId, string roleName)
-//		{
-//			var manager = _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-//			var roleresult = await manager.AddToRoleAsync(userId, "roleName");
+		//	if (result.Succeeded)
+		//	{
 
-//			if (result.Succeeded)
-//			{
+		//		await SignInAsync(user, isPersistent: false);
+		//	}
+		//	foreach (string error in result.Errors)
+		//	{
+		//		ModelState.AddModelError("", error);
+		//	}
 
-//				await SignInAsync(user, isPersistent: false);
-//			}
-//			foreach (string error in result.Errors)
-//			{
-//				ModelState.AddModelError("", error);
-//			}
-
-//			return View();
-//		}
-//	}
-//}
+		//	return View();
+		//}
+	}
+}

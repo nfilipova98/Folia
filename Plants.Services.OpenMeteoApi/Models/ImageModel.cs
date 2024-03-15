@@ -1,4 +1,4 @@
-﻿namespace Plants.Services.APIs.BlobService
+﻿namespace Plants.Services.APIs.Models
 {
     using static Services.Constants.GlobalConstants.ErrorMessages;
 

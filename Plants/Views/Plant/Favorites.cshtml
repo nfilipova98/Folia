@@ -50,19 +50,3 @@
 		</div>
 	</div>
 </div>
-
-@section scripts {
-	<script>
-		$(document).on('click', '.favorite-btn', function () {
-			$(this).toggleClass('clicked');
-			var $img = $(this).find('img');
-			if ($(this).hasClass('clicked')) {
-				$img.attr('src', '/img/icons/heart-filled.png');
-			} else {
-				$img.attr('src', '/img/icons/heart-outline.png');
-			}
-
-			var isLiked = !$button.hasClass('clicked');
-		});
-	</script>
-}

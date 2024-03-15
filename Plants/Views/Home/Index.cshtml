@@ -16,7 +16,14 @@
 								<div class="hs-info">
 									<h5>@plant.Name</h5>
 									<p>@plant.ScientificName</p>
-									<a href="LikeButton" class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
+									@if (true)
+									{
+										<a class="favorite-btn"><img src="~/img/icons/heart-filled.png"></a>
+									}
+									else
+									{
+										<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
+									}
 								</div>
 							</div>
 						}
@@ -38,13 +45,23 @@
 				$img.attr('src', '/img/icons/heart-outline.png');
 			}
 
-			var isLiked = !$button.hasClass('clicked');
-		});
+			var isLiked = $(this).hasClass('clicked');
+			var plantName = $(this).closest('.hs-item').find('h5').text();
 
-		$.ajax({
-			url: '/Home/LikeButton',
-			method: 'POST',
-			data: { id: 1, isLiked: isLiked },
+			$.ajax({
+				url: '@Url.Action("LikeButton", "Home")',
+				method: 'POST',
+				data: {
+					id: 1,
+					isLiked: isLiked
+				},
+				success: function (response) {
+					alert(plantName + " added successfully.");
+				},
+				error: function (request, status, error) {
+					alert("Fail");
+				}
+			});
 		});
 	</script>
 }

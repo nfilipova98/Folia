@@ -3,8 +3,10 @@ namespace Plants.Web
     using Data;
     using Data.Models.ApplicationUser;
     using Data.Seeding;
+    using Services.AboutService;
     using Services.APIs.EmailSenderService;
-    using Services.Mapping;
+    using Services.APIs.Models;
+	using Services.Mapping;
     using Services.RepositoryService;
     using Services.PlantService;
 
@@ -13,8 +15,10 @@ namespace Plants.Web
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+	using Plants.Services.Home;
+	using Plants.Services.Pet;
 
-    public class Program
+	public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -44,8 +48,11 @@ namespace Plants.Web
 
 			//Local services
 			services.AddScoped<IRepository, Repository>();
-			//services.AddScoped<IApplicationUserService, ApplicationUserService>();
-			services.AddScoped<IPlantService, PlantService>();
+
+			services.AddTransient<IPlantService, PlantService>();
+			services.AddTransient<IAboutService, AboutService>();
+			services.AddTransient<IHomeService, HomeService>();
+			services.AddTransient<IPetService, PetService>();
 
             //Email Sender service
             services.AddTransient<IEmailSender, EmailSender>();
@@ -82,7 +89,7 @@ namespace Plants.Web
 			using (var serviceScope = app.Services.CreateScope())
 			{
 				var dbContext = serviceScope.ServiceProvider.GetRequiredService<PlantsDbContext>();
-				dbContext.Database.Migrate();
+				//dbContext.Database.Migrate();
 				new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
 			}
 
