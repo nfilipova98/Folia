@@ -1,6 +1,6 @@
 ﻿@model List<PlantAllViewModel>
 @{
-	ViewData["Title"] = "Explore";
+	ViewData["Title"] = "Explore Plant";
 }
 
 <div class="container">
@@ -21,8 +21,16 @@
 						<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
 							<h5 class="text-left">@item.Name</h5>
 							<div style="display: flex; justify-content: space-between;">
-								<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
-								<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
+								@if (User.IsInRole("Admin"))
+								{
+									<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
+								}
+								else
+								{
+									<a asp-controller="Plant" asp-action="Edit" asp-route-id="@item.Id"><img src="~/img/icons/edit.png"></a>
+									<a asp-controller="Plant" asp-action="Delete" asp-route-id="@item.Id"><img src="~/img/icons/delete.png"></a>
+								}
+									<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
 							</div>
 						</div>
 						<p style="padding-left:30px;">@item.ScientificName</p>
@@ -45,7 +53,7 @@
 			}
 
 			var isLiked = $(this).hasClass('clicked');
-			var plantName = $(this).closest('.hs-item').find('h5').text();
+			var plantName = $(this).closest('.portfolio-item').find('h5').text();
 
 			$.ajax({
 				url: '@Url.Action("LikeButton", "Home")',

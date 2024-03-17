@@ -2,13 +2,14 @@
 {
     using Models;
     using Services.APIs.Models;
-	using Services.Pet;
+	using Services.PetService;
     using Services.PlantService;
     using Utilities;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+	using System.Security.Claims;
 
 	public class PlantController : BaseController
 	{
@@ -23,19 +24,11 @@
 
 		[HttpGet]
 		[AllowAnonymous]
+		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> Favorites()
 		{
-			var model = new List<PlantHomeViewModel>();
-
-			return View(model);
-		}
-
-		[HttpPost]
-		[AllowAnonymous]
-		[TypeFilter(typeof(TierResultFilterAttribute))]
-		public async Task<IActionResult> Favorites(PlantHomeViewModel model)
-		{
-			var plants = await _plantService.GetAllPlantsAsync();
+			var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var plants = await _plantService.GetFavoritePlantsAsync(id);
 
 			return View(plants);
 		}
@@ -50,7 +43,8 @@
 		[AllowAnonymous]
 		public async Task<IActionResult> Explore()
 		{
-			var plants = await _plantService.GetFavoritePlantsAsync();
+			//mahni id posle 
+			var plants = await _plantService.GetAllPlantsAsync();
 
 			return View(plants);
 		}
@@ -60,6 +54,7 @@
 		public async Task<IActionResult> Add()
 		{
 			var model = new PlantEditOrAddViewModel();
+			model.Pets = await _petService.GetAllPetsAsync();
 
 			return View(model);
 		}
@@ -113,65 +108,42 @@
 			return RedirectToAction("Index", "Home");
 		}
 
-		//[HttpGet]
-		//[AllowAnonymous]
-		//public async Task<IActionResult> Edit(int id)
-		//{
-		//	var plant = await _repository
-		//		.FindByIdAsync<Plant>(id);
+		[HttpGet]
+		[AllowAnonymous]
+		public async Task<IActionResult> Edit(int id)
+		{
+			var plant = await _plantService.ExistsAsync(id);
 
-		//	if (plant == null)
-		//	{
-		//		return NotFound();
-		//	}
+			if (plant == false)
+			{
+				return BadRequest();
+			}
 
-		//	var model = new PlantEditOrAddViewModel()
-		//	{
-		//		Name = plant.Name,
-		//		ScientificName = plant.ScientificName,
-		//		Lifestyle = plant.Lifestyle,
-		//		Outdoor = plant.Outdoor,
-		//		Difficulty = plant.Difficulty,
-		//		Humidity = plant.Humidity,
-		//		IsTrending = plant.IsTrending,
-		//		KidSafe = plant.KidSafe
-		//	};
+			var model = await _plantService.GetPlantAddOrEditModelAsync(id);
 
-		//	return View(model);
-		//}
+			return View(model);
+		}
 
-		//[HttpPost]
-		//[AllowAnonymous]
-		//public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
-		//{
-		//	var plantToEdit = await _repository
-		//		.FindByIdAsync<Plant>(id);
+		[HttpPost]
+		[AllowAnonymous]
+		public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
+		{
+			var plantToEdit = await _plantService.ExistsAsync(id);
 
-		//	if (plantToEdit == null)
-		//	{
-		//		return NotFound();
-		//	}
+			if (plantToEdit == false)
+			{
+				return BadRequest();
+			}
 
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return View(model);
-		//	}
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
 
-		//	//vij za pets
+			await _plantService.EditAsync(id, model);
 
-		//	plantToEdit.Name = model.Name;
-		//	plantToEdit.ScientificName = model.ScientificName;
-		//	plantToEdit.Lifestyle = model.Lifestyle;
-		//	plantToEdit.Outdoor = model.Outdoor;
-		//	plantToEdit.Difficulty = model.Difficulty;
-		//	plantToEdit.Humidity = model.Humidity;
-		//	plantToEdit.IsTrending = model.IsTrending;
-		//	plantToEdit.KidSafe = model.KidSafe;
-
-		//	await _repository.SaveChangesAsync();
-
-		//	return RedirectToAction("Home", "Index");
-		//}
+			return RedirectToAction("Explore");
+		}
 
 		[HttpGet]
 		[AllowAnonymous]
@@ -195,7 +167,7 @@
 
 			}
 
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction("Explore");
 		}
 	}
 }

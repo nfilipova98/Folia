@@ -27,6 +27,22 @@
 		}
 
 		//vij za greshkite kak se pravi
+
+
+		public async Task<bool> ExistsAsync(int id)
+		{
+			return await _repository.AllReadOnly<Plant>()
+				.AnyAsync(x => x.Id == id);
+		}
+
+		public async Task<PlantEditOrAddViewModel> GetPlantAddOrEditModelAsync(int id)
+		{
+			var plant = await _repository
+				.FindByIdAsync<Plant>(id);
+
+			return _mapper.Map<PlantEditOrAddViewModel>(plant);
+		}
+
 		public async Task<IActionResult> UploadFileAsync(ImageModel file, PlantEditOrAddViewModel model)
 		{
 			try
@@ -60,6 +76,7 @@
 			}
 
 		}
+
 		public async Task<PlantDeleteViewModel> DeleteAsync(int id)
 		{
 			var plant = await _repository
@@ -76,10 +93,12 @@
 		public async Task<bool> DeleteFileAsync(string url, int id)
 		{
 			//iztrii ot bazata 
+			var plant = await _repository
+				.FindByIdAsync<Plant>(id);
 
 			var fileName = Path.GetFileName(url);
 
-			if (fileName == null)
+			if (fileName == null || plant == null)
 			{
 
 			}
@@ -87,12 +106,26 @@
 			var blobClient = GetBlobClient(fileName);
 			var isDeleted = await blobClient.DeleteIfExistsAsync();
 
+			//_repository.Delete<Plant>(plant);
+			//await _repository.SaveChangesAsync();
+
 			return isDeleted;
 		}
 
-		public async Task<IEnumerable<PlantHomeViewModel>> GetAllPlantsAsync()
+		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync()
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
+				.ToListAsync();
+
+			var model = _mapper.Map<List<PlantAllViewModel>>(plants);
+
+			return model;
+		}
+
+		public async Task<IEnumerable<PlantHomeViewModel>> GetTrendingPlants()
+		{
+			var plants = await _repository.AllReadOnly<Plant>()
+				.Where(x => x.IsTrending == true)
 				.OrderBy(x => x.Id)
 				.ToListAsync();
 
@@ -101,15 +134,37 @@
 			return model;
 		}
 
-		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync()
+		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync(string id)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
-				.OrderBy(x => x.Id)
+				.Where(x => x.UsersLikedPlant.Any(x => x.Id == id))
 				.ToListAsync();
 
 			var model = _mapper.Map<List<PlantAllViewModel>>(plants);
 
 			return model;
+		}
+
+		public async Task EditAsync(int id, PlantEditOrAddViewModel model)
+		{
+			var plant = await _repository
+				.FindByIdAsync<Plant>(id);
+
+			//vij za jivotnite
+			if (plant != null)
+			{
+				plant.Name = model.Name;
+				plant.ScientificName = model.ScientificName;
+				plant.Lifestyle = model.Lifestyle;
+				plant.Outdoor = model.Outdoor;
+				plant.Difficulty = model.Difficulty;
+				plant.Humidity = model.Humidity;
+				plant.IsTrending = model.IsTrending;
+				plant.KidSafe = model.KidSafe;
+			}
+
+			_repository.UpdateAsync<Plant>(plant);
+			await _repository.SaveChangesAsync();
 		}
 
 		private BlobClient GetBlobClient(string fileName)

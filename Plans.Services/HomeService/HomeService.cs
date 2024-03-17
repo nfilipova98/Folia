@@ -1,12 +1,10 @@
-﻿namespace Plants.Services.Home
+﻿namespace Plants.Services.HomeService
 {
 	using Data.Models.ApplicationUser;
 	using Data.Models.Plant;
-	using Models;
 	using RepositoryService;
 
 	using AutoMapper;
-	using Microsoft.EntityFrameworkCore;
 	using Microsoft.AspNetCore.Mvc;
 
 	public class HomeService : IHomeService
@@ -18,18 +16,6 @@
 		{
 			_repository = repository;
 			_mapper = mapper;
-		}
-
-		public async Task<IEnumerable<PlantHomeViewModel>> GetTrendingPlants()
-		{
-			var plants = await _repository.AllReadOnly<Plant>()
-				.Where(x => x.IsTrending == true)
-				.OrderBy(x => x.Id)
-				.ToListAsync();
-
-			var model = _mapper.Map<List<PlantHomeViewModel>>(plants);
-
-			return model;
 		}
 
 		public async Task<IActionResult> LikeButton(int id, bool isLiked, string userId)

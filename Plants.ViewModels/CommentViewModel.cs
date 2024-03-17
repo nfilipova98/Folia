@@ -18,10 +18,12 @@
 
 		public DateTime? UpdatedOn { get; set; }
 
-		//public required string ApplicationUserId { get; set; }
-		//public required ApplicationUser User { get; set; }
+		[Required(ErrorMessage = RequiredErrorMessage)]
+		public required string UserId { get; set; }
 
-		//public required int PlantId { get; set; }
-		//public required Plant Plant { get; set; }
+		public string? UserPictureUrl { get; set; }
+
+		[Required(ErrorMessage = RequiredErrorMessage)]
+		public required int PlantId { get; set; }
 	}
 }

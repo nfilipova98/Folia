@@ -42,6 +42,6 @@
 
         public string? ImageUrl { get; set; }
 
-		public ICollection<int>? Pets { get; set; }
+        public IEnumerable<PetViewModel>? Pets { get; set; } = new List<PetViewModel>();
 	}
 }

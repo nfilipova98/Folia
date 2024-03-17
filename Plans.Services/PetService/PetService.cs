@@ -1,4 +1,4 @@
-﻿namespace Plants.Services.Pet
+﻿namespace Plants.Services.PetService
 {
 	using Data.Models.Pet;
 	using Models;
@@ -18,12 +18,13 @@
 			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<PetViewModel>> GetPetsAsync()
+		public async Task<IEnumerable<PetViewModel>> GetAllPetsAsync()
 		{
-			var pets = await _repository.AllReadOnly<Pet>()
+			var pets = await _repository
+				.AllReadOnly<Pet>()
 				.ToListAsync();
 
-			var model = _mapper.Map<IEnumerable<PetViewModel>>(pets);
+			var model = _mapper.Map<List<PetViewModel>>(pets);
 
 			return model;
 		}

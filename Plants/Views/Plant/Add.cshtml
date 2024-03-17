@@ -37,7 +37,7 @@
 						<select asp-for="@Model.Lifestyle" class="form-select">
 							@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>
@@ -74,17 +74,16 @@
 						</select>
 						<span asp-validation-for="@Model.IsTrending" class="text-danger"></span>
 					</div>
-				@* 	<div class="mb-3">
-						<label asp-for="@Model.PetIds" class="form-label-add-edit"><em>PETS</em></label>
-						<select asp-for="@Model.PetIds" class="form-control" aria-required="true">
-							<option disabled selected value=""></option>
+					<div class="mb-3">
+						<label asp-for="@Model.Pets" class="form-label-add-edit"><em>PETS</em></label>
+						<select asp-for="@Model.Pets" class="form-select">
 							@foreach (var item in Model.Pets)
 							{
 								<option value="@item.Id">@item.Name</option>
 							}
 						</select>
-						<span asp-validation-for="@Model.PetIds" class="text-danger"></span>
-					</div> *@
+						<span asp-validation-for="@Model.Pets" class="text-danger"></span>
+					</div>
 					<div class="mb-3">
 						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="CREATE 1/2" />
 					</div>

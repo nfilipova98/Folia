@@ -1,24 +1,25 @@
 ﻿namespace Plants.Controllers
 {
-	using Services.RepositoryService;
+	using Services.CommentService;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;
 
 	public class CommentController : Controller
 	{
-		private IRepository _repository;
+		private ICommentService _service;
 
-		public CommentController(IRepository repository)
+		public CommentController(ICommentService service)
 		{
-			_repository = repository;
+			_service = service;
 		}
 
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
+			var comments = await _service.GetCommentsAsync();
 
-			return View();
+			return View(comments);
 		}
 	}
 }

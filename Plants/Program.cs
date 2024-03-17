@@ -6,17 +6,18 @@ namespace Plants.Web
     using Services.AboutService;
     using Services.APIs.EmailSenderService;
     using Services.APIs.Models;
+	using Services.CommentService;
+	using Services.HomeService;
 	using Services.Mapping;
-    using Services.RepositoryService;
+	using Services.PetService;
     using Services.PlantService;
+    using Services.RepositoryService;
 
     using Azure.Storage.Blobs;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-	using Plants.Services.Home;
-	using Plants.Services.Pet;
 
 	public class Program
 	{
@@ -53,6 +54,7 @@ namespace Plants.Web
 			services.AddTransient<IAboutService, AboutService>();
 			services.AddTransient<IHomeService, HomeService>();
 			services.AddTransient<IPetService, PetService>();
+			services.AddTransient<ICommentService, CommentService>();
 
             //Email Sender service
             services.AddTransient<IEmailSender, EmailSender>();

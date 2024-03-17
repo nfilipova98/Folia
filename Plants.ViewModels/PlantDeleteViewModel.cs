@@ -7,12 +7,12 @@
     public class PlantDeleteViewModel
 	{
         [Required(ErrorMessage = RequiredErrorMessage)]
-        public int Id { get; set; }
+        public required int Id { get; set; }
 
         [Required(ErrorMessage = RequiredErrorMessage)]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; } = string.Empty;
 
 		[Required(ErrorMessage = RequiredErrorMessage)]
-		public string ImageUrl { get; set; }
+		public required string ImageUrl { get; set; }
 	}
 }

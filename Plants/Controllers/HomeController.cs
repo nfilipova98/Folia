@@ -1,28 +1,30 @@
 namespace Plants.Controllers
 {
 	using Models;
-	using Services.Home;
+	using Services.HomeService;
+	using Services.PlantService;
 	using Utilities;
 
 	using System.Diagnostics;
 	using System.Security.Claims;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
-	using Plants.Data.Models.ApplicationUser;
 
 	public class HomeController : BaseController
 	{
-		private IHomeService _service;
+		private IHomeService _homeService;
+		private IPlantService _plantService;
 
-		public HomeController(IHomeService service)
+		public HomeController(IHomeService homeService, IPlantService plantService)
 		{
-			_service = service;
+			_homeService = homeService;
+			_plantService = plantService;
 		}
 
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
-			var plants = await _service.GetTrendingPlants();
+			var plants = await _plantService.GetTrendingPlants();
 
 			return View(plants);
 		}
@@ -34,7 +36,7 @@ namespace Plants.Controllers
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-			await _service.LikeButton(id, isLiked, userId);
+			await _homeService.LikeButton(id, isLiked, userId);
 
 			return Ok();
 		}
