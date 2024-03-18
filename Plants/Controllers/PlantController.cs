@@ -50,7 +50,7 @@
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Add()
 		{
 			var model = new PlantEditOrAddViewModel();
@@ -60,7 +60,7 @@
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		//vij dali da e asinhronno
 		public async Task<IActionResult> Add(PlantEditOrAddViewModel model)
 		{
@@ -75,7 +75,7 @@
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public IActionResult UploadFile()
 		{
 			if (TempData["PlantInfo"] == null)
@@ -87,7 +87,7 @@
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UploadFile(ImageModel file)
 		{
 			if (file == null || file.FormFile == null || file.FormFile.Length == 0 || !file.FormFile.ContentType.StartsWith("image"))
@@ -109,7 +109,7 @@
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Edit(int id)
 		{
 			var plant = await _plantService.ExistsAsync(id);
@@ -125,7 +125,7 @@
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
 		{
 			var plantToEdit = await _plantService.ExistsAsync(id);
@@ -146,7 +146,7 @@
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var plant = await _plantService.DeleteAsync(id);
@@ -155,7 +155,7 @@
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var plant = await _plantService.DeleteAsync(id);

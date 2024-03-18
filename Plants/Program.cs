@@ -77,7 +77,6 @@ namespace Plants.Web
 			string blobString = configuration["BlobConnectionString"];
 
 			services.AddSingleton(x => new BlobServiceClient(blobString));
-			//services.AddSingleton<IBlobService, BlobService>();
 
 			//Filters
 			services.AddDatabaseDeveloperPageExceptionFilter();

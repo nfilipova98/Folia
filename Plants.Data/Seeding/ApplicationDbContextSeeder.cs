@@ -1,12 +1,12 @@
 ﻿namespace Plants.Data.Seeding
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Logging;
+	using System;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
-    public class ApplicationDbContextSeeder : ISeeder
+	public class ApplicationDbContextSeeder : ISeeder
     {
         public async Task SeedAsync(PlantsDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -15,11 +15,14 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
+            var logger = serviceProvider
+                .GetService<ILoggerFactory>()
+                .CreateLogger(typeof(ApplicationDbContextSeeder));
 
             var seeders = new List<ISeeder>
             {
                 new RolesSeeder(),
+                new UserSeeder()
             };
 
             foreach (var seeder in seeders)
