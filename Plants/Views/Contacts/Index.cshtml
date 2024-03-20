@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ContactViewModel
+@{
 	ViewData["Title"] = "Contacts";
 }
 
@@ -16,18 +17,24 @@
 								<h2>Get in touch</h2>
 								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus libero mauris, bibendum eget sapien ac, ultrices rhoncus ipsum. Donec nec sapien in urna fermentum ornare. Morbi vel ultrices leo. Sed eu turpis eu arcu vehicula fringilla ut vitae orci. Suspendisse maximus malesuada  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus libero mauris, bibendum eget sapien ac, ultrices rhoncus ipsum. </p>
 							</div>
-							<form class="contact-form">
-								<div class="row">
-									<div class="col-lg-6">
-										<input type="text" placeholder="Name">
-									</div>
-									<div class="col-lg-6">
-										<input type="text" placeholder="E-mail">
-									</div>
-									<div class="col-lg-12">
-										<input type="text" placeholder="Subject">
-										<textarea placeholder="Message"></textarea>
-										<button class="site-btn">send message <img src="img/arrow-right.png" alt=""></button>
+							<form asp-action="SendMessage" asp-controller="ContactsController" method="post">
+								<div class="contact-form">
+									<div class="row">
+										<div class="col-lg-6">
+											<span asp-validation-for="@Model.Name" class="text-danger"></span>
+											<input asp-for="@Model.Name" class="form-control" placeholder="Name" />
+										</div>
+										<div class="col-lg-6">
+											<span asp-validation-for="@Model.Email" class="text-danger"></span>
+											<input asp-for="@Model.Email" class="form-control" placeholder="E-mail" />
+										</div>
+										<div class="col-lg-12">
+											<span asp-validation-for="@Model.Subject" class="text-danger"></span>
+											<input asp-for="@Model.Subject" class="form-control" placeholder="Subject" />
+											<span asp-validation-for="@Model.Message" class="text-danger"></span>
+											<textarea class="form-control" asp-for="@Model.Message" placeholder="Message"></textarea>
+											<button class="site-btn">send message <img src="/img/icons/arrow-right.png" alt=""></button>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -38,3 +45,7 @@
 		</div>
 	</div>
 </div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

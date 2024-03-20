@@ -1,60 +1,33 @@
-﻿@model IEnumerable<PlantAllViewModel>
+﻿@model PlantsAllViewModel
 @{
-	ViewData["Title"] = "Favorites";
+	ViewData["Title"] = "Favorite Plants";
 }
 
 <div class="container">
 	<div class="site-content-warp" style="padding-left: 0; padding-bottom: 10px;">
-		<div class="row">
-			@foreach (var item in Model)
-			{
-				<div class="col-md-4">
-					<div class="portfolio-item">
-						<img src="@item.ImageUrl" alt="#">
-						<p></p>
-						<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
-							<h5 class="text-left">@item.Name</h5>
-							<div style="display: flex; justify-content: space-between;">
-								<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
-								<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
+		<div>
+			<div class="row">
+				@foreach (var item in Model.AllPlants)
+				{
+					<div class="col-md-4">
+						<div class="portfolio-item">
+							<img src="@item.ImageUrl" alt="#">
+							<p></p>
+							<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
+								<h5 class="text-left">@item.Name</h5>
+								<div style="display: flex; justify-content: space-between;">
+									<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
+									<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
+								</div>
 							</div>
+							<p style="padding-left:30px;">@item.ScientificName</p>
 						</div>
-						<p style="padding-left:30px;">@item.ScientificName</p>
 					</div>
-				</div>
-			}
+				}
+			</div>
 		</div>
 	</div>
-</div>
 
-@section scripts {
-	<script>
-		$(document).on('click', '.favorite-btn', function () {
-			$(this).toggleClass('clicked');
-			var $img = $(this).find('img');
-			if ($(this).hasClass('clicked')) {
-				$img.attr('src', '/img/icons/heart-filled.png');
-			} else {
-				$img.attr('src', '/img/icons/heart-outline.png');
-			}
+	<partial name="_PagingPartial" />
 
-			var isLiked = $(this).hasClass('clicked');
-			var plantName = $(this).closest('.hs-item').find('h5').text();
-
-			$.ajax({
-				url: '@Url.Action("LikeButton", "Home")',
-				method: 'POST',
-				data: {
-					id: 1,
-					isLiked: isLiked
-				},
-				success: function (response) {
-					alert(plantName + " added successfully.");
-				},
-				error: function (request, status, error) {
-					alert("Fail");
-				}
-			});
-		});
-	</script>
-}
+	@*dobavi da moje da se maha ot lubimi*@

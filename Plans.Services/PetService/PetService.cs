@@ -1,7 +1,7 @@
 ﻿namespace Plants.Services.PetService
 {
 	using Data.Models.Pet;
-	using Models;
+	using ViewModels;
 	using RepositoryService;
 
 	using AutoMapper;
@@ -27,6 +27,26 @@
 			var model = _mapper.Map<List<PetViewModel>>(pets);
 
 			return model;
+		}
+
+		public async Task CreateAsync(string name)
+		{
+			var model = _repository
+				.AllReadOnly<Pet>()
+				.FirstOrDefault(x => x.Name == name);
+
+			if (model != null)
+			{
+				//already exist
+			}
+
+			var pet = new Pet()
+			{
+				Name = name
+			};
+
+			await _repository.AddAsync<Pet>(pet);
+			await _repository.SaveChangesAsync();
 		}
 	}
 }

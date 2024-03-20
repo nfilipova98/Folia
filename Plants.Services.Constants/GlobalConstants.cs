@@ -39,6 +39,7 @@
         {
             public const string RequiredErrorMessage = "The {0} field is required";
             public const string StringLenghtErrorMessage = "The {0} field must be between {2} and {1} characters";
+            public const string CapitalLetter = "The {0} field must begin with one capital letter";
         }
 
         public static class ApiConstants
@@ -46,5 +47,10 @@
             public const string BlobContainerName = "publicimages";
             public const int PastDays = 90;
         }
-    }
+
+		public static class Paging
+		{
+			public const int ItemsPerPage = 12;
+		}
+	}
 }

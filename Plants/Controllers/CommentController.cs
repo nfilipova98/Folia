@@ -21,5 +21,7 @@
 
 			return View(comments);
 		}
+
+		//	[TypeFilter(typeof(TierResultFilterAttribute))] sloji go kato ostavqt komentari
 	}
 }

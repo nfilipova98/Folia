@@ -73,17 +73,16 @@
 						</select>
 						<span asp-validation-for="@Model.IsTrending" class="text-danger"></span>
 					</div>
-					@* 	<div class="mb-3">
-					<label asp-for="@Model.PetIds" class="form-label-add-edit"><em>PETS</em></label>
-					<input asp-for="@Model.PetIds" class="form-control" />
-					<span asp-validation-for="@Model.PetIds" class="text-danger"></span>
-					</div> *@
-					@* <div class="mb-3">
-					<h5>Do you want to change the image?</h5>
-					<div class="text-center">
-					<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" asp-action="UploadFile" asp-controller="Plant" style="background-color: #d8c269" value="GO TO IMAGE" />
+					<div class="mb-3">
+						<label asp-for="PetIds"><em>PETS:</em></label>
+						<select asp-for="PetIds" class="form-control" multiple>
+							@foreach (var animal in Model.Pets)
+							{
+								<option value="@animal.Id">@animal.Name</option>
+							}
+						</select>
+						<span asp-validation-for="PetIds" class="text-danger"></span>
 					</div>
-					</div> *@
 					<div class="mb-3">
 						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="SAVE" />
 					</div>

@@ -1,4 +1,4 @@
-﻿@model List<PlantAllViewModel>
+﻿@model PlantsAllViewModel
 @{
 	ViewData["Title"] = "Explore Plant";
 }
@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<div class="row">
-			@foreach (var item in Model)
+			@foreach (var item in Model.AllPlants)
 			{
 				<div class="col-md-4">
 					<div class="portfolio-item">
@@ -21,7 +21,7 @@
 						<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
 							<h5 class="text-left">@item.Name</h5>
 							<div style="display: flex; justify-content: space-between;">
-								@if (User.IsInRole("Admin"))
+								@if (!User.IsInRole("Admin"))
 								{
 									<a class="favorite-btn"><img src="~/img/icons/heart-outline.png"></a>
 								}
@@ -40,6 +40,8 @@
 		</div>
 	</div>
 </div>
+
+<partial name="_PagingPartial" />
 
 @section scripts {
 	<script>

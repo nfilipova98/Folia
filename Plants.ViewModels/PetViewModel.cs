@@ -1,4 +1,4 @@
-﻿namespace Plants.Models
+﻿namespace Plants.ViewModels
 {
 	using static Services.Constants.GlobalConstants.ErrorMessages;
 	using static Services.Constants.GlobalConstants.PetConstants;
@@ -7,12 +7,13 @@
 
 	public class PetViewModel
 	{
-		[Required(ErrorMessage = RequiredErrorMessage)]
-		public int Id { get; set; }
+        public int? Id { get; set; }
 
-		[Required(ErrorMessage = RequiredErrorMessage)]
+        [Required(ErrorMessage = RequiredErrorMessage)]
 		[StringLength(PetNameMaxLenght, MinimumLength = PetNameMinLenght,
 			ErrorMessage = StringLenghtErrorMessage)]
+		[RegularExpression(@"\b[A-Z][a-z]*",
+			ErrorMessage = CapitalLetter)]
 		public string Name { get; set; } = string.Empty;
 	}
 }

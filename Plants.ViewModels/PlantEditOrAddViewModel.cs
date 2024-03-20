@@ -6,6 +6,7 @@
 
     using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel;
+	using Plants.ViewModels;
 
 	[Serializable]
     public class PlantEditOrAddViewModel
@@ -41,6 +42,8 @@
 		public bool IsTrending { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        public IEnumerable<int>? PetIds { get; set; } = new List<int>();
 
         public IEnumerable<PetViewModel>? Pets { get; set; } = new List<PetViewModel>();
 	}

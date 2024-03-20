@@ -22,6 +22,7 @@ namespace Plants.Controllers
 		}
 
 		[AllowAnonymous]
+		[TypeFilter(typeof(ProfileSetUpFilter))]
 		public async Task<IActionResult> Index()
 		{
 			var plants = await _plantService.GetTrendingPlants();
@@ -29,9 +30,8 @@ namespace Plants.Controllers
 			return View(plants);
 		}
 
-		[AllowAnonymous]
+		[Authorize]
 		[HttpPost]
-		//add authorize
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{

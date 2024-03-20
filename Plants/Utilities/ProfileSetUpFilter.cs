@@ -23,22 +23,27 @@
 			var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 			var getUser = await _repository.FindByIdAsync<ApplicationUser>(userId);
 
+			bool toContinue = true;
+
 			if (user.IsInRole("Admin") || !user.Identity.IsAuthenticated || userId == null)
 			{
-
+				toContinue = false;
 			}
 
 			await next();
 
-			var userConfiguration = getUser?.UserConfigurationIsNull;
-			var firsTimeLogIn = getUser?.IsFirstTimeLogin;
-
-			if (userConfiguration != false && firsTimeLogIn == false)
+			if (toContinue)
 			{
-				context.Result = new ViewResult
+				var userConfiguration = getUser?.UserConfigurationIsNull;
+				var firsTimeLogIn = getUser?.IsFirstTimeLogin;
+
+				if (userConfiguration == false && firsTimeLogIn == false)
 				{
-					ViewName = "FirstLoginView"
-				};
+					context.Result = new ViewResult
+					{
+						ViewName = "FirstLoginView.cshtml"
+					};
+				}
 			}
 		}
 

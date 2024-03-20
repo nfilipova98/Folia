@@ -11,6 +11,12 @@
 	@if (SignInManager.IsSignedIn(User))
 	{
 		<div class="d-flex align-items-center">
+
+			@if (User.IsInRole("Admin"))
+			{
+				<a asp-controller="Plant" asp-action="Add">ADD PLANT</a>
+				<a asp-controller="Pet" asp-action="Add">ADD PET</a>
+			}
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
 				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
 			</form>

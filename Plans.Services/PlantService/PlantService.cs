@@ -1,17 +1,17 @@
 ﻿namespace Plants.Services.PlantService
 {
 	using APIs.Models;
+	using Data.Models.Pet;
 	using Data.Models.Plant;
-	using static Constants.GlobalConstants.ApiConstants;
 	using Models;
 	using RepositoryService;
+	using static Constants.GlobalConstants.ApiConstants;
 
 	using AutoMapper;
 	using Azure;
 	using Azure.Storage.Blobs;
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.AspNetCore.Mvc;
 
 	public class PlantService : IPlantService
 	{
@@ -28,7 +28,6 @@
 
 		//vij za greshkite kak se pravi
 
-
 		public async Task<bool> ExistsAsync(int id)
 		{
 			return await _repository.AllReadOnly<Plant>()
@@ -43,32 +42,21 @@
 			return _mapper.Map<PlantEditOrAddViewModel>(plant);
 		}
 
-		public async Task<IActionResult> UploadFileAsync(ImageModel file, PlantEditOrAddViewModel model)
+		public async Task<string> UploadFileAsync(ImageModel file)
 		{
 			try
 			{
 				var fileName = Guid.NewGuid().ToString();
 				using var fileStream = file.FormFile.OpenReadStream();
 
-				var blobClient = GetBlobClient(file.FormFile.FileName);
+				var blobClient = GetBlobClient(fileName);
 
 				using (var stream = file.FormFile.OpenReadStream())
 				{
 					await blobClient.UploadAsync(stream);
 				}
 
-				var fileUrl = blobClient.Uri.ToString();
-
-				//add pets service for adding 
-				var plant = _mapper.Map<Plant>(model);
-				plant.ImageUrl = fileUrl;
-				plant.IsTrending = false;
-
-				await _repository.AddAsync(plant);
-				await _repository.SaveChangesAsync();
-
-				return new OkResult();
-
+				return blobClient.Uri.ToString();
 			}
 			catch (RequestFailedException ex)
 			{
@@ -77,28 +65,47 @@
 
 		}
 
+		public async Task CreatePlantAsync(string fileUrl, PlantEditOrAddViewModel model)
+		{
+			var petIds = model.PetIds;
+
+			var pets = await _repository.AllReadOnly<Pet>()
+				.Where(x => petIds.Contains(x.Id))
+				.ToListAsync();
+
+			var plant = _mapper.Map<Plant>(model);
+			plant.ImageUrl = fileUrl;
+
+			await _repository.AddAsync(plant);
+			await _repository.SaveChangesAsync();
+
+			if (pets.Count != 0)
+			{
+				foreach (var item in pets)
+				{
+					plant.Pets.Add(item);
+				}
+
+				await _repository.SaveChangesAsync();
+			}
+		}
+
 		public async Task<PlantDeleteViewModel> DeleteAsync(int id)
 		{
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
-
-			if (plant == null)
-			{
-
-			}
 
 			return _mapper.Map<PlantDeleteViewModel>(plant);
 		}
 
 		public async Task<bool> DeleteFileAsync(string url, int id)
 		{
-			//iztrii ot bazata 
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
 
 			var fileName = Path.GetFileName(url);
 
-			if (fileName == null || plant == null)
+			if (fileName = null || plant == null)
 			{
 
 			}
@@ -106,18 +113,32 @@
 			var blobClient = GetBlobClient(fileName);
 			var isDeleted = await blobClient.DeleteIfExistsAsync();
 
-			//_repository.Delete<Plant>(plant);
-			//await _repository.SaveChangesAsync();
+			_repository.Delete<Plant>(plant);
+			await _repository.SaveChangesAsync();
 
 			return isDeleted;
 		}
 
-		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync()
+		public async Task<IEnumerable<int>> GetPetIds(int id)
+		{
+			var petIds = _repository
+				.AllReadOnly<Plant>()
+				.Where(plant => plant.Id == id)
+				.SelectMany(plant => plant.Pets.Select(pet => pet.Id))
+				.ToList();
+
+			return petIds;
+		}
+
+		public async Task<IEnumerable<T>> GetAllPlantsAsync<T>(int page, int itemsPerPage)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
+				.OrderByDescending(x => x.Id)
+				.Skip((page - 1) * itemsPerPage)
+				.Take(itemsPerPage)
 				.ToListAsync();
 
-			var model = _mapper.Map<List<PlantAllViewModel>>(plants);
+			var model = _mapper.Map<List<T>>(plants);
 
 			return model;
 		}
@@ -134,13 +155,16 @@
 			return model;
 		}
 
-		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync(string id)
+		public async Task<IEnumerable<T>> GetFavoritePlantsAsync<T>(string id, int page, int itemsPerPage)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
 				.Where(x => x.UsersLikedPlant.Any(x => x.Id == id))
+				.OrderByDescending(x => x.Id)
+				.Skip((page - 1) * itemsPerPage)
+				.Take(itemsPerPage)
 				.ToListAsync();
 
-			var model = _mapper.Map<List<PlantAllViewModel>>(plants);
+			var model = _mapper.Map<List<T>>(plants);
 
 			return model;
 		}
@@ -149,6 +173,8 @@
 		{
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
+
+			var pets = _mapper.Map<Pet>(model.Pets);
 
 			//vij za jivotnite
 			if (plant != null)
@@ -161,6 +187,7 @@
 				plant.Humidity = model.Humidity;
 				plant.IsTrending = model.IsTrending;
 				plant.KidSafe = model.KidSafe;
+				//plant.Pets = pets;
 			}
 
 			_repository.UpdateAsync<Plant>(plant);
@@ -171,6 +198,14 @@
 		{
 			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(BlobContainerName);
 			return blobContainerClient.GetBlobClient(fileName);
+		}
+
+		public async Task<int> GetPlantsCount()
+		{
+			var plant = await _repository.AllReadOnly<Plant>()
+				.ToListAsync();
+
+			return plant.Count;
 		}
 	}
 }

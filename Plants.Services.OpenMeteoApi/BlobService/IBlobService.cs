@@ -1,13 +1,10 @@
 ﻿namespace Plants.Services.APIs.BlobService
 {
-	using Plants.Models;
 	using Models;
-
-	using Microsoft.AspNetCore.Mvc;
 
 	public interface IBlobService
 	{
-		Task<IActionResult> UploadFileAsync(ImageModel file, PlantEditOrAddViewModel model);
+		Task<string> UploadFileAsync(ImageModel file);
 		Task<bool> DeleteFileAsync(string fileName, int id);
 	}
 }

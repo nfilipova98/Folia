@@ -1,9 +1,10 @@
 ﻿namespace Plants.Services.PetService
 {
-	using Models;
+	using ViewModels;
 
 	public interface IPetService
 	{
 		Task<IEnumerable<PetViewModel>> GetAllPetsAsync();
+		Task CreateAsync(string name);
 	}
 }

@@ -7,6 +7,7 @@ namespace Plants.Web
     using Services.APIs.EmailSenderService;
     using Services.APIs.Models;
 	using Services.CommentService;
+	using Services.ContactsService;
 	using Services.HomeService;
 	using Services.Mapping;
 	using Services.PetService;
@@ -55,6 +56,7 @@ namespace Plants.Web
 			services.AddTransient<IHomeService, HomeService>();
 			services.AddTransient<IPetService, PetService>();
 			services.AddTransient<ICommentService, CommentService>();
+			//services.AddTransient<IContactsService, ContactsService>();
 
             //Email Sender service
             services.AddTransient<IEmailSender, EmailSender>();
@@ -75,7 +77,6 @@ namespace Plants.Web
 
 			//Blob service
 			string blobString = configuration["BlobConnectionString"];
-
 			services.AddSingleton(x => new BlobServiceClient(blobString));
 
 			//Filters

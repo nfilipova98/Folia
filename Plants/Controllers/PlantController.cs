@@ -1,14 +1,16 @@
 ﻿namespace Plants.Controllers
 {
-    using Models;
-    using Services.APIs.Models;
+	using Models;
+	using Services.APIs.Models;
 	using Services.PetService;
-    using Services.PlantService;
-    using Utilities;
+	using Services.PlantService;
+	using static Services.Constants.GlobalConstants.Paging;
+	using Utilities;
+	using ViewModels;
 
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
+	using Newtonsoft.Json;
 	using System.Security.Claims;
 
 	public class PlantController : BaseController
@@ -25,12 +27,31 @@
 		[HttpGet]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
-		public async Task<IActionResult> Favorites()
+		public async Task<IActionResult> Favorites(int id = 1)
 		{
-			var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var plants = await _plantService.GetFavoritePlantsAsync(id);
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			return View(plants);
+			if (userId == null)
+			{
+				return View("NoPlantsInFavorites");
+			}
+
+			var plants = await _plantService.GetFavoritePlantsAsync<PlantAllViewModel>(userId, id, ItemsPerPage);
+
+			if (plants.Any())
+			{
+				var model = new PlantsAllViewModel
+				{
+					PageNumber = id,
+					AllPlants = plants,
+					ItemsPerPage = ItemsPerPage,
+					ItemsCount = await _plantService.GetPlantsCount()
+				};
+
+				return View(model);
+			}
+
+			return View("NoPlantsInFavorites");
 		}
 
 		[AllowAnonymous]
@@ -41,12 +62,17 @@
 		}
 
 		[AllowAnonymous]
-		public async Task<IActionResult> Explore()
+		public async Task<IActionResult> Explore(int id = 1)
 		{
-			//mahni id posle 
-			var plants = await _plantService.GetAllPlantsAsync();
+			var model = new PlantsAllViewModel
+			{
+				PageNumber = id,
+				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(id, ItemsPerPage),
+				ItemsPerPage = ItemsPerPage,
+				ItemsCount = await _plantService.GetPlantsCount()
+			};
 
-			return View(plants);
+			return View(model);
 		}
 
 		[HttpGet]
@@ -66,6 +92,7 @@
 		{
 			if (!ModelState.IsValid)
 			{
+				model.Pets = await _petService.GetAllPetsAsync();
 				return View(model);
 			}
 
@@ -83,6 +110,8 @@
 				return BadRequest();
 			}
 
+			TempData.Keep("PlantInfo");
+
 			return View();
 		}
 
@@ -90,7 +119,8 @@
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UploadFile(ImageModel file)
 		{
-			if (file == null || file.FormFile == null || file.FormFile.Length == 0 || !file.FormFile.ContentType.StartsWith("image"))
+			if (file == null || file.FormFile == null || file.FormFile.Length == 0
+				|| !file.FormFile.ContentType.StartsWith("image"))
 			{
 				ModelState.AddModelError(nameof(ImageModel.FormFile), "Please upload an image.");
 				return View();
@@ -103,9 +133,10 @@
 				return NotFound();
 			}
 
-			await _plantService.UploadFileAsync(file, model);
+			var url = await _plantService.UploadFileAsync(file);
+			await _plantService.CreatePlantAsync(url, model);
 
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction(nameof(Explore));
 		}
 
 		[HttpGet]
@@ -120,6 +151,9 @@
 			}
 
 			var model = await _plantService.GetPlantAddOrEditModelAsync(id);
+
+			model.Pets = await _petService.GetAllPetsAsync();
+			model.PetIds = await _plantService.GetPetIds(id);
 
 			return View(model);
 		}
@@ -137,12 +171,14 @@
 
 			if (!ModelState.IsValid)
 			{
+				model.Pets = await _petService.GetAllPetsAsync();
+				model.PetIds = await _plantService.GetPetIds(id);
 				return View(model);
 			}
 
 			await _plantService.EditAsync(id, model);
 
-			return RedirectToAction("Explore");
+			return RedirectToAction(nameof(Explore));
 		}
 
 		[HttpGet]
@@ -167,7 +203,7 @@
 
 			}
 
-			return RedirectToAction("Explore");
+			return RedirectToAction(nameof(Explore));
 		}
 	}
 }

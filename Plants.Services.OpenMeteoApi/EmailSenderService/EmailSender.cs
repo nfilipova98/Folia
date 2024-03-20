@@ -27,6 +27,7 @@
             {
                 throw new Exception("Null SendGridKey");
             }
+
             await Execute(Options.SendGridKey, subject, message, toEmail);
         }
 
@@ -40,6 +41,7 @@
                 PlainTextContent = message,
                 HtmlContent = message
             };
+
             msg.AddTo(new EmailAddress(toEmail));
 
             msg.SetClickTracking(false, false);

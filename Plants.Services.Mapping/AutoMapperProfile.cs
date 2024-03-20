@@ -4,6 +4,7 @@
 	using Data.Models.Pet;
 	using Data.Models.Plant;
 	using Models;
+	using ViewModels;
 
 	using AutoMapper;
 
@@ -18,6 +19,7 @@
 			CreateMap<PlantEditOrAddViewModel, Plant>();
 
 			CreateMap<Pet, PetViewModel>();
+			CreateMap<PetViewModel, Pet>();
 
 			CreateMap<Comment, CommentViewModel>();
 		}
