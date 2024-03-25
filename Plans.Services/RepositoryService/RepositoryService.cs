@@ -4,7 +4,7 @@
 
 	using Microsoft.EntityFrameworkCore;
 
-	public class Repository : IRepository
+	public class Repository : IRepositoryService
 	{
 		private readonly PlantsDbContext _context;
 
@@ -39,7 +39,7 @@
 			return await DbSet<T>().FindAsync(id);
 		}
 
-		public async Task<T?> FindByIdAsync<T>(string id) where T : class
+		public async virtual Task<T?> FindByIdAsync<T>(string id) where T : class
 		{
 			return await DbSet<T>().FindAsync(id);
 		}

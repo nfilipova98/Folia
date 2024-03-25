@@ -76,9 +76,19 @@
 					<div class="mb-3">
 						<label asp-for="PetIds"><em>PETS:</em></label>
 						<select asp-for="PetIds" class="form-control" multiple>
-							@foreach (var animal in Model.Pets)
+							@foreach (var item in Model.PetIds)
 							{
-								<option value="@animal.Id">@animal.Name</option>
+								@foreach (var animal in Model.Pets)
+								{
+									if (item == animal.Id)
+									{
+										<option value="@animal.Id" selected="@animal">@animal.Name</option>
+									}
+									else
+									{
+										<option value="@animal.Id">@animal.Name</option>
+									}
+								}
 							}
 						</select>
 						<span asp-validation-for="PetIds" class="text-danger"></span>

@@ -1,6 +1,7 @@
 ﻿namespace Plants.Services.PlantService
 {
 	using APIs.Models;
+	using Data.Models.ApplicationUser;
 	using Data.Models.Pet;
 	using Data.Models.Plant;
 	using Models;
@@ -12,14 +13,15 @@
 	using Azure.Storage.Blobs;
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
+	using Plants.ViewModels;
 
 	public class PlantService : IPlantService
 	{
-		private readonly IRepository _repository;
+		private readonly IRepositoryService _repository;
 		private readonly IMapper _mapper;
 		private readonly BlobServiceClient _blobServiceClient;
 
-		public PlantService(IRepository repository, IMapper mapper, BlobServiceClient blobServiceClient)
+		public PlantService(IRepositoryService repository, IMapper mapper, BlobServiceClient blobServiceClient)
 		{
 			_repository = repository;
 			_mapper = mapper;
@@ -62,7 +64,6 @@
 			{
 				throw;
 			}
-
 		}
 
 		public async Task CreatePlantAsync(string fileUrl, PlantEditOrAddViewModel model)
@@ -105,7 +106,7 @@
 
 			var fileName = Path.GetFileName(url);
 
-			if (fileName = null || plant == null)
+			if (fileName == null || plant == null)
 			{
 
 			}
@@ -130,41 +131,44 @@
 			return petIds;
 		}
 
-		public async Task<IEnumerable<T>> GetAllPlantsAsync<T>(int page, int itemsPerPage)
+		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync<T>(int page, int itemsPerPage, string userId)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
+				.Include(x => x.UsersLikedPlant)
 				.OrderByDescending(x => x.Id)
 				.Skip((page - 1) * itemsPerPage)
 				.Take(itemsPerPage)
 				.ToListAsync();
 
-			var model = _mapper.Map<List<T>>(plants);
+			var model = _mapper.Map <List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
 
 			return model;
 		}
 
-		public async Task<IEnumerable<PlantHomeViewModel>> GetTrendingPlants()
+		public async Task<IEnumerable<PlantHomeViewModel>> GetTrendingPlants(string userId)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
-				.Where(x => x.IsTrending == true)
+				.Include(x => x.UsersLikedPlant)
+				.Where(x => x.IsTrending)
 				.OrderBy(x => x.Id)
 				.ToListAsync();
 
-			var model = _mapper.Map<List<PlantHomeViewModel>>(plants);
+			var model = _mapper.Map<List<Plant>, List<PlantHomeViewModel>>(plants, opt => opt.Items["userId"] = userId);
 
 			return model;
 		}
 
-		public async Task<IEnumerable<T>> GetFavoritePlantsAsync<T>(string id, int page, int itemsPerPage)
+		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync<T>(string id, int page, int itemsPerPage, string userId)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
+				.Include(x => x.UsersLikedPlant)
 				.Where(x => x.UsersLikedPlant.Any(x => x.Id == id))
 				.OrderByDescending(x => x.Id)
 				.Skip((page - 1) * itemsPerPage)
 				.Take(itemsPerPage)
 				.ToListAsync();
 
-			var model = _mapper.Map<List<T>>(plants);
+			var model = _mapper.Map<List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
 
 			return model;
 		}
@@ -206,6 +210,35 @@
 				.ToListAsync();
 
 			return plant.Count;
+		}
+
+		public async Task<bool> LikeButton(int id, bool isLiked, string userId)
+		{
+			var plant = await _repository.FindByIdAsync<Plant>(id);
+			var user = await _repository.All<ApplicationUser>()
+										.Include(x => x.LikedPlants)
+										.SingleOrDefaultAsync(x => x.Id == userId);
+
+			if (plant == null || user == null)
+			{
+				return false;
+			}
+
+			var likedPlant = user.LikedPlants
+				.FirstOrDefault(x => x.Id == plant.Id);
+
+			if (isLiked && likedPlant == null)
+			{
+				user.LikedPlants.Add(plant);
+			}
+			else
+			{
+				user.LikedPlants.Remove(plant);
+			}
+
+			await _repository.SaveChangesAsync();
+
+			return true;
 		}
 	}
 }

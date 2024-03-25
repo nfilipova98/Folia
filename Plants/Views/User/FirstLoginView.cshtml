@@ -1,0 +1,91 @@
+﻿@using Microsoft.OpenApi.Extensions
+@model FirstLoginViewModel
+@{
+	ViewData["Title"] = "First Time Login";
+	Layout = "_BlankLayout";
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalCenterTitle" style="font-family:'Playfair Display';">
+					Let's set up your profile. 🌱
+				</h3>
+				<input type="button" value="x" onclick="window.location='@Url.Action("Index", "Home")'" style="background-color: transparent; margin-left:20px" />
+			</div>
+			<div class="modal-header">
+				<h6 style="font-weight: bold;">
+					This will help us improve your experience.
+					Ready to get started?
+				</h6>
+			</div>
+			<div class="modal-body">
+				<div class="comments-list">
+					<div class="mb-3">
+						<div class="mb-3">
+							<label asp-for="PetIds"><em>Do you have any pets</em></label>
+							<select asp-for="PetIds" class="form-control" multiple>
+								@foreach (var animal in Model.Pets)
+								{
+									<option value="@animal.Id">@animal.Name</option>
+								}
+							</select>
+							<span asp-validation-for="PetIds" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label asp-for="Kids"><em>Do you have kids?</em></label>
+						<select asp-for="Kids" class="form-select">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span asp-validation-for="Kids" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<label for="lifestyle"><em>Choose the facing direction of your apartment/ house</em>:</label>
+						<select asp-for="@Model.Lifestyle" class="form-select">
+							@foreach (FacingDirection value in Enum.GetValues(typeof(FacingDirection)))
+							{
+								<option value="@value">@value.GetDisplayName()</option>
+							}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="lifestyle"><em>Choose your lifestyle</em>:</label>
+						<select asp-for="@Model.Lifestyle" class="form-select">
+							@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
+							{
+								<option value="@value">@value.GetDisplayName()</option>
+							}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label asp-for="CityId"><em>Choose the city you live in</em></label>
+						<select asp-for="CityId" class="form-control">
+							@foreach (var city in Model.Cities)
+							{
+								<option value="@city.Id">@city.Name</option>
+							}
+						</select>
+						<span asp-validation-for="CityId" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="modal-footer" style="justify-content:center">
+					<form>
+						<div class="col-lg-12" style="font-family:'Playfair Display';">
+							<button class="site-btn">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@section Scripts {
+		<script>
+			$('#myModal').modal('show');
+		</script>
+
+		<partial name="_ValidationScriptsPartial" />
+	}

@@ -5,11 +5,9 @@
 
 	using System.ComponentModel.DataAnnotations;
 
-	public class PetViewModel
+	public class PetAddViewModel
 	{
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = RequiredErrorMessage)]
+		[Required(ErrorMessage = RequiredErrorMessage)]
 		[StringLength(PetNameMaxLenght, MinimumLength = PetNameMinLenght,
 			ErrorMessage = StringLenghtErrorMessage)]
 		[RegularExpression(@"\b[A-Z][a-z]*",

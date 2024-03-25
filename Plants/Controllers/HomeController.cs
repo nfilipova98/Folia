@@ -1,9 +1,7 @@
 namespace Plants.Controllers
 {
 	using Models;
-	using Services.HomeService;
 	using Services.PlantService;
-	using Utilities;
 
 	using System.Diagnostics;
 	using System.Security.Claims;
@@ -12,33 +10,20 @@ namespace Plants.Controllers
 
 	public class HomeController : BaseController
 	{
-		private IHomeService _homeService;
 		private IPlantService _plantService;
 
-		public HomeController(IHomeService homeService, IPlantService plantService)
+		public HomeController(IPlantService plantService)
 		{
-			_homeService = homeService;
 			_plantService = plantService;
 		}
 
 		[AllowAnonymous]
-		[TypeFilter(typeof(ProfileSetUpFilter))]
 		public async Task<IActionResult> Index()
 		{
-			var plants = await _plantService.GetTrendingPlants();
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var plants = await _plantService.GetTrendingPlants(userId);
 
 			return View(plants);
-		}
-
-		[Authorize]
-		[HttpPost]
-		[TypeFilter(typeof(TierResultFilterAttribute))]
-		public async Task<IActionResult> LikeButton(int id, bool isLiked)
-		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-			await _homeService.LikeButton(id, isLiked, userId);
-
-			return Ok();
 		}
 
 		[AllowAnonymous]

@@ -22,13 +22,16 @@
 		private readonly IUserEmailStore<ApplicationUser> _emailStore;
 		private readonly IEmailSender _emailSender;
 		private readonly ILogger<ExternalLoginModel> _logger;
+		private readonly FirstLoginHelper _helper;
 
 		public ExternalLoginModel(
 			SignInManager<ApplicationUser> signInManager,
 			UserManager<ApplicationUser> userManager,
 			IUserStore<ApplicationUser> userStore,
 			ILogger<ExternalLoginModel> logger,
-			IEmailSender emailSender)
+			IEmailSender emailSender,
+			FirstLoginHelper helper)
+		
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
@@ -36,6 +39,7 @@
 			_emailStore = GetEmailStore();
 			_logger = logger;
 			_emailSender = emailSender;
+			_helper = helper;
 		}
 
 		/// <summary>
@@ -106,9 +110,22 @@
 
 			// Sign in the user with this external login provider if the user already has a login.
 			var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+			
 			if (result.Succeeded)
 			{
 				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				bool isFirstTime = false;
+
+				if (userId != null && !User.IsInRole("Admin"))
+				{
+					isFirstTime = await _helper.FirstTimeLogin(userId);
+				}
+				if (isFirstTime)
+				{
+					return RedirectToAction("FirstLoginView", "User");
+				}
+
 				return LocalRedirect(returnUrl);
 			}
 			if (result.IsLockedOut)

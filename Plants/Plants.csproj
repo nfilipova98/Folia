@@ -8,14 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Administration\Views\Admin\**" />
-    <Compile Remove="Areas\Administration\Views\Blob\**" />
-    <Content Remove="Areas\Administration\Views\Admin\**" />
-    <Content Remove="Areas\Administration\Views\Blob\**" />
-    <EmbeddedResource Remove="Areas\Administration\Views\Admin\**" />
-    <EmbeddedResource Remove="Areas\Administration\Views\Blob\**" />
-    <None Remove="Areas\Administration\Views\Admin\**" />
-    <None Remove="Areas\Administration\Views\Blob\**" />
+    <Compile Remove="Areas\Administration\Views\**" />
+    <Content Remove="Areas\Administration\Views\**" />
+    <EmbeddedResource Remove="Areas\Administration\Views\**" />
+    <None Remove="Areas\Administration\Views\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,10 +41,6 @@
     <ProjectReference Include="..\Plants.Services.Constants\Plants.Services.Constants.csproj" />
     <ProjectReference Include="..\Plants.Services.Mapping\Plants.Services.Mapping.csproj" />
     <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.APIs.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Administration\Views\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 namespace Plants.Web
 {
+	using Areas.Identity.Pages.Account;
     using Data;
     using Data.Models.ApplicationUser;
     using Data.Seeding;
@@ -7,12 +8,11 @@ namespace Plants.Web
     using Services.APIs.EmailSenderService;
     using Services.APIs.Models;
 	using Services.CommentService;
-	using Services.ContactsService;
-	using Services.HomeService;
 	using Services.Mapping;
 	using Services.PetService;
     using Services.PlantService;
     using Services.RepositoryService;
+	using Services.UserService;
 
     using Azure.Storage.Blobs;
     using Microsoft.AspNetCore.Identity;
@@ -49,17 +49,18 @@ namespace Plants.Web
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
 			//Local services
-			services.AddScoped<IRepository, Repository>();
+			services.AddScoped<IRepositoryService, Repository>();
 
 			services.AddTransient<IPlantService, PlantService>();
 			services.AddTransient<IAboutService, AboutService>();
-			services.AddTransient<IHomeService, HomeService>();
 			services.AddTransient<IPetService, PetService>();
 			services.AddTransient<ICommentService, CommentService>();
+			services.AddTransient<IUserService, UserService>();
+			services.AddTransient<FirstLoginHelper>();
 			//services.AddTransient<IContactsService, ContactsService>();
 
-            //Email Sender service
-            services.AddTransient<IEmailSender, EmailSender>();
+			//Email Sender service
+			services.AddTransient<IEmailSender, EmailSender>();
 			services.Configure<AuthMessageSenderOptions>(configuration);
 
 			//Login Services

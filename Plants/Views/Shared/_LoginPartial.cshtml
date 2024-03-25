@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
 @using Plants.Services.RepositoryService
-@inject IRepository repository
+@inject IRepositoryService repository
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -22,9 +22,13 @@
 			</form>
 			@{
 				var user = await repository.FindByIdAsync<ApplicationUser>(User.FindFirstValue(ClaimTypes.NameIdentifier));
-				var tier = (int)user.Tier;
+
+				if (user != null)
+				{
+					var tier = (int)user.Tier;
+					<a href=""><img src="~/img/tiers/@(tier).png"></a>
+				}
 			}
-			<a href=""><img src="~/img/tiers/@(tier).png"></a>
 		</div>
 	}
 	else

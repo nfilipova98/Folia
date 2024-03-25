@@ -9,10 +9,10 @@
 
 	public class PetService : IPetService
 	{
-		private IRepository _repository;
+		private IRepositoryService _repository;
 		private readonly IMapper _mapper;
 
-		public PetService(IRepository repository, IMapper mapper)
+		public PetService(IRepositoryService repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;

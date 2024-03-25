@@ -10,9 +10,9 @@
 
 	public class TierResultFilterAttribute : ResultFilterAttribute
 	{
-		private IRepository _repository;
+		private IRepositoryService _repository;
 
-		public TierResultFilterAttribute(IRepository repository)
+		public TierResultFilterAttribute(IRepositoryService repository)
 		{
 			_repository = repository;
 		}
@@ -37,19 +37,19 @@
 
 				if (getUser != null && tierName != Tier.Blossom)
 				{
-					tierPoint += 10;
+					getUser.TierPoints += 10;
 				}
 				if (tierPoint > 25)
 				{
-					tierName = Tier.Sprout;
+					getUser.Tier = Tier.Sprout;
 				}
 				else if (tierPoint > 50)
 				{
-					tierName = Tier.Bloom;
+					getUser.Tier = Tier.Bloom;
 				}
 				else if (tierPoint > 75)
 				{
-					tierName = Tier.Blossom;
+					getUser.Tier = Tier.Blossom;
 				}
 			}
 

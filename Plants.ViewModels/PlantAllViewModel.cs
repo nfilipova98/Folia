@@ -45,6 +45,8 @@
 
 		public string? ImageUrl { get; set; }
 
+		public bool IsLiked { get; set; }
+
 		public ICollection<PetViewModel>? Pets { get; set; }
 
 		public ICollection<CommentViewModel>? Comments { get; set; }

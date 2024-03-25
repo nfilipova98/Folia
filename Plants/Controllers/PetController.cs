@@ -20,7 +20,7 @@
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Add()
 		{
-			var model = new PetViewModel();
+			var model = new PetAddViewModel();
 
 			return View(model);
 		}
@@ -28,7 +28,7 @@
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
 		//vij dali da e asinhronno
-		public async Task<IActionResult> Add(PetViewModel model)
+		public async Task<IActionResult> Add(PetAddViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{

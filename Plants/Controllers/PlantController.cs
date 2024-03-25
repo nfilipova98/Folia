@@ -24,19 +24,20 @@
 			_petService = petService;
 		}
 
+		//vij zashto ne se maha tuka ot kolekciqta
 		[HttpGet]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> Favorites(int id = 1)
 		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userId = GetUserId();
 
 			if (userId == null)
 			{
 				return View("NoPlantsInFavorites");
 			}
 
-			var plants = await _plantService.GetFavoritePlantsAsync<PlantAllViewModel>(userId, id, ItemsPerPage);
+			var plants = await _plantService.GetFavoritePlantsAsync<PlantAllViewModel>(userId, id, ItemsPerPage, userId);
 
 			if (plants.Any())
 			{
@@ -55,19 +56,14 @@
 		}
 
 		[AllowAnonymous]
-		[TypeFilter(typeof(TierResultFilterAttribute))]
-		public IActionResult MyPlants()
-		{
-			return View();
-		}
-
-		[AllowAnonymous]
 		public async Task<IActionResult> Explore(int id = 1)
 		{
+			var userId = GetUserId();
+
 			var model = new PlantsAllViewModel
 			{
 				PageNumber = id,
-				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(id, ItemsPerPage),
+				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(id, ItemsPerPage, userId),
 				ItemsPerPage = ItemsPerPage,
 				ItemsCount = await _plantService.GetPlantsCount()
 			};
@@ -204,6 +200,22 @@
 			}
 
 			return RedirectToAction(nameof(Explore));
+		}
+
+		[Authorize]
+		[HttpPost]
+		[TypeFilter(typeof(TierResultFilterAttribute))]
+		public async Task<IActionResult> LikeButton(int id, bool isLiked)
+		{
+			var userId = GetUserId();
+			await _plantService.LikeButton(id, isLiked, userId);
+
+			return Ok();
+		}
+
+		private string? GetUserId()
+		{
+			return User.FindFirstValue(ClaimTypes.NameIdentifier);
 		}
 	}
 }

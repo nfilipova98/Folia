@@ -9,10 +9,10 @@
 
 	public class CommentService : ICommentService
 	{
-		private IRepository _repository;
+		private IRepositoryService _repository;
 		private readonly IMapper _mapper;
 
-		public CommentService(IRepository repository, IMapper mapper)
+		public CommentService(IRepositoryService repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
