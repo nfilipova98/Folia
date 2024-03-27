@@ -20,7 +20,7 @@ namespace Plants.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userId = User.Id();
 			var plants = await _plantService.GetTrendingPlants(userId);
 
 			return View(plants);

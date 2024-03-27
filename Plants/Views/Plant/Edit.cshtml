@@ -76,9 +76,9 @@
 					<div class="mb-3">
 						<label asp-for="PetIds"><em>PETS:</em></label>
 						<select asp-for="PetIds" class="form-control" multiple>
-							@foreach (var item in Model.PetIds)
+							@foreach (var animal in Model.Pets)
 							{
-								@foreach (var animal in Model.Pets)
+								@foreach (var item in Model.PetIds)
 								{
 									if (item == animal.Id)
 									{

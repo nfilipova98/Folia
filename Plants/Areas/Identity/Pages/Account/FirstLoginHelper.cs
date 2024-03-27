@@ -3,8 +3,6 @@
 	using Data.Models.ApplicationUser;
 	using Services.RepositoryService;
 
-	using Microsoft.AspNetCore.Mvc;
-
 	public class FirstLoginHelper
 	{
 		private readonly IRepositoryService _repository;

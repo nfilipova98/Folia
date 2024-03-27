@@ -24,13 +24,12 @@
 			_petService = petService;
 		}
 
-		//vij zashto ne se maha tuka ot kolekciqta
 		[HttpGet]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> Favorites(int id = 1)
 		{
-			var userId = GetUserId();
+			var userId = User.Id();
 
 			if (userId == null)
 			{
@@ -39,15 +38,15 @@
 
 			var plants = await _plantService.GetFavoritePlantsAsync<PlantAllViewModel>(userId, id, ItemsPerPage, userId);
 
-			if (plants.Any())
+			if (plants.Any() && !User.IsInRole("Admin"))
 			{
 				var model = new PlantsAllViewModel
 				{
-					PageNumber = id,
 					AllPlants = plants,
 					ItemsPerPage = ItemsPerPage,
-					ItemsCount = await _plantService.GetPlantsCount()
 				};
+
+				model.ItemsCount = model.AllPlants.Count();
 
 				return View(model);
 			}
@@ -56,19 +55,18 @@
 		}
 
 		[AllowAnonymous]
-		public async Task<IActionResult> Explore(int id = 1)
+		public async Task<IActionResult> Explore(PlantsAllViewModel model)
 		{
-			var userId = GetUserId();
+			var userId = User.Id();
 
-			var model = new PlantsAllViewModel
+			var plant = new PlantsAllViewModel
 			{
-				PageNumber = id,
-				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(id, ItemsPerPage, userId),
-				ItemsPerPage = ItemsPerPage,
-				ItemsCount = await _plantService.GetPlantsCount()
+				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(model.PageNumber, ItemsPerPage, userId, model.SearchTerm),
+				ItemsCount = await _plantService.GetPlantsCount(),
+				SearchTerm = model.SearchTerm,
 			};
 
-			return View(model);
+			return View(plant);
 		}
 
 		[HttpGet]
@@ -207,15 +205,10 @@
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{
-			var userId = GetUserId();
+			var userId = User.Id();
 			await _plantService.LikeButton(id, isLiked, userId);
 
 			return Ok();
-		}
-
-		private string? GetUserId()
-		{
-			return User.FindFirstValue(ClaimTypes.NameIdentifier);
 		}
 	}
 }

@@ -1,11 +1,10 @@
 ﻿namespace Plants.Controllers
 {
-	using Models;
 	using Services.PetService;
+	using ViewModels;
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
-	using Plants.ViewModels;
 
 	public class PetController : BaseController
 	{

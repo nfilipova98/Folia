@@ -114,7 +114,7 @@
 			if (result.Succeeded)
 			{
 				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var userId = User.Id();
 				bool isFirstTime = false;
 
 				if (userId != null && !User.IsInRole("Admin"))

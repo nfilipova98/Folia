@@ -22,7 +22,7 @@
 			bool isSuccessful = true;
 
 			var user = context.HttpContext.User;
-			var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userId = user.Id();
 
 			if (user.IsInRole("Admin") || !user.Identity.IsAuthenticated || userId == null)
 			{

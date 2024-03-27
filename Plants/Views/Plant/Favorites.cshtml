@@ -1,10 +1,10 @@
 ﻿@model PlantsAllViewModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions {
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
+	public string GetAntiXsrfRequestToken()
+	{
+		return Xsrf.GetAndStoreTokens(Context).RequestToken;
+	}
 }
 @{
 	ViewData["Title"] = "Favorite Plants";
@@ -34,41 +34,42 @@
 			</div>
 		</div>
 	</div>
+</div>
 
-	<partial name="_PagingPartial" />
+<partial name="_PagingPartial" />
 
-    @section scripts {
-        <script>
-            $(document).on('click', '.favorite-btn', function () {
-                $(this).toggleClass('clicked');
-                var $img = $(this).find('img');
-                if ($(this).hasClass('clicked')) {
-                    $img.attr('src', '/img/icons/heart-filled.png');
-                } else {
-                    $img.attr('src', '/img/icons/heart-outline.png');
-                }
+@section scripts {
+	<script>
+		$(document).on('click', '.favorite-btn', function () {
+			$(this).toggleClass('clicked');
+			var $img = $(this).find('img');
+			if ($(this).hasClass('clicked')) {
+				$img.attr('src', '/img/icons/heart-filled.png');
+			} else {
+				$img.attr('src', '/img/icons/heart-outline.png');
+			}
 
-                var isLiked = $(this).hasClass('clicked');
-                var plantName = $(this).closest('.portfolio-item').find('h5').text();
-                var plantId = $(this).data("id");
+			var isLiked = $(this).hasClass('clicked');
+			var plantName = $(this).closest('.portfolio-item').find('h5').text();
+			var plantId = $(this).data("id");
 
-                $.ajax({
-                    url: '@Url.Action("LikeButton", "Plant")',
-                    method: 'POST',
-                    headers: {
-                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
-                    },
-                    data: {
-                        id: plantId,
-                        isLiked: isLiked
-                    },
-                    success: function (response) {
-                        alert(plantName + (isLiked ? " added to favorites." : " removed from favorites."));
-                    },
-                    error: function (request, status, error) {
-                        alert("Fail");
-                    }
-                });
-            });
-        </script>
-    }
+			$.ajax({
+				url: '@Url.Action("LikeButton", "Plant")',
+				method: 'POST',
+				headers: {
+					"RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+				},
+				data: {
+					id: plantId,
+					isLiked: isLiked
+				},
+				success: function (response) {
+					alert(plantName + (isLiked ? " added to favorites." : " removed from favorites."));
+				},
+				error: function (request, status, error) {
+					alert("Fail");
+				}
+			});
+		});
+	</script>
+}

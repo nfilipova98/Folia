@@ -2,9 +2,11 @@
 {
 	public class PagingViewModel
 	{
-		public int ItemsPerPage { get; set; }
+		private const int ItemsPerPageDefault = 12;
 
-		public int PageNumber { get; set; }
+		public int ItemsPerPage { get; set; } = ItemsPerPageDefault;
+
+		public int PageNumber { get; set; } = 1;
 
 		public int NextPageNumber => PageNumber + 1;
 

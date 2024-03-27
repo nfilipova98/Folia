@@ -110,7 +110,7 @@
 
 				if (result.Succeeded)
 				{
-					var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+					var userId = User.Id();
 					_logger.LogInformation("User logged in.");
 
 					if (userId != null && !User.IsInRole("Admin"))

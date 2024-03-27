@@ -21,7 +21,7 @@
 				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
 			</form>
 			@{
-				var user = await repository.FindByIdAsync<ApplicationUser>(User.FindFirstValue(ClaimTypes.NameIdentifier));
+				var user = await repository.FindByIdAsync<ApplicationUser>(User.Id());
 
 				if (user != null)
 				{

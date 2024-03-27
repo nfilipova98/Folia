@@ -13,7 +13,6 @@
 	using Azure.Storage.Blobs;
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
-	using Plants.ViewModels;
 
 	public class PlantService : IPlantService
 	{
@@ -131,16 +130,33 @@
 			return petIds;
 		}
 
-		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync<T>(int page, int itemsPerPage, string userId)
+		//improve this code
+		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync<T>
+			(int page,
+			int itemsPerPage,
+			string userId,
+			string searchString)
 		{
-			var plants = await _repository.AllReadOnly<Plant>()
+
+			var plantsToShow = _repository.AllReadOnly<Plant>();
+
+			if (searchString != string.Empty)
+			{
+				string normalizedSearchTerm = searchString.ToLower();
+
+				plantsToShow = plantsToShow
+				   .Where(x => x.Name.ToLower().Contains(normalizedSearchTerm) ||
+									  x.ScientificName.ToLower().Contains(normalizedSearchTerm));
+			}
+
+			var plants = await plantsToShow
 				.Include(x => x.UsersLikedPlant)
 				.OrderByDescending(x => x.Id)
 				.Skip((page - 1) * itemsPerPage)
 				.Take(itemsPerPage)
 				.ToListAsync();
 
-			var model = _mapper.Map <List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
+			var model = _mapper.Map<List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
 
 			return model;
 		}
