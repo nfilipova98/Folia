@@ -78,16 +78,19 @@
 						<select asp-for="PetIds" class="form-control" multiple>
 							@foreach (var animal in Model.Pets)
 							{
+								bool isSelected = false;
+
 								@foreach (var item in Model.PetIds)
 								{
 									if (item == animal.Id)
 									{
 										<option value="@animal.Id" selected="@animal">@animal.Name</option>
+										isSelected = true;
 									}
-									else
-									{
-										<option value="@animal.Id">@animal.Name</option>
-									}
+								}
+								if (!isSelected)
+								{
+									<option value="@animal.Id">@animal.Name</option>
 								}
 							}
 						</select>

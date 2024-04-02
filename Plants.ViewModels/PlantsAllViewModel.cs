@@ -11,14 +11,12 @@
 
 		public string? SearchTerm { get; set; } = string.Empty;
 
-		public PlantFilter Sorting { get; set; }
+		public Lifestyle? Lifestyle { get; set; }
 
-		public Lifestyle Lifestyle { get; set; }
-
-		public Difficulty Difficulty { get; set; }
+		public Difficulty? Difficulty { get; set; }
 
 		[DisplayName("Kid Safe")]
-		public bool KidSafe { get; set; }
+		public bool? KidSafe { get; set; }
 
 		public IEnumerable<int>? PetIds { get; set; } = new List<int>();
 

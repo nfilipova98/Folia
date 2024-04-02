@@ -4,10 +4,10 @@
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI.Services;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.RazorPages;
 	using Microsoft.AspNetCore.WebUtilities;
+	using Plants.Services.APIs.EmailSenderService;
 	using System.ComponentModel.DataAnnotations;
 	using System.Security.Claims;
 	using System.Text;
@@ -20,7 +20,7 @@
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IUserStore<ApplicationUser> _userStore;
 		private readonly IUserEmailStore<ApplicationUser> _emailStore;
-		private readonly IEmailSender _emailSender;
+		private readonly ICustomEmailSender _emailSender;
 		private readonly ILogger<ExternalLoginModel> _logger;
 		private readonly FirstLoginHelper _helper;
 
@@ -29,7 +29,7 @@
 			UserManager<ApplicationUser> userManager,
 			IUserStore<ApplicationUser> userStore,
 			ILogger<ExternalLoginModel> logger,
-			IEmailSender emailSender,
+			ICustomEmailSender emailSender,
 			FirstLoginHelper helper)
 		
 		{

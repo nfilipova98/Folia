@@ -1,5 +1,6 @@
 ﻿namespace Plants.Services.Mapping
 {
+	using Data.Models.ApplicationUser;
 	using Data.Models.Comment;
 	using Data.Models.Pet;
 	using Data.Models.Plant;

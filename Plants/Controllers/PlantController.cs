@@ -4,49 +4,55 @@
 	using Services.APIs.Models;
 	using Services.PetService;
 	using Services.PlantService;
-	using static Services.Constants.GlobalConstants.Paging;
 	using Utilities;
 	using ViewModels;
 
+	using Azure;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 	using Newtonsoft.Json;
+	using SendGrid.Helpers.Errors.Model;
 	using System.Security.Claims;
 
 	public class PlantController : BaseController
 	{
 		private readonly IPlantService _plantService;
 		private readonly IPetService _petService;
+		private readonly ILogger _logger;
 
-		public PlantController(IPlantService plantService, IPetService petService)
+		public PlantController(IPlantService plantService, IPetService petService, ILogger<PlantController> logger)
 		{
 			_plantService = plantService;
 			_petService = petService;
+			_logger = logger;
 		}
 
+		//sloji logger i greshki
 		[HttpGet]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> Favorites(int id = 1)
 		{
-			var userId = User.Id();
+			string userId = User.Id();
 
 			if (userId == null)
 			{
 				return View("NoPlantsInFavorites");
 			}
 
-			var plants = await _plantService.GetFavoritePlantsAsync<PlantAllViewModel>(userId, id, ItemsPerPage, userId);
+			var plants = await _plantService.GetFavoritePlantsAsync(userId);
 
 			if (plants.Any() && !User.IsInRole("Admin"))
 			{
-				var model = new PlantsAllViewModel
+				var model = new PlantsAllViewModelFavorites
 				{
-					AllPlants = plants,
-					ItemsPerPage = ItemsPerPage,
+					ItemsCount = plants.Count(),
+					PageNumber = id
 				};
 
-				model.ItemsCount = model.AllPlants.Count();
+				var plantsToShow = await _plantService.Pagination(plants, id);
+
+				model.AllPlants = plantsToShow;
 
 				return View(model);
 			}
@@ -54,19 +60,26 @@
 			return View("NoPlantsInFavorites");
 		}
 
+		//sloji logger i greshki
+		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Explore(PlantsAllViewModel model)
+		public async Task<IActionResult> Explore(PlantsAllViewModel model, int id = 1)
 		{
-			var userId = User.Id();
+			string userId = User.Id();
 
-			var plant = new PlantsAllViewModel
+			var plants = await _plantService.GetAllPlantsAsync(userId, model.SearchTerm);
+
+			var plantsToShow = new PlantsAllViewModel
 			{
-				AllPlants = await _plantService.GetAllPlantsAsync<PlantAllViewModel>(model.PageNumber, ItemsPerPage, userId, model.SearchTerm),
-				ItemsCount = await _plantService.GetPlantsCount(),
-				SearchTerm = model.SearchTerm,
+				ItemsCount = plants.Count(),
+				PageNumber = id
 			};
 
-			return View(plant);
+			var plantsPagination = await _plantService.Pagination(plants, id);
+
+			plantsToShow.AllPlants = plantsPagination;
+
+			return View(plantsToShow);
 		}
 
 		[HttpGet]
@@ -81,11 +94,12 @@
 
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
-		//vij dali da e asinhronno
 		public async Task<IActionResult> Add(PlantEditOrAddViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
+				_logger.LogError("PlantController/Add - ModelState was not valid");
+
 				model.Pets = await _petService.GetAllPetsAsync();
 				return View(model);
 			}
@@ -101,6 +115,7 @@
 		{
 			if (TempData["PlantInfo"] == null)
 			{
+				_logger.LogError("PlantController/UploadFile - TempData was null");
 				return BadRequest();
 			}
 
@@ -113,9 +128,12 @@
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UploadFile(ImageModel file)
 		{
+			var url = string.Empty;
+
 			if (file == null || file.FormFile == null || file.FormFile.Length == 0
 				|| !file.FormFile.ContentType.StartsWith("image"))
 			{
+				_logger.LogError("PlantController/UploadFile - Error occurred during file upload");
 				ModelState.AddModelError(nameof(ImageModel.FormFile), "Please upload an image.");
 				return View();
 			}
@@ -124,12 +142,21 @@
 
 			if (model == null)
 			{
+				_logger.LogError("PlantController/UploadFile - No model was found");
 				return NotFound();
 			}
 
-			var url = await _plantService.UploadFileAsync(file);
-			await _plantService.CreatePlantAsync(url, model);
+			try
+			{
+				url = await _plantService.UploadFileAsync(file);
+			}
+			catch (RequestFailedException ex)
+			{
+				_logger.LogError(ex, "PlantController/UploadFile - Azure request failed error");
+				return BadRequest();
+			}
 
+			await _plantService.CreatePlantAsync(url, model);
 			return RedirectToAction(nameof(Explore));
 		}
 
@@ -141,6 +168,7 @@
 
 			if (plant == false)
 			{
+				_logger.LogError("PlantController/Edit - No plant with the given id exists");
 				return BadRequest();
 			}
 
@@ -160,17 +188,28 @@
 
 			if (plantToEdit == false)
 			{
+				_logger.LogError("PlantController/Edit - No plant with the given id exists");
 				return BadRequest();
 			}
 
 			if (!ModelState.IsValid)
 			{
+				_logger.LogError("PlantController/Edit - ModelState was not valid");
+
 				model.Pets = await _petService.GetAllPetsAsync();
 				model.PetIds = await _plantService.GetPetIds(id);
 				return View(model);
 			}
 
-			await _plantService.EditAsync(id, model);
+			try
+			{
+				await _plantService.EditAsync(id, model);
+			}
+			catch (NotFoundException nfEx)
+			{
+				_logger.LogError(nfEx, "PlantController/Edit - Plant with the given id was not found");
+				return NotFound();
+			}
 
 			return RedirectToAction(nameof(Explore));
 		}
@@ -179,34 +218,71 @@
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var plant = await _plantService.DeleteAsync(id);
-
-			return View(plant);
+			try
+			{
+				var plant = await _plantService.DeleteAsync(id);
+				return View(plant);
+			}
+			catch (NotFoundException nfEx)
+			{
+				_logger.LogError(nfEx, "PlantController/Delete - Plant with the given id was not found");
+				return NotFound();
+			}
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			var plant = await _plantService.DeleteAsync(id);
-			var url = plant.ImageUrl;
-			var result = await _plantService.DeleteFileAsync(url, id);
+			var url = string.Empty;
 
-			if (result == false)
+			try
 			{
+				var plant = await _plantService.DeleteAsync(id);
+				url = plant.ImageUrl;
 
+				await _plantService.DeleteFileAsync(url, id);
+			}
+			catch (NotFoundException nfEx)
+			{
+				_logger.LogError(nfEx, "PlantController/DeleteConfirmed - Plant with the given id was not found");
+				return NotFound();
+			}
+			catch (ArgumentException argEx)
+			{
+				_logger.LogError(argEx, "PlantController/DeleteConfirmed - File with the given name was not found");
+				return BadRequest();
+			}
+			catch (RequestFailedException rEx)
+			{
+				_logger.LogError(rEx, "PlantController/DeleteConfirmed - The file was not deleted");
+				return BadRequest();
 			}
 
 			return RedirectToAction(nameof(Explore));
 		}
 
-		[Authorize]
+		//vij za tier change-a kak da stane
 		[HttpPost]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{
 			var userId = User.Id();
-			await _plantService.LikeButton(id, isLiked, userId);
+
+			if (userId == null)
+			{
+				return BadRequest();
+			}
+
+			try
+			{
+				await _plantService.LikeButton(id, isLiked, userId);
+			}
+			catch (NotFoundException nfEx)
+			{
+				_logger.LogError(nfEx, "PlantController/LikeButton - Error occurred while trying to like a plant");
+				return BadRequest();
+			}
 
 			return Ok();
 		}

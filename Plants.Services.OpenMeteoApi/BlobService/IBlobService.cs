@@ -5,6 +5,6 @@
 	public interface IBlobService
 	{
 		Task<string> UploadFileAsync(ImageModel file);
-		Task<bool> DeleteFileAsync(string fileName, int id);
+		Task DeleteFileAsync(string fileName, int id);
 	}
 }

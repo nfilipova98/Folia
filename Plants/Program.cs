@@ -8,6 +8,7 @@ namespace Plants.Web
     using Services.APIs.EmailSenderService;
     using Services.APIs.Models;
 	using Services.CommentService;
+	using Services.ContactsService;
 	using Services.Mapping;
 	using Services.PetService;
     using Services.PlantService;
@@ -16,7 +17,6 @@ namespace Plants.Web
 
     using Azure.Storage.Blobs;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -57,10 +57,10 @@ namespace Plants.Web
 			services.AddTransient<ICommentService, CommentService>();
 			services.AddTransient<IUserService, UserService>();
 			services.AddTransient<FirstLoginHelper>();
-			//services.AddTransient<IContactsService, ContactsService>();
+			services.AddTransient<IContactsService, ContactsService>();
 
 			//Email Sender service
-			services.AddTransient<IEmailSender, EmailSender>();
+			services.AddTransient<ICustomEmailSender, EmailSender>();
 			services.Configure<AuthMessageSenderOptions>(configuration);
 
 			//Login Services

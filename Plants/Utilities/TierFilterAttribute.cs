@@ -24,6 +24,8 @@
 			var user = context.HttpContext.User;
 			var userId = user.Id();
 
+			bool isChanged = false;
+
 			if (user.IsInRole("Admin") || !user.Identity.IsAuthenticated || userId == null)
 			{
 				isSuccessful = false;
@@ -37,19 +39,23 @@
 
 				if (getUser != null && tierName != Tier.Blossom)
 				{
-					getUser.TierPoints += 10;
+					var currentPoints = getUser.TierPoints += 5;
+					tierPoint = currentPoints;
 				}
-				if (tierPoint > 25)
+				if (tierPoint == 25)
 				{
 					getUser.Tier = Tier.Sprout;
+					isChanged = true;
 				}
-				else if (tierPoint > 50)
+				else if (tierPoint == 50)
 				{
 					getUser.Tier = Tier.Bloom;
+					isChanged = true;
 				}
-				else if (tierPoint > 75)
+				else if (tierPoint == 75)
 				{
 					getUser.Tier = Tier.Blossom;
+					isChanged = true;
 				}
 			}
 
@@ -58,6 +64,7 @@
 			if (isSuccessful)
 			{
 				await _repository.SaveChangesAsync();
+				context.HttpContext.Items["tierUp"] = isChanged;
 			}
 		}
 	}

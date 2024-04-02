@@ -3,10 +3,10 @@
 	using Data.Models.ApplicationUser;
 
 	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI.Services;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.RazorPages;
 	using Microsoft.AspNetCore.WebUtilities;
+	using Plants.Services.APIs.EmailSenderService;
 	using System.ComponentModel.DataAnnotations;
 	using System.Text;
 	using System.Text.Encodings.Web;
@@ -14,9 +14,9 @@
 	public class ForgotPasswordModel : PageModel
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
-		private readonly IEmailSender _emailSender;
+		private readonly ICustomEmailSender _emailSender;
 
-		public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+		public ForgotPasswordModel(UserManager<ApplicationUser> userManager, ICustomEmailSender emailSender)
 		{
 			_userManager = userManager;
 			_emailSender = emailSender;

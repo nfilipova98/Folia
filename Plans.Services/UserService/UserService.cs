@@ -1,11 +1,12 @@
 ﻿namespace Plants.Services.UserService
 {
 	using Data.Models.ApplicationUser;
+	using Data.Models.Enums;
+	using Data.Models.Pet;
 	using RepositoryService;
 	using ViewModels;
 
 	using AutoMapper;
-	using Plants.Data.Models.Pet;
 
 	public class UserService : IUserService
 	{
@@ -33,6 +34,13 @@
 			};
 
 			return model;
+		}
+
+		public async Task<Tier?> FindUserByIdAsync(string userId)
+		{
+			var user = await _repository.FindByIdAsync<ApplicationUser>(userId);
+
+			return user?.Tier;
 		}
 	}
 }

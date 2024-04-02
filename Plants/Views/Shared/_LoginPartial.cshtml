@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
-@using Plants.Services.RepositoryService
-@inject IRepositoryService repository
+@using Plants.Services.UserService
+@inject IUserService service
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -21,11 +21,11 @@
 				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
 			</form>
 			@{
-				var user = await repository.FindByIdAsync<ApplicationUser>(User.Id());
+				var userTier = await service.FindUserByIdAsync(User.Id());
 
-				if (user != null)
+				if (userTier != null)
 				{
-					var tier = (int)user.Tier;
+					var tier = (int)userTier;
 					<a href=""><img src="~/img/tiers/@(tier).png"></a>
 				}
 			}

@@ -7,12 +7,13 @@
 	using Models;
 	using RepositoryService;
 	using static Constants.GlobalConstants.ApiConstants;
+	using static Services.Constants.GlobalConstants.Paging;
 
 	using AutoMapper;
-	using Azure;
 	using Azure.Storage.Blobs;
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
+	using SendGrid.Helpers.Errors.Model;
 
 	public class PlantService : IPlantService
 	{
@@ -45,24 +46,17 @@
 
 		public async Task<string> UploadFileAsync(ImageModel file)
 		{
-			try
+			var fileName = Guid.NewGuid().ToString();
+			using var fileStream = file.FormFile.OpenReadStream();
+
+			var blobClient = GetBlobClient(fileName);
+
+			using (var stream = file.FormFile.OpenReadStream())
 			{
-				var fileName = Guid.NewGuid().ToString();
-				using var fileStream = file.FormFile.OpenReadStream();
-
-				var blobClient = GetBlobClient(fileName);
-
-				using (var stream = file.FormFile.OpenReadStream())
-				{
-					await blobClient.UploadAsync(stream);
-				}
-
-				return blobClient.Uri.ToString();
+				await blobClient.UploadAsync(stream);
 			}
-			catch (RequestFailedException ex)
-			{
-				throw;
-			}
+
+			return blobClient.Uri.ToString();
 		}
 
 		public async Task CreatePlantAsync(string fileUrl, PlantEditOrAddViewModel model)
@@ -95,28 +89,31 @@
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
 
+			if (plant == null)
+			{
+				throw new NotFoundException();
+			}
+
 			return _mapper.Map<PlantDeleteViewModel>(plant);
 		}
 
-		public async Task<bool> DeleteFileAsync(string url, int id)
+		public async Task DeleteFileAsync(string url, int id)
 		{
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
 
-			var fileName = Path.GetFileName(url);
-
-			if (fileName == null || plant == null)
+			if (plant == null)
 			{
-
+				throw new NotFoundException();
 			}
 
+			var fileName = Path.GetFileName(url);
+
 			var blobClient = GetBlobClient(fileName);
-			var isDeleted = await blobClient.DeleteIfExistsAsync();
+			await blobClient.DeleteIfExistsAsync();
 
-			_repository.Delete<Plant>(plant);
+			_repository.Delete(plant);
 			await _repository.SaveChangesAsync();
-
-			return isDeleted;
 		}
 
 		public async Task<IEnumerable<int>> GetPetIds(int id)
@@ -130,11 +127,8 @@
 			return petIds;
 		}
 
-		//improve this code
-		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync<T>
-			(int page,
-			int itemsPerPage,
-			string userId,
+		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync
+			(string userId,
 			string searchString)
 		{
 
@@ -152,8 +146,6 @@
 			var plants = await plantsToShow
 				.Include(x => x.UsersLikedPlant)
 				.OrderByDescending(x => x.Id)
-				.Skip((page - 1) * itemsPerPage)
-				.Take(itemsPerPage)
 				.ToListAsync();
 
 			var model = _mapper.Map<List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
@@ -174,14 +166,12 @@
 			return model;
 		}
 
-		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync<T>(string id, int page, int itemsPerPage, string userId)
+		public async Task<IEnumerable<PlantAllViewModel>> GetFavoritePlantsAsync(string userId)
 		{
 			var plants = await _repository.AllReadOnly<Plant>()
 				.Include(x => x.UsersLikedPlant)
-				.Where(x => x.UsersLikedPlant.Any(x => x.Id == id))
+				.Where(x => x.UsersLikedPlant.Any(x => x.Id == userId))
 				.OrderByDescending(x => x.Id)
-				.Skip((page - 1) * itemsPerPage)
-				.Take(itemsPerPage)
 				.ToListAsync();
 
 			var model = _mapper.Map<List<Plant>, List<PlantAllViewModel>>(plants, opt => opt.Items["userId"] = userId);
@@ -189,46 +179,31 @@
 			return model;
 		}
 
+		public async Task<IEnumerable<T>> Pagination<T>(IEnumerable<T> model, int page)
+		{
+			var plants = model
+				.Skip((page - 1) * ItemsPerPage)
+				.Take(ItemsPerPage)
+				.ToList();
+
+			return plants;
+		}
+
 		public async Task EditAsync(int id, PlantEditOrAddViewModel model)
 		{
 			var plant = await _repository
 				.FindByIdAsync<Plant>(id);
 
-			var pets = _mapper.Map<Pet>(model.Pets);
-
-			//vij za jivotnite
-			if (plant != null)
+			if (plant == null)
 			{
-				plant.Name = model.Name;
-				plant.ScientificName = model.ScientificName;
-				plant.Lifestyle = model.Lifestyle;
-				plant.Outdoor = model.Outdoor;
-				plant.Difficulty = model.Difficulty;
-				plant.Humidity = model.Humidity;
-				plant.IsTrending = model.IsTrending;
-				plant.KidSafe = model.KidSafe;
-				//plant.Pets = pets;
+				throw new NotFoundException();
 			}
 
-			_repository.UpdateAsync<Plant>(plant);
+			_repository.UpdateAsync(plant);
 			await _repository.SaveChangesAsync();
 		}
 
-		private BlobClient GetBlobClient(string fileName)
-		{
-			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(BlobContainerName);
-			return blobContainerClient.GetBlobClient(fileName);
-		}
-
-		public async Task<int> GetPlantsCount()
-		{
-			var plant = await _repository.AllReadOnly<Plant>()
-				.ToListAsync();
-
-			return plant.Count;
-		}
-
-		public async Task<bool> LikeButton(int id, bool isLiked, string userId)
+		public async Task LikeButton(int id, bool isLiked, string userId)
 		{
 			var plant = await _repository.FindByIdAsync<Plant>(id);
 			var user = await _repository.All<ApplicationUser>()
@@ -237,7 +212,7 @@
 
 			if (plant == null || user == null)
 			{
-				return false;
+				throw new NotFoundException();
 			}
 
 			var likedPlant = user.LikedPlants
@@ -253,8 +228,12 @@
 			}
 
 			await _repository.SaveChangesAsync();
+		}
 
-			return true;
+		private BlobClient GetBlobClient(string fileName)
+		{
+			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(BlobContainerName);
+			return blobContainerClient.GetBlobClient(fileName);
 		}
 	}
 }

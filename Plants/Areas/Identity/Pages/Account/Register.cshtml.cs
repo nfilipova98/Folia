@@ -1,10 +1,10 @@
 ﻿namespace Plants.Areas.Identity.Pages.Account
 {
-    using Plants.Data.Models.ApplicationUser;
+    using Data.Models.ApplicationUser;
+	using Services.APIs.EmailSenderService;
 
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
@@ -19,14 +19,14 @@
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly ICustomEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+			ICustomEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;

@@ -5,18 +5,16 @@
 
 	public class ContactsService : IContactsService
 	{
-		private readonly EmailSender _emailSender;
+		private readonly ICustomEmailSender _emailSender;
 
-		public ContactsService(EmailSender emailSender)
+		public ContactsService(ICustomEmailSender emailSender)
 		{
 			_emailSender = emailSender;
 		}
 
 		public async Task SendEmail(ContactViewModel model)
 		{
-			var message = model.Message;
-
-			var result = _emailSender.SendEmailAsync("nfilipova98@gmail.com", "ContactsRequest", message);
+			await _emailSender.SendEmailAsync(model.Email, "nfilipova@students.softuni.bg", model.Subject, model.Message);
 		}
 	}
 }

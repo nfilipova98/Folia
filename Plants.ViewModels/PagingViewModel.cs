@@ -6,7 +6,7 @@
 
 		public int ItemsPerPage { get; set; } = ItemsPerPageDefault;
 
-		public int PageNumber { get; set; } = 1;
+		public int PageNumber { get; set; } 
 
 		public int NextPageNumber => PageNumber + 1;
 

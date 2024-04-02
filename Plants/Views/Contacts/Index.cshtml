@@ -33,7 +33,7 @@
 											<input asp-for="@Model.Subject" class="form-control" placeholder="Subject" />
 											<span asp-validation-for="@Model.Message" class="text-danger"></span>
 											<textarea class="form-control" asp-for="@Model.Message" placeholder="Message"></textarea>
-											<button class="site-btn">send message <img src="/img/icons/arrow-right.png" alt=""></button>
+											<button asp-action="SendMessage" asp-controller="Contacts" class="site-btn">send message <img src="/img/icons/arrow-right.png" alt=""></button>
 										</div>
 									</div>
 								</div>

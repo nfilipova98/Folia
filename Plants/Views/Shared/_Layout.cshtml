@@ -20,41 +20,41 @@
 	<!-- Main Stylesheets -->
 	<link rel="stylesheet" href="~/css/style.css" />
 </head>
-	<body>
-		<!-- Page Preloder -->
-		<div id="preloder">
-			<div class="loader"></div>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+	<!-- Main section start -->
+	<div class="main-site-warp">
+		<div class="site-menu-warp">
+			<div class="close-menu">x</div>
+			<!-- Main menu -->
+			<ul class="site-menu">
+				<partial name="_ControllerHelperPartial" />
+			</ul>
 		</div>
-		<!-- Main section start -->
-		<div class="main-site-warp">
-			<div class="site-menu-warp">
-				<div class="close-menu">x</div>
-				<!-- Main menu -->
-				<ul class="site-menu">
-					<partial name="_ControllerHelperPartial" />
-				</ul>
+		<header class="header-section">
+			<div class="nav-switch">
+				<i class="fa fa-bars"></i>
 			</div>
-			<header class="header-section">
-				<div class="nav-switch">
-					<i class="fa fa-bars"></i>
-				</div>
-				<!-- Top Icons -->
-				<div class="header-social">
+			<!-- Top Icons -->
+			<div class="header-social">
 				<partial name="_LoginPartial" />
-				</div>
-			</header>
-			@RenderBody()
-		</div>
-		<script src="~/lib/jquery/dist/jquery.min.js"></script>
-		<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="~/js/site.js" asp-append-version="true"></script>
-		<script src="~/js/jquery-3.2.1.min.js"></script>
-		<script src="~/js/bootstrap.min.js"></script>
-		<script src="~/js/owl.carousel.min.js"></script>
-		<script src="~/js/jquery.nicescroll.min.js"></script>
-		<script src="~/js/circle-progress.min.js"></script>
-		<script src="~/js/jquery.magnific-popup.min.js"></script>
-		<script src="~/js/main.js"></script>
-		@await RenderSectionAsync("Scripts", required: false)
-	</body>
+			</div>
+		</header>
+		@RenderBody()
+	</div>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/jquery-3.2.1.min.js"></script>
+	<script src="~/js/bootstrap.min.js"></script>
+	<script src="~/js/owl.carousel.min.js"></script>
+	<script src="~/js/jquery.nicescroll.min.js"></script>
+	<script src="~/js/circle-progress.min.js"></script>
+	<script src="~/js/jquery.magnific-popup.min.js"></script>
+	<script src="~/js/main.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>

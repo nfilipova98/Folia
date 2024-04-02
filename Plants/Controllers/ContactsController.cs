@@ -16,7 +16,8 @@
 		}
 
 		[AllowAnonymous]
-		public IActionResult Index()
+		[HttpGet]
+		public async Task<IActionResult> Index()
 		{
 			var model = new ContactViewModel();
 
@@ -29,7 +30,7 @@
 		{
 			if (!ModelState.IsValid)
 			{
-
+				return View(model);
 			}
 
 			await _contactsService.SendEmail(model);
