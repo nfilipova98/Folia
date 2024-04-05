@@ -1,5 +1,7 @@
 ﻿namespace Plants.Data.Seeding
 {
+	using static Services.Constants.GlobalConstants.AdminConstants;
+
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.Extensions.DependencyInjection;
 	using System;
@@ -12,7 +14,7 @@
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            await SeedRoleAsync(roleManager, "Admin");
+            await SeedRoleAsync(roleManager, Admin);
             await SeedRoleAsync(roleManager, "User");         
         }
 

@@ -2,12 +2,14 @@
 {
 	using Data.Models.ApplicationUser;
 
+	using Services.APIs.EmailSenderService;
+	using static Services.Constants.GlobalConstants.AdminConstants;
+
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.RazorPages;
 	using Microsoft.AspNetCore.WebUtilities;
-	using Plants.Services.APIs.EmailSenderService;
 	using System.ComponentModel.DataAnnotations;
 	using System.Security.Claims;
 	using System.Text;
@@ -31,7 +33,7 @@
 			ILogger<ExternalLoginModel> logger,
 			ICustomEmailSender emailSender,
 			FirstLoginHelper helper)
-		
+
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
@@ -110,14 +112,14 @@
 
 			// Sign in the user with this external login provider if the user already has a login.
 			var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-			
+
 			if (result.Succeeded)
 			{
 				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
 				var userId = User.Id();
 				bool isFirstTime = false;
 
-				if (userId != null && !User.IsInRole("Admin"))
+				if (userId != null && !User.IsInRole(Admin))
 				{
 					isFirstTime = await _helper.FirstTimeLogin(userId);
 				}

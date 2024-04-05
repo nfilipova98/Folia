@@ -3,6 +3,7 @@
 	using Data.Models.ApplicationUser;
 	using Data.Models.Enums;
 	using Services.RepositoryService;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 
 	using Microsoft.AspNetCore.Mvc.Filters;
 	using System.Threading.Tasks;
@@ -26,7 +27,7 @@
 
 			bool isChanged = false;
 
-			if (user.IsInRole("Admin") || !user.Identity.IsAuthenticated || userId == null)
+			if (user.IsInRole(Admin) || !user.Identity.IsAuthenticated || userId == null)
 			{
 				isSuccessful = false;
 			}

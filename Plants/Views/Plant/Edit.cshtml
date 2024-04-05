@@ -74,6 +74,11 @@
 						<span asp-validation-for="@Model.IsTrending" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
+						<label asp-for="Description"><em>DESCRIPTION</em></label>
+						<textarea asp-for="Description" class="form-control" rows="5"></textarea>
+						<span asp-validation-for="Description" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
 						<label asp-for="PetIds"><em>PETS:</em></label>
 						<select asp-for="PetIds" class="form-control" multiple>
 							@foreach (var animal in Model.Pets)

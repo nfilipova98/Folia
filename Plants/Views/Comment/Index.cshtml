@@ -1,53 +1,76 @@
-﻿@model IEnumerable<CommentViewModel>
+﻿@model CommentsViewModel
 @{
 	ViewData["Title"] = "Comments";
+	Layout = "_BlankLayout";
 }
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalCenterTitle">Comments</h5>
+				<h5 class="modal-title" id="exampleModalCenterTitle" style="font-family:'Playfair Display';">@Model.PlantName</h5>
 				<input type="button" value="x" onclick="window.location='@Url.Action("Explore", "Plant")'" style="background-color: transparent; margin-left:20px" />
 			</div>
 			<div class="modal-body">
-				<ul class="comments-list">
-					@foreach (var comment in Model)
-					{
-						<li>
-							<div class="blog-avator">
-								<img src=@comment.UserPictureUrl alt="/img/icons/user-avatar.png">
+				<div class="card-body p-4" style="padding-top:0px; padding-bottom:0px;">
+				<p>@Model.PlantDescription</p>
+				</div>
+				@foreach (var comment in Model.ExistingComments)
+				{
+					<div class="row d-flex justify-content-center">
+						<div>
+							<div class="card w-100">
+								<div class="card-body p-4">
+									<div class="d-flex align-items-center">
+										@if (comment.ApplicationUserPictureUrl == string.Empty)
+										{
+											<img class="rounded-circle shadow-1-strong me-3"
+												 src="@comment.ApplicationUserPictureUrl" width="65" height="65" />
+										}
+										else
+										{
+											<img class="rounded-circle shadow-1-strong me-3"
+												 src="~/img/icons/user-avatar.png" alt="avatar" width="65" height="65" />
+										}
+										<h5>@comment.ApplicationUserName</h5>
+									</div>
+									<p></p>
+									@{
+										var createdOn = (comment.CreatedOn.ToString(DateFormat, CultureInfo.InvariantCulture));
+									}
+									<p class="small">
+										@createdOn
+									</p>
+									<p>@comment.Content</p>
+								</div>
 							</div>
-							<div class="comment-text">
-								<h6>@comment.UserId</h6>
-								@if (comment.UpdatedOn != null)
-								{
-									<span>@comment.UpdatedOn</span>
-								}
-								else
-								{
-									<span>@comment.CreatedOn</span>
-								}
-								<p>@comment.Content</p>
-								<a href="#">Reply</a>
-							</div>
-						</li>
-					}
-				</ul>
-			</div>
-			<div class="modal-footer">
-				<form class="contact-form">
-					<div class="col-lg-12" style="font-family:'Playfair Display';">
-						<textarea style="margin-bottom:0" placeholder="Comment"></textarea>
-						<button class="site-btn">Submit</button>
+						</div>
 					</div>
-				</form>
+					<p></p>
+				}
+				<p></p>
+				<div class="modal-footer-center">
+					<div class="row d-flex justify-content-center">
+						<div>
+							<form class="contact-form" style="padding:0" asp-action="Index" asp-controller="Comment" method="post">
+								<textarea style="margin-bottom:0" asp-for="@Model.NewComment.Content" placeholder="Comment"></textarea>
+								<span asp-validation-for="@Model.NewComment.Content" class="text-danger"></span>
+								<div style="text-align: center;">
+									<button class="site-btn" style="font-family:'Playfair Display';">Submit</button>
+									<p></p>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-@section scripts {
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
 	<script>
 		$('#myModal').modal('show');
 	</script>

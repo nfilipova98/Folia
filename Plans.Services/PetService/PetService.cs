@@ -45,7 +45,7 @@
 				Name = name
 			};
 
-			await _repository.AddAsync<Pet>(pet);
+			await _repository.AddAsync(pet);
 			await _repository.SaveChangesAsync();
 		}
 	}

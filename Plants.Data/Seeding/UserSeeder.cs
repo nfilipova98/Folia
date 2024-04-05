@@ -2,6 +2,7 @@
 {
 	using Models.ApplicationUser;
 	using Models.Enums;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +40,7 @@
 					throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
 				}
 
-				await userManager.AddToRoleAsync(user, "Admin");
+				await userManager.AddToRoleAsync(user, Admin);
 			}
 		}
 	}

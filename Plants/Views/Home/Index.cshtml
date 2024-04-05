@@ -52,7 +52,7 @@
 								<div class="hs-info">
 									<h5>@plant.Name</h5>
 									<p>@plant.ScientificName</p>
-									@if (!User.IsInRole("Admin") && User.Identity?.IsAuthenticated == true && plant.IsLiked)
+									@if (!User.IsInRole(Admin) && User.Identity?.IsAuthenticated == true && plant.IsLiked)
 									{
 										<a class="favorite-btn" data-id="@plant.Id"><img src="~/img/icons/heart-filled.png"></a>
 									}

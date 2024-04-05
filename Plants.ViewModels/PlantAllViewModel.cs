@@ -25,6 +25,9 @@
 		[DisplayName("Is Trending")]
 		public bool IsTrending { get; set; }
 
+		[Required(ErrorMessage = RequiredErrorMessage)]
+		public required string Description { get; set; } = string.Empty;
+
 		public string? ImageUrl { get; set; }
 
 		public bool IsLiked { get; set; }

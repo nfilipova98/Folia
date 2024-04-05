@@ -12,7 +12,7 @@
 	{
 		<div class="d-flex align-items-center">
 
-			@if (User.IsInRole("Admin"))
+			@if (User.IsInRole(Admin))
 			{
 				<a asp-controller="Plant" asp-action="Add">ADD PLANT</a>
 				<a asp-controller="Pet" asp-action="Add">ADD PET</a>

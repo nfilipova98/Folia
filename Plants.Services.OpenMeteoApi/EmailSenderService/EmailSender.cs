@@ -1,5 +1,7 @@
 ﻿namespace Plants.Services.APIs.EmailSenderService
 {
+	using static Constants.GlobalConstants.AdminConstants;
+
 	using Microsoft.Extensions.Logging;
 	using Microsoft.Extensions.Options;
 	using Models;
@@ -34,7 +36,7 @@
 			var client = new SendGridClient(Options.SendGridKey);
 
 			var toAddress = new EmailAddress(to);
-			var fromAddress = new EmailAddress("nfilipova98@gmail.com");
+			var fromAddress = new EmailAddress(from);
 
 			var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, textMessage, null);
 
@@ -50,7 +52,7 @@
 
 			var msg = new SendGridMessage()
 			{
-				From = new EmailAddress("nfilipova@students.softuni.bg", "Plants Team 🌱"),
+				From = new EmailAddress(AdminMail, "Plants Team 🌱"),
 				Subject = subject,
 				PlainTextContent = message,
 				HtmlContent = message,

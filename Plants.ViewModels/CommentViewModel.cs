@@ -7,23 +7,17 @@
 
 	public class CommentViewModel
 	{
-		public int Id { get; set; }
-
-		[StringLength(CommentContentMaxLenght, MinimumLength = CommentContentMinLenght,
+        [StringLength(CommentContentMaxLenght, MinimumLength = CommentContentMinLenght,
 			ErrorMessage = StringLenghtErrorMessage)]
-		public required string Content { get; set; }
+		public string Content { get; set; } = string.Empty;
 
-		[Required(ErrorMessage = RequiredErrorMessage)]
-		public required DateTime CreatedOn { get; set; }
+		public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
-		public DateTime? UpdatedOn { get; set; }
+		public required string ApplicationUserId { get; set; } = string.Empty;
+		public required string ApplicationUserName { get; set; } = string.Empty;
 
-		[Required(ErrorMessage = RequiredErrorMessage)]
-		public required string UserId { get; set; }
+		public string? ApplicationUserPictureUrl { get; set; }
 
-		public string? UserPictureUrl { get; set; }
-
-		[Required(ErrorMessage = RequiredErrorMessage)]
 		public required int PlantId { get; set; }
 	}
 }

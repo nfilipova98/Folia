@@ -1,6 +1,7 @@
 ﻿namespace Plants.Controllers
 {
 	using Services.PetService;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 	using ViewModels;
 
 	using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Add()
 		{
 			var model = new PetAddViewModel();
@@ -25,7 +26,7 @@
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		//vij dali da e asinhronno
 		public async Task<IActionResult> Add(PetAddViewModel model)
 		{

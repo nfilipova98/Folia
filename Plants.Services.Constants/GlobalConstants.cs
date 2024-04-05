@@ -9,7 +9,9 @@
 
             public const int PlantScientificNameMinLenght = 3;
             public const int PlantScientificNameMaxLenght = 100;
-        }
+
+			public const int PlantDescriptionMinLenght = 10;
+		}
 
         public static class PetConstants
         {
@@ -51,6 +53,17 @@
 		public static class Paging
 		{
 			public const int ItemsPerPage = 12;
+		}
+
+        public static class AdminConstants
+        {
+            public const string Admin = "Admin";
+            public const string AdminMail = "nfilipova@students.softuni.bg";
+		}
+
+		public static class DateConstant
+		{
+			public const string DateFormat = "dd/MM/yyyy HH:mm";
 		}
 	}
 }

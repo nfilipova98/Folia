@@ -15,11 +15,6 @@
 				.UsingEntity(x => x.ToTable("ApplicationUsersLikedPlants"));
 
 			builder
-				.HasMany(x => x.PlantsOwned)
-				.WithMany(x => x.Owners)
-				.UsingEntity(x => x.ToTable("ApplicationUsersOwnedPlants"));
-
-			builder
 				.ToTable("ApplicationUsers")
 				.HasOne(x => x.UserConfiguration)
 				.WithOne(x => x.ApplicationUser)

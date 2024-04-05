@@ -1,6 +1,7 @@
 ﻿namespace Plants.Services.ContactsService
 {
 	using APIs.EmailSenderService;
+	using static Constants.GlobalConstants.AdminConstants;
 	using ViewModels;
 
 	public class ContactsService : IContactsService
@@ -14,7 +15,7 @@
 
 		public async Task SendEmail(ContactViewModel model)
 		{
-			await _emailSender.SendEmailAsync(model.Email, "nfilipova@students.softuni.bg", model.Subject, model.Message);
+			await _emailSender.SendEmailAsync(model.Email, AdminMail, model.Subject, model.Message);
 		}
 	}
 }

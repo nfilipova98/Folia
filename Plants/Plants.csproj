@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Administration\Views\**" />
-    <Content Remove="Areas\Administration\Views\**" />
-    <EmbeddedResource Remove="Areas\Administration\Views\**" />
-    <None Remove="Areas\Administration\Views\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.3" />

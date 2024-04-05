@@ -1,27 +1,66 @@
 ﻿namespace Plants.Controllers
 {
+	using Utilities;
 	using Services.CommentService;
+	using ViewModels;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Authorization;
+	using System.Security.Claims;
+	using SendGrid.Helpers.Errors.Model;
 
-	public class CommentController : Controller
+	public class CommentController : BaseController
 	{
 		private ICommentService _service;
+		private ILogger _logger;
 
-		public CommentController(ICommentService service)
+		public CommentController(ICommentService service, ILogger<CommentController> logger)
 		{
 			_service = service;
+			_logger = logger;
 		}
 
+		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int id)
 		{
-			var comments = await _service.GetCommentsAsync();
+			var comments = new CommentsViewModel();
+
+			try
+			{
+				comments = await _service.GetCommentsAsync(id);
+			}
+			catch (NotFoundException nfEx)
+			{
+				_logger.LogError(nfEx, "CommentController/Index - Plant not found");
+				return BadRequest();
+			}
 
 			return View(comments);
 		}
 
-		//	[TypeFilter(typeof(TierResultFilterAttribute))] sloji go kato ostavqt komentari
+		[HttpPost]
+		[TypeFilter(typeof(TierResultFilterAttribute))]
+		public async Task<IActionResult> Index(CommentsViewModel model, int id)
+		{
+			var userId = User.Id();
+
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				await _service.AddCommentsAsync(model.NewComment, userId, id);
+			}
+			catch (ArgumentException aEx)
+			{
+				_logger.LogError(aEx, "CommentController/Index - Invalid userId or plantId");
+				return BadRequest();
+			}
+
+			return RedirectToAction(nameof(Index));
+		}
 	}
 }

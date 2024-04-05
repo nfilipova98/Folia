@@ -4,6 +4,7 @@
 	using Services.APIs.Models;
 	using Services.PetService;
 	using Services.PlantService;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 	using Utilities;
 	using ViewModels;
 
@@ -42,7 +43,7 @@
 
 			var plants = await _plantService.GetFavoritePlantsAsync(userId);
 
-			if (plants.Any() && !User.IsInRole("Admin"))
+			if (plants.Any() && !User.IsInRole(Admin))
 			{
 				var model = new PlantsAllViewModelFavorites
 				{
@@ -83,7 +84,7 @@
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Add()
 		{
 			var model = new PlantEditOrAddViewModel();
@@ -93,7 +94,7 @@
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Add(PlantEditOrAddViewModel model)
 		{
 			if (!ModelState.IsValid)
@@ -110,7 +111,7 @@
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public IActionResult UploadFile()
 		{
 			if (TempData["PlantInfo"] == null)
@@ -125,7 +126,7 @@
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> UploadFile(ImageModel file)
 		{
 			var url = string.Empty;
@@ -161,7 +162,7 @@
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Edit(int id)
 		{
 			var plant = await _plantService.ExistsAsync(id);
@@ -181,7 +182,7 @@
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Edit(PlantEditOrAddViewModel model, int id)
 		{
 			var plantToEdit = await _plantService.ExistsAsync(id);
@@ -215,7 +216,7 @@
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Delete(int id)
 		{
 			try
@@ -231,7 +232,7 @@
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var url = string.Empty;

@@ -1,6 +1,7 @@
 ﻿namespace Plants.Areas.Identity.Pages.Account
 {
 	using Data.Models.ApplicationUser;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 
 	using Microsoft.AspNetCore.Authentication;
 	using Microsoft.AspNetCore.Identity;
@@ -113,7 +114,7 @@
 					var userId = User.Id();
 					_logger.LogInformation("User logged in.");
 
-					if (userId != null && !User.IsInRole("Admin"))
+					if (userId != null && !User.IsInRole(Admin))
 					{
 						isFirstTime = await _helper.FirstTimeLogin(userId);
 					}

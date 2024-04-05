@@ -17,6 +17,7 @@ namespace Plants.Controllers
 			_plantService = plantService;
 		}
 
+		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{

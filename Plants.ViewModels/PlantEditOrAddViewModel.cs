@@ -41,7 +41,11 @@
 		[DisplayName("Is Trending")]
 		public bool IsTrending { get; set; }
 
-        public string? ImageUrl { get; set; }
+		[StringLength(maximumLength: PlantDescriptionMinLenght)]
+		[Required(ErrorMessage = RequiredErrorMessage)]
+		public string Description { get; set; } = string.Empty;
+
+		public string? ImageUrl { get; set; }
 
         public IEnumerable<int>? PetIds { get; set; } = new List<int>();
 

@@ -1,6 +1,5 @@
 ﻿namespace Plants.Services.Mapping
 {
-	using Data.Models.ApplicationUser;
 	using Data.Models.Comment;
 	using Data.Models.Pet;
 	using Data.Models.Plant;
@@ -44,7 +43,8 @@
 			CreateMap<PetAddViewModel, Pet>();
 			CreateMap<Pet, PetAddViewModel>();
 
-			CreateMap<Comment, CommentViewModel>();
+			CreateMap<CommentViewModel, Comment>().ReverseMap().ForMember(dest => dest.ApplicationUserName, opt => opt.MapFrom(src => src.ApplicationUser.UserName));
+			CreateMap<CommentsViewModel, Comment>().ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.NewComment.Content));
 		}
 	}
 }
