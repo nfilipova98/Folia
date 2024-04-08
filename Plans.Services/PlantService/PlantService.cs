@@ -1,6 +1,5 @@
 ﻿namespace Plants.Services.PlantService
 {
-	using APIs.Models;
 	using Data.Models.ApplicationUser;
 	using Data.Models.Pet;
 	using Data.Models.Plant;
@@ -97,10 +96,10 @@
 			return _mapper.Map<PlantDeleteViewModel>(plant);
 		}
 
-		public async Task DeleteFileAsync(string url, int id)
+		public async Task DeleteFileAsync(string url, int plantId)
 		{
 			var plant = await _repository
-				.FindByIdAsync<Plant>(id);
+				.FindByIdAsync<Plant>(plantId);
 
 			if (plant == null)
 			{

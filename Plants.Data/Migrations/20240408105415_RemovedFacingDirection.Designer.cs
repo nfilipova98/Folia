@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Plants.Data;
 
@@ -11,9 +12,11 @@ using Plants.Data;
 namespace Plants.Data.Migrations
 {
     [DbContext(typeof(PlantsDbContext))]
-    partial class PlantsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408105415_RemovedFacingDirection")]
+    partial class RemovedFacingDirection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,7 +189,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("PlantsId");
 
-                    b.ToTable("PetPlant", (string)null);
+                    b.ToTable("PetPlant");
                 });
 
             modelBuilder.Entity("PetUserConfiguration", b =>
@@ -201,7 +204,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("PetUserConfiguration", (string)null);
+                    b.ToTable("PetUserConfiguration");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.ApplicationUser", b =>
@@ -318,7 +321,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Country", b =>
@@ -338,7 +341,7 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.UserConfiguration", b =>
@@ -369,7 +372,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("UserConfigurations", (string)null);
+                    b.ToTable("UserConfigurations");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
@@ -405,7 +408,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("PlantId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Pet.Pet", b =>
@@ -425,7 +428,7 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pets", (string)null);
+                    b.ToTable("Pets");
 
                     b.HasData(
                         new
@@ -489,7 +492,7 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Plants", (string)null);
+                    b.ToTable("Plants");
 
                     b.HasData(
                         new

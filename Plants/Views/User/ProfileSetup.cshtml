@@ -1,0 +1,68 @@
+﻿@model FirstLoginViewModel
+
+@{
+	ViewData["Title"] = "Profile Setup";
+}
+
+<div class="site-content-warp" style="padding-left: 0">
+	<div class="page-section">
+		<div class="row">
+			<h1 class="text-center" style="font-family:'Playfair Display';">@ViewBag.Title</h1>
+			<p></p>
+			<p></p>
+			<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+				<form asp-action="ProfileSetup" method="post" enctype="multipart/form-data">
+					<div class="mb-3">
+						<label asp-for="PetIds"><em>Do you have any pets (Select zero or multiple)</em></label>
+						<select asp-for="PetIds" class="form-control" multiple>
+							@foreach (var animal in Model.Pets)
+							{
+								<option value="@animal.Id">@animal.Name</option>
+							}
+						</select>
+						<span asp-validation-for="PetIds" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<label asp-for="Kids"><em>Do you have kids?</em></label>
+						<select asp-for="Kids" class="form-select">
+							<option value="true">Yes</option>
+							<option value="false">No</option>
+						</select>
+						<span asp-validation-for="Kids" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<label for="lifestyle"><em>Choose your lifestyle</em>:</label>
+						<select asp-for="@Model.Lifestyle" class="form-select">
+							@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
+							{
+								<option value="@value">@value.GetDisplayName()</option>
+							}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label asp-for="CityId"><em>Choose the city you live in</em></label>
+						<select asp-for="CityId" class="form-control">
+							@foreach (var city in Model.Cities)
+							{
+								<option value="@city.Id">@city.Name</option>
+							}
+						</select>
+						<span asp-validation-for="CityId" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<input type="file" asp-for="ImageModel.FormFile" class="form-label" />
+						<span asp-validation-for="ImageModel.FormFile" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="CONFIRM" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+
+	<partial name="_ValidationScriptsPartial" />
+}

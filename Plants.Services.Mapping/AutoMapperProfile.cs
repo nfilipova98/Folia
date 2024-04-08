@@ -7,6 +7,7 @@
 	using ViewModels;
 
 	using AutoMapper;
+	using Plants.Data.Models.ApplicationUser;
 
 	public class AutoMapperProfile : Profile
 	{
@@ -35,16 +36,18 @@
 					 return false;
 				 }));
 			CreateMap<Plant, PlantDeleteViewModel>();
-			CreateMap<Plant, PlantEditOrAddViewModel>();
-			CreateMap<PlantEditOrAddViewModel, Plant>();
+			CreateMap<Plant, PlantEditOrAddViewModel>().ReverseMap();
 
-			CreateMap<Pet, PetViewModel>();
-			CreateMap<PetViewModel, Pet>();
-			CreateMap<PetAddViewModel, Pet>();
-			CreateMap<Pet, PetAddViewModel>();
+			CreateMap<Pet, PetViewModel>().ReverseMap();
+			CreateMap<PetAddViewModel, Pet>().ReverseMap();
 
-			CreateMap<CommentViewModel, Comment>().ReverseMap().ForMember(dest => dest.ApplicationUserName, opt => opt.MapFrom(src => src.ApplicationUser.UserName));
-			CreateMap<CommentsViewModel, Comment>().ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.NewComment.Content));
+			CreateMap<CommentModel, Comment>();
+			CreateMap<Comment, CommentViewModel>().ForMember(x => x.ApplicationUserName, x => x.MapFrom(x => x.ApplicationUser.UserName));
+
+			CreateMap<CityAddViewModel, City>().ReverseMap();
+			CreateMap<CityViewModel, City>().ReverseMap();
+
+			CreateMap<FirstLoginViewModel, UserConfiguration>();
 		}
 	}
 }

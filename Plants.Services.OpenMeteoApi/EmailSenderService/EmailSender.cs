@@ -1,10 +1,10 @@
 ﻿namespace Plants.Services.APIs.EmailSenderService
 {
+	using Models;
 	using static Constants.GlobalConstants.AdminConstants;
 
 	using Microsoft.Extensions.Logging;
 	using Microsoft.Extensions.Options;
-	using Models;
 	using SendGrid;
 	using SendGrid.Helpers.Mail;
 

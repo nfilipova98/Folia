@@ -42,15 +42,6 @@
 						<span asp-validation-for="Kids" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
-						<label for="lifestyle"><em>Choose the facing direction of your apartment/ house</em>:</label>
-						<select asp-for="@Model.Lifestyle" class="form-select">
-							@foreach (FacingDirection value in Enum.GetValues(typeof(FacingDirection)))
-							{
-								<option value="@value">@value.GetDisplayName()</option>
-							}
-						</select>
-					</div>
-					<div class="mb-3">
 						<label for="lifestyle"><em>Choose your lifestyle</em>:</label>
 						<select asp-for="@Model.Lifestyle" class="form-select">
 							@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
@@ -80,11 +71,12 @@
 			</div>
 		</div>
 	</div>
+</div>
 
-	@section Scripts {
-		<script>
-			$('#myModal').modal('show');
-		</script>
+@section Scripts {
+	<script>
+		$('#myModal').modal('show');
+	</script>
 
-		<partial name="_ValidationScriptsPartial" />
-	}
+	<partial name="_ValidationScriptsPartial" />
+}

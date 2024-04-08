@@ -16,6 +16,7 @@
 			{
 				<a asp-controller="Plant" asp-action="Add">ADD PLANT</a>
 				<a asp-controller="Pet" asp-action="Add">ADD PET</a>
+				<a asp-controller="City" asp-action="Add">ADD CITY</a>
 			}
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
 				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
@@ -26,7 +27,7 @@
 				if (userTier != null)
 				{
 					var tier = (int)userTier;
-					<a href=""><img src="~/img/tiers/@(tier).png"></a>
+					<a asp-area="Identity" asp-page="/Account/Manage/Email"><img src="~/img/tiers/@(tier).png"></a>
 				}
 			}
 		</div>
@@ -36,6 +37,6 @@
 		<a asp-area="Identity" asp-page="/Account/Register">REGISTER</a>
 		<a asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
 
-		<a href=""><img src="~/img/tiers/0.png"></a>
+		<a asp-area="Identity" asp-page="/Account/Manage/Email"><img src="~/img/tiers/0.png"></a>
 	}
 </div>

@@ -1,4 +1,4 @@
-﻿namespace Plants.Services.APIs.Models
+﻿namespace Plants.Models
 {
     public class AuthMessageSenderOptions
     {

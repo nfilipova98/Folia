@@ -77,7 +77,7 @@
 						<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
 							<h5 class="text-left">@item.Name</h5>
 							<div style="display: flex; justify-content: space-between;">
-								@if (!User.IsInRole(Admin) && User.Identity?.IsAuthenticated == true && item.IsLiked)
+								@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
 								{
 									<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
 								}
@@ -109,6 +109,7 @@
 		$(document).on('click', '.favorite-btn', function () {
 			$(this).toggleClass('clicked');
 			var $img = $(this).find('img');
+
 			if ($(this).hasClass('clicked')) {
 				$img.attr('src', '/img/icons/heart-filled.png');
 			} else {

@@ -26,6 +26,7 @@
 		{
 			var comments = await _repository
 				.AllReadOnly<Comment>()
+				.Include(x => x.ApplicationUser)
 				.Where(x => x.PlantId == id)
 				.ToListAsync();
 
@@ -47,19 +48,18 @@
 			return model;
 		}
 
-		public async Task<CommentViewModel> AddCommentsAsync(CommentViewModel model, string id, int plantId)
+		public async Task AddCommentsAsync(CommentModel model, string id, int plantId)
 		{
 			var plant = await _repository.FindByIdAsync<Plant>(plantId);
 			var user = await _repository.FindByIdAsync<ApplicationUser>(id);
 
 			if (id != string.Empty && plant != null && user != null)
 			{
-				model.PlantId = plantId;
-				model.ApplicationUserId = id;
+				var comment = _mapper.Map<CommentModel, Comment>(model);
 
-				var comment = _mapper.Map<CommentViewModel, Comment>(model);
 				comment.ApplicationUser = user;
 				comment.Plant = plant;
+				comment.CreatedOn = DateTime.UtcNow;
 
 				await _repository.AddAsync(comment);
 				await _repository.SaveChangesAsync();
@@ -68,8 +68,6 @@
 			{
 				throw new ArgumentException();
 			}
-
-			return model;
 		}
 	}
 }

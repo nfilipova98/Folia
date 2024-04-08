@@ -1,7 +1,6 @@
 ﻿namespace Plants.Controllers
 {
 	using Models;
-	using Services.APIs.Models;
 	using Services.PetService;
 	using Services.PlantService;
 	using static Services.Constants.GlobalConstants.AdminConstants;
@@ -43,7 +42,7 @@
 
 			var plants = await _plantService.GetFavoritePlantsAsync(userId);
 
-			if (plants.Any() && !User.IsInRole(Admin))
+			if (plants.Any())
 			{
 				var model = new PlantsAllViewModelFavorites
 				{

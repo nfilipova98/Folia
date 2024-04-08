@@ -4,9 +4,9 @@
 
     using OpenMeteo;
 
-    public class HumiditySetUp
-    {
-        static async Task<double?> GetHumidityAsync(string location, float latitude, float longitude)
+    public class HumiditySetUp : IOpenMeteoService
+	{
+        public async Task<double?> GetHumidityAsync(string location, float? latitude, float? longitude)
         {
             OpenMeteoClient client = new();
 
@@ -23,8 +23,8 @@
 
             if (location == null)
             {
-                weatherForecastOptions.Longitude = longitude;
-                weatherForecastOptions.Latitude = latitude;
+                weatherForecastOptions.Longitude = longitude.Value;
+                weatherForecastOptions.Latitude = latitude.Value;
             }
 
             WeatherForecast weatherForecast = location == null

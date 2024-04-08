@@ -6,6 +6,6 @@
 	public interface ICommentService
 	{
 		Task<CommentsViewModel> GetCommentsAsync(int id);
-		Task<CommentViewModel> AddCommentsAsync(CommentViewModel model, string id, int plantId);
+		Task AddCommentsAsync(CommentModel model, string id, int plantId);
 	}
 }

@@ -2,9 +2,7 @@
 {
 	using Models;
 
-    using APIs.BlobService;
-
-	public interface IPlantService : IBlobService
+	public interface IPlantService
     {
 		Task<bool> ExistsAsync(int id);
         Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync(string userId, string searchString);
@@ -17,5 +15,7 @@
 		Task<PlantEditOrAddViewModel> GetPlantAddOrEditModelAsync(int id);
 		Task<PlantDeleteViewModel> DeleteAsync(int id);
 		Task LikeButton(int id, bool isLiked, string userId);
+		Task<string> UploadFileAsync(ImageModel file);
+		Task DeleteFileAsync(string url, int plantId);
 	}
 }

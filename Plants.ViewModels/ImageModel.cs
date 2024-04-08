@@ -1,4 +1,4 @@
-﻿namespace Plants.Services.APIs.Models
+﻿namespace Plants.Models
 {
     using static Services.Constants.GlobalConstants.ErrorMessages;
 
@@ -8,7 +8,7 @@
 
     public class ImageModel
     {
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredErrorMessage)]
         [DisplayName("Image")]

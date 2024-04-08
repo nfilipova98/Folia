@@ -23,7 +23,10 @@
 							<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
 								<h5 class="text-left">@item.Name</h5>
 								<div style="display: flex; justify-content: space-between;">
-									<a class="favorite-btn"><img src="~/img/icons/heart-filled.png"></a>
+									@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
+									{
+										<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
+									}
 									<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
 								</div>
 							</div>

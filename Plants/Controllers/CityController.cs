@@ -1,40 +1,40 @@
 ﻿namespace Plants.Controllers
 {
-	using Services.PetService;
+	using Services.CityService;
 	using static Services.Constants.GlobalConstants.AdminConstants;
 	using ViewModels;
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 
-	public class PetController : BaseController
+	public class CityController : BaseController
 	{
-		private readonly IPetService _petService;
+		private readonly ICityService _cityService;
 
-		public PetController(IPetService petService)
+		public CityController(ICityService cityService)
 		{
-			_petService = petService;
+			_cityService = cityService;
 		}
 
 		[HttpGet]
 		[Authorize(Roles = Admin)]
 		public async Task<IActionResult> Add()
 		{
-			var model = new PetAddViewModel();
+			var model = new CityAddViewModel();
 
 			return View(model);
 		}
 
 		[HttpPost]
 		[Authorize(Roles = Admin)]
-		public async Task<IActionResult> Add(PetAddViewModel model)
+		public async Task<IActionResult> Add(CityAddViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			await _petService.CreateAsync(model.Name);
+			await _cityService.CreateAsync(model.CityName, model.CountryName);
 
 			return RedirectToAction("Index", "Home");
 		}

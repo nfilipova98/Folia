@@ -12,6 +12,6 @@
 		[Required(ErrorMessage = RequiredErrorMessage)]
 		[StringLength(CityNameMaxLenght, MinimumLength = CityNameMinLenght,
 			ErrorMessage = StringLenghtErrorMessage)]
-		public required string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 	}
 }
