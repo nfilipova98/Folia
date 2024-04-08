@@ -28,15 +28,15 @@
 
 		public async Task<FirstLoginViewModel> GetModels()
 		{
-			var cities = _repository.AllReadOnly<City>();
+			var cities = _repository.AllReadOnly<Region>();
 			var pets = _repository.AllReadOnly<Pet>();
 
-			var citiesViewModels = _mapper.Map<IEnumerable<CityViewModel>>(cities);
+			var citiesViewModels = _mapper.Map<IEnumerable<RegionViewModel>>(cities);
 			var petsViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
 
 			var model = new FirstLoginViewModel()
 			{
-				Cities = citiesViewModels,
+				Regions = citiesViewModels,
 				Pets = petsViewModels,
 			};
 
@@ -70,18 +70,18 @@
 			var user = await _repository
 				.FindByIdAsync<ApplicationUser>(userId);
 
-			var city = await _repository
-				.FindByIdAsync<City>(model.CityId);
+			var region = await _repository
+				.FindByIdAsync<Region>(model.RegionId);
 
-			if (user.UserPictureUrl != null)
+			if (user.UserConfiguration.UserPictureUrl != null)
 			{
-				await DeleteFileAsync(user.UserPictureUrl, user.Id);
+				await DeleteFileAsync(user.UserConfiguration.UserPictureUrl, user.Id);
 			}
 
-			if (user != null && city != null)
+			if (user != null && region != null)
 			{
 				var userConfiguration = _mapper.Map<UserConfiguration>(model);
-				userConfiguration.City = city;
+				userConfiguration.Region = region;
 				userConfiguration.ApplicationUser = user;
 
 				await _repository.AddAsync(userConfiguration);

@@ -12,8 +12,8 @@ using Plants.Data;
 namespace Plants.Data.Migrations
 {
     [DbContext(typeof(PlantsDbContext))]
-    [Migration("20240405205358_AddedDescription")]
-    partial class AddedDescription
+    [Migration("20240408122025_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,8 +197,8 @@ namespace Plants.Data.Migrations
                     b.Property<int>("PetsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UsersId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
 
                     b.HasKey("PetsId", "UsersId");
 
@@ -273,12 +273,8 @@ namespace Plants.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UserPictureUrl")
-                        .HasColumnType("nvarchar(max)")
-                        .HasComment("Profile picture");
-
-                    b.Property<string>("UsersConfigurationId")
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<int?>("UsersConfigurationId")
+                        .HasColumnType("int")
                         .HasComment("Additional profile configuration");
 
                     b.HasKey("Id");
@@ -346,9 +342,12 @@ namespace Plants.Data.Migrations
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.UserConfiguration", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasComment("Identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
@@ -359,14 +358,15 @@ namespace Plants.Data.Migrations
                         .HasColumnType("int")
                         .HasComment("City identifier");
 
-                    b.Property<int>("Direction")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Kids")
                         .HasColumnType("bit");
 
                     b.Property<int>("Lifestyle")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserPictureUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("Profile picture");
 
                     b.HasKey("Id");
 

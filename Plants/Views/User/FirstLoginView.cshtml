@@ -51,14 +51,14 @@
 						</select>
 					</div>
 					<div class="mb-3">
-						<label asp-for="CityId"><em>Choose the city you live in</em></label>
-						<select asp-for="CityId" class="form-control">
-							@foreach (var city in Model.Cities)
+						<label asp-for="RegionId"><em>Choose the region you live in</em></label>
+						<select asp-for="RegionId" class="form-control">
+							@foreach (var region in Model.Regions)
 							{
-								<option value="@city.Id">@city.Name</option>
+								<option value="@region.Id">@region.Name</option>
 							}
 						</select>
-						<span asp-validation-for="CityId" class="text-danger"></span>
+						<span asp-validation-for="RegionId" class="text-danger"></span>
 					</div>
 				</div>
 				<div class="modal-footer" style="justify-content:center">

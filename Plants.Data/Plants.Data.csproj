@@ -23,6 +23,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Plants\Plants.Infrastructure\Plants.Data.Models.csproj" />
+    <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.APIs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

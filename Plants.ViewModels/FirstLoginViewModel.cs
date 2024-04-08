@@ -7,9 +7,9 @@
 	{
 		public string ApplicationUserId { get; set; } = string.Empty!;
 
-		public int CityId { get; set; }
+		public int RegionId { get; set; }
 
-		public IEnumerable<CityViewModel> Cities { get; set; } = new List<CityViewModel>();
+		public IEnumerable<RegionViewModel> Regions { get; set; } = new List<RegionViewModel>();
 
 		public bool Kids { get; set; }
 

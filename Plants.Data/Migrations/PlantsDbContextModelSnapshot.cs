@@ -186,7 +186,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("PlantsId");
 
-                    b.ToTable("PetPlant", (string)null);
+                    b.ToTable("PetPlant");
                 });
 
             modelBuilder.Entity("PetUserConfiguration", b =>
@@ -194,14 +194,14 @@ namespace Plants.Data.Migrations
                     b.Property<int>("PetsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UsersId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
 
                     b.HasKey("PetsId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("PetUserConfiguration", (string)null);
+                    b.ToTable("PetUserConfiguration");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.ApplicationUser", b =>
@@ -270,12 +270,8 @@ namespace Plants.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UserPictureUrl")
-                        .HasColumnType("nvarchar(max)")
-                        .HasComment("Profile picture");
-
-                    b.Property<string>("UsersConfigurationId")
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<int?>("UsersConfigurationId")
+                        .HasColumnType("int")
                         .HasComment("Additional profile configuration");
 
                     b.HasKey("Id");
@@ -289,36 +285,6 @@ namespace Plants.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("ApplicationUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Identifier");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int")
-                        .HasComment("Country identifier");
-
-                    b.Property<int?>("Humidity")
-                        .HasColumnType("int")
-                        .HasComment("City humidity");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(165)
-                        .HasColumnType("nvarchar(165)")
-                        .HasComment("City name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Country", b =>
@@ -338,23 +304,52 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int")
+                        .HasComment("Country identifier");
+
+                    b.Property<int?>("Humidity")
+                        .HasColumnType("int")
+                        .HasComment("Region humidity");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(165)
+                        .HasColumnType("nvarchar(165)")
+                        .HasComment("Region name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.UserConfiguration", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasComment("Identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasComment("User identifier");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int")
-                        .HasComment("City identifier");
 
                     b.Property<bool>("Kids")
                         .HasColumnType("bit");
@@ -362,14 +357,22 @@ namespace Plants.Data.Migrations
                     b.Property<int>("Lifestyle")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RegionId")
+                        .HasColumnType("int")
+                        .HasComment("Region identifier");
+
+                    b.Property<string>("UserPictureUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("Profile picture");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("RegionId");
 
-                    b.ToTable("UserConfigurations", (string)null);
+                    b.ToTable("UserConfigurations");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
@@ -405,7 +408,7 @@ namespace Plants.Data.Migrations
 
                     b.HasIndex("PlantId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Pet.Pet", b =>
@@ -425,7 +428,7 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pets", (string)null);
+                    b.ToTable("Pets");
 
                     b.HasData(
                         new
@@ -489,7 +492,7 @@ namespace Plants.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Plants", (string)null);
+                    b.ToTable("Plants");
 
                     b.HasData(
                         new
@@ -786,10 +789,10 @@ namespace Plants.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Region", b =>
                 {
                     b.HasOne("Plants.Data.Models.ApplicationUser.Country", "Country")
-                        .WithMany("Cities")
+                        .WithMany("Regions")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -805,13 +808,13 @@ namespace Plants.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Plants.Data.Models.ApplicationUser.City", "City")
+                    b.HasOne("Plants.Data.Models.ApplicationUser.Region", "Region")
                         .WithMany("Users")
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("RegionId");
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("City");
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Comment.Comment", b =>
@@ -840,14 +843,14 @@ namespace Plants.Data.Migrations
                     b.Navigation("UserConfiguration");
                 });
 
-            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.City", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Country", b =>
                 {
-                    b.Navigation("Cities");
+                    b.Navigation("Regions");
+                });
+
+            modelBuilder.Entity("Plants.Data.Models.ApplicationUser.Region", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Plants.Data.Models.Plant.Plant", b =>

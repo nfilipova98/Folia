@@ -1,7 +1,7 @@
 ﻿namespace Plants.Controllers
 {
 	using Models;
-	using Services.CityService;
+	using Services.RegionService;
 	using Services.PetService;
 	using Services.UserService;
 	using ViewModels;
@@ -14,21 +14,21 @@
 	{
 		private IUserService _service;
 		private IPetService _petService;
-		private ICityService _cityService;
+		private IRegionService _regionService;
 		private ILogger _logger;
 
-		public UserController(IUserService service, IPetService petService, ICityService cityService, ILogger<UserController> logger)
+		public UserController(IUserService service, IPetService petService, IRegionService regionService, ILogger<UserController> logger)
 		{
 			_service = service;
 			_petService = petService;
-			_cityService = cityService;
+			_regionService = regionService;
 			_logger = logger;
 		}
 
 		[HttpGet]
-		public IActionResult FirstLoginView()
+		public async Task<IActionResult> FirstLoginView()
 		{
-			var model = new FirstLoginViewModel();
+			var model = await _service.GetModels();
 
 			return View(model);
 		}
@@ -38,10 +38,9 @@
 		{
 			if (!ModelState.IsValid)
 			{
+				await _service.GetModels();
 				return View(model);
 			}
-
-			await _service.GetModels();
 
 			return RedirectToAction("Index", "Home");
 		}
@@ -66,7 +65,7 @@
 			{
 				_logger.LogError("UserController/ProfileSetup - ModelState was not valid");
 				model.Pets = await _petService.GetAllPetsAsync();
-				model.Cities = await _cityService.GetAllCitiesAsync();
+				model.Regions = await _regionService.GetAllRegionsAsync();
 				
 				return View(model);
 			}
@@ -78,7 +77,7 @@
 			{
 				_logger.LogError("UserController/ProfilePicture - Error occurred during file upload");
 				model.Pets = await _petService.GetAllPetsAsync();
-				model.Cities = await _cityService.GetAllCitiesAsync();
+				model.Regions = await _regionService.GetAllRegionsAsync();
 
 				ModelState.AddModelError(nameof(ImageModel.FormFile), "Please upload an image.");
 				return View(model);

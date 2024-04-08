@@ -1,7 +1,7 @@
-﻿@model CityAddViewModel
+﻿@model RegionAddViewModel
 
 @{
-	ViewData["Title"] = "Add City";
+	ViewData["Title"] = "Add Region";
 }
 
 <div class="site-content-warp" style="padding-left: 0">
@@ -13,9 +13,9 @@
 			<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
 				<form asp-action="Add" method="post">
 					<div class="mb-3">
-						<label asp-for="@Model.CityName" class="form-label-add-edit"><em>CITY NAME</em></label>
-						<input asp-for="@Model.CityName" class="form-control" />
-						<span asp-validation-for="@Model.CityName" class="text-danger"></span>
+						<label asp-for="@Model.RegionName" class="form-label-add-edit"><em>REGION NAME</em></label>
+						<input asp-for="@Model.RegionName" class="form-control" />
+						<span asp-validation-for="@Model.RegionName" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
 						<label asp-for="@Model.CountryName" class="form-label-add-edit"><em>COUNTRY NAME</em></label>

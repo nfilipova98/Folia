@@ -8,7 +8,7 @@ namespace Plants.Web
     using Services.AboutService;
     using Services.APIs.EmailSenderService;
 	using Services.APIs.OpenMeteoService;
-	using Services.CityService;
+	using Services.RegionService;
     using Services.CommentService;
     using Services.ContactsService;
     using Services.Mapping;
@@ -54,7 +54,7 @@ namespace Plants.Web
             services.AddScoped<IRepositoryService, Repository>();
 
             services.AddTransient<IPlantService, PlantService>();
-            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<IRegionService, RegionService>();
             services.AddTransient<IAboutService, AboutService>();
             services.AddTransient<IPetService, PetService>();
             services.AddTransient<ICommentService, CommentService>();
@@ -96,7 +96,7 @@ namespace Plants.Web
             using (var serviceScope = app.Services.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<PlantsDbContext>();
-                //dbContext.Database.Migrate();
+               // dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 

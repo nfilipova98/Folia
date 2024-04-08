@@ -25,10 +25,10 @@
             public const int CommentContentMaxLenght = 350;
         }
 
-        public static class CityConstants
+        public static class RegionConstants
         {
-            public const int CityNameMinLenght = 1;
-            public const int CityNameMaxLenght = 165;
+            public const int RegionNameMinLenght = 1;
+            public const int RegionNameMaxLenght = 165;
         }
 
         public static class CountryConstants

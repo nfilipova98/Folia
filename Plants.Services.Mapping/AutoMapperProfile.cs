@@ -44,8 +44,8 @@
 			CreateMap<CommentModel, Comment>();
 			CreateMap<Comment, CommentViewModel>().ForMember(x => x.ApplicationUserName, x => x.MapFrom(x => x.ApplicationUser.UserName));
 
-			CreateMap<CityAddViewModel, City>().ReverseMap();
-			CreateMap<CityViewModel, City>().ReverseMap();
+			CreateMap<RegionAddViewModel, Region>().ReverseMap();
+			CreateMap<RegionViewModel, Region>().ReverseMap();
 
 			CreateMap<FirstLoginViewModel, UserConfiguration>();
 		}
