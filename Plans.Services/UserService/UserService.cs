@@ -1,7 +1,6 @@
 ﻿namespace Plants.Services.UserService
 {
 	using Data.Models.ApplicationUser;
-	using Data.Models.Enums;
 	using Data.Models.Pet;
 	using static Constants.GlobalConstants.ApiConstants;
 	using Models;
@@ -12,6 +11,8 @@
 	using Azure.Storage.Blobs;
 	using SendGrid.Helpers.Errors.Model;
 	using System;
+	using Microsoft.EntityFrameworkCore;
+	using System.ComponentModel;
 
 	public class UserService : IUserService
 	{
@@ -28,8 +29,8 @@
 
 		public async Task<FirstLoginViewModel> GetModels()
 		{
-			var cities = _repository.AllReadOnly<Region>();
-			var pets = _repository.AllReadOnly<Pet>();
+			var cities = _repository.AllReadOnly<Region>().OrderBy(x => x.Name);
+			var pets = _repository.AllReadOnly<Pet>().OrderBy(x => x.Name);
 
 			var citiesViewModels = _mapper.Map<IEnumerable<RegionViewModel>>(cities);
 			var petsViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
@@ -41,13 +42,6 @@
 			};
 
 			return model;
-		}
-
-		public async Task<Tier?> FindUserByIdAsync(string userId)
-		{
-			var user = await _repository.FindByIdAsync<ApplicationUser>(userId);
-
-			return user?.Tier;
 		}
 
 		public async Task<string> UploadFileAsync(ImageModel file)
@@ -68,23 +62,36 @@
 		public async Task AddUserInformation(FirstLoginViewModel model, string url, string userId)
 		{
 			var user = await _repository
-				.FindByIdAsync<ApplicationUser>(userId);
+				.AllReadOnly<ApplicationUser>()
+				.Include(x => x.UserConfiguration)
+				.FirstOrDefaultAsync(x => x.Id == userId);
 
 			var region = await _repository
 				.FindByIdAsync<Region>(model.RegionId);
 
-			if (user.UserConfiguration.UserPictureUrl != null)
+			if (user.UserConfigurationIsNull == false)
 			{
-				await DeleteFileAsync(user.UserConfiguration.UserPictureUrl, user.Id);
+				if (user.UserConfiguration.UserPictureUrl != null)
+				{
+					await DeleteFileAsync(user.UserConfiguration.UserPictureUrl, user.Id);
+				}
 			}
-
 			if (user != null && region != null)
 			{
 				var userConfiguration = _mapper.Map<UserConfiguration>(model);
+
 				userConfiguration.Region = region;
 				userConfiguration.ApplicationUser = user;
+				userConfiguration.UserPictureUrl = url;
 
-				await _repository.AddAsync(userConfiguration);
+				user.UserConfiguration = userConfiguration;
+				user.UserConfigurationIsNull = false;
+
+				//vij ako veche go ima kak da go opravq
+
+				_repository.UpdateAsync(user);
+				await _repository.SaveChangesAsync();
+				user.UsersConfigurationId = userConfiguration.Id;
 			}
 
 			await _repository.SaveChangesAsync();
@@ -92,10 +99,12 @@
 
 		public async Task DeleteFileAsync(string url, string userId)
 		{
-			var plant = await _repository
-				.FindByIdAsync<ApplicationUser>(userId);
+			var user = await _repository
+				.AllReadOnly<ApplicationUser>()
+				.Where(x => x.Id == userId)
+				.FirstOrDefaultAsync();
 
-			if (plant == null)
+			if (user == null)
 			{
 				throw new NotFoundException();
 			}
@@ -104,9 +113,6 @@
 
 			var blobClient = GetBlobClient(fileName);
 			await blobClient.DeleteIfExistsAsync();
-
-			_repository.Delete(plant);
-			await _repository.SaveChangesAsync();
 		}
 
 		private BlobClient GetBlobClient(string fileName)

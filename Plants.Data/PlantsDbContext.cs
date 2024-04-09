@@ -8,11 +8,9 @@
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-	using Plants.Services.APIs.OpenMeteoService;
 
 	public class PlantsDbContext : IdentityDbContext<ApplicationUser>
     {
-		private readonly IOpenMeteoService _openMeteoService;
 
 		public PlantsDbContext(DbContextOptions<PlantsDbContext> options)
             : base(options)
@@ -35,7 +33,7 @@
             modelBuilder.ApplyConfiguration(new PlantConfiguration());
             modelBuilder.ApplyConfiguration(new PetConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new RegionConfiguration(_openMeteoService));
+            modelBuilder.ApplyConfiguration(new RegionConfiguration());
         }
 	}
 }

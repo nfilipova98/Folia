@@ -26,29 +26,21 @@
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> FirstLoginView()
-		{
-			var model = await _service.GetModels();
-
-			return View(model);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> FirstLoginView(FirstLoginViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				await _service.GetModels();
-				return View(model);
-			}
-
-			return RedirectToAction("Index", "Home");
-		}
-
-		[HttpGet]
 		public async Task<IActionResult> ProfileSetup()
 		{
+			var userId = User.Id();
 			var model = await _service.GetModels();
+			bool isProfileSetup = false;
+
+			if (TempData["IsProfileSetup"] != null)
+			{
+				isProfileSetup = (bool)TempData["IsProfileSetup"];
+			}
+
+			if (isProfileSetup == true)
+			{
+				return View("FirstLoginView", model);
+			}
 
 			return View(model);
 		}

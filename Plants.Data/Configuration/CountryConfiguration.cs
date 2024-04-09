@@ -10,7 +10,7 @@
 		private Country country = new Country
 		{
 			Id = 1,
-			Name = "Bulgaria"
+			Name = "Bulgaria",
 		};
 
 		public void Configure(EntityTypeBuilder<Country> builder)

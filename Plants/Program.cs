@@ -7,7 +7,6 @@ namespace Plants.Web
 	using Models;
     using Services.AboutService;
     using Services.APIs.EmailSenderService;
-	using Services.APIs.OpenMeteoService;
 	using Services.RegionService;
     using Services.CommentService;
     using Services.ContactsService;
@@ -21,6 +20,7 @@ namespace Plants.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+	using Plants.Services.LayoutService;
 
 	public class Program
     {
@@ -61,7 +61,7 @@ namespace Plants.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<FirstLoginHelper>();
             services.AddTransient<IContactsService, ContactsService>();
-            services.AddTransient<IOpenMeteoService, HumiditySetUp>();
+            services.AddTransient<ILayoutService, LayoutService>();
 
             //Email Sender service
             services.AddTransient<ICustomEmailSender, EmailSender>();
@@ -96,7 +96,7 @@ namespace Plants.Web
             using (var serviceScope = app.Services.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<PlantsDbContext>();
-               // dbContext.Database.Migrate();
+                //dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 

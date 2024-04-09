@@ -7,10 +7,7 @@
 	<div class="site-content-warp" style="padding-left: 0">
 		<div class="page-section contact-page">
 			<div class="contact-section">
-				<div class="row">
-					<div class="col-xl-6" style="padding-top:10px">
-						<div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14376.077865872314!2d-73.879277264103!3d40.757667781624285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1546528920522" style="border:0" allowfullscreen></iframe></div>
-					</div>
+				<div class="row" style="justify-content:center">
 					<div class="col-xl-6">
 						<div class="contact-text-warp">
 							<div class="contact-text" style="padding-top:10px">
@@ -33,6 +30,8 @@
 											<input asp-for="@Model.Subject" class="form-control" placeholder="Subject" />
 											<span asp-validation-for="@Model.Message" class="text-danger"></span>
 											<textarea class="form-control" asp-for="@Model.Message" placeholder="Message"></textarea>
+										</div>
+										<div class="col-lg-12" style="display: flex; justify-content: center;">
 											<button asp-action="SendMessage" asp-controller="Contacts" class="site-btn">send message <img src="/img/icons/arrow-right.png" alt=""></button>
 										</div>
 									</div>

@@ -27,6 +27,7 @@
 			var comments = await _repository
 				.AllReadOnly<Comment>()
 				.Include(x => x.ApplicationUser)
+				.Include(X => X.ApplicationUser.UserConfiguration)
 				.Where(x => x.PlantId == id)
 				.ToListAsync();
 

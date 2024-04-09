@@ -7,6 +7,7 @@
 	using AutoMapper;
 	using Microsoft.EntityFrameworkCore;
 	using System.Collections.Generic;
+	using OpenMeteo;
 
 	public class RegionService : IRegionService
 	{
@@ -19,61 +20,62 @@
 			_mapper = mapper;
 		}
 
-		//public async Task CreateAsync(string regionName, string countryName)
-		//{
-		//	var region = _repository
-		//		.AllReadOnly<Region>()
-		//		.FirstOrDefault(x => x.Name == regionName);
-
-		//	var country = _repository
-		//		.AllReadOnly<Country>()
-		//		.Include(x => x.Regions)
-		//		.FirstOrDefault(x => x.Name == countryName);
-
-		//	//tuk trqbva da opravq humidity
-
-		//	if (country == null)
-		//	{
-		//		country = new Country()
-		//		{
-		//			Name = countryName
-		//		};
-
-		//		await _repository.AddAsync(country);
-		//	}
-
-		//	if (region == null || region.Country.Name != countryName)
-		//	{
-		//		region = new Region()
-		//		{
-		//			Name = regionName
-		//		};
-
-		//		await _repository.AddAsync(region);
-
-		//		var humidity = await _openMeteoService.GetHumidityAsync(regionName);
-
-		//		if (humidity != null)
-		//		{
-		//			//city.Humidity
-		//		}
-		//	}
-
-		//	region.Country = country;
-		//	country.Regions.Add(region);
-
-		//	await _repository.SaveChangesAsync();
-		//}
-
 		public async Task<IEnumerable<RegionViewModel>> GetAllRegionsAsync()
 		{
 			var cities = await _repository
 				.AllReadOnly<Region>()
+				.OrderBy(x => x.Name)
 				.ToListAsync();
 
 			var model = _mapper.Map<List<RegionViewModel>>(cities);
 
 			return model;
+		}
+
+		public Task<IEnumerable<Region>> GetHumidityAsync(IEnumerable<Region> regions)
+		{
+			throw new NotImplementedException();
+			//OpenMeteoClient client = new();
+
+			//			HourlyOptions hourlyOptions = new()
+			//			{
+			//				HourlyOptionsParameter.relativehumidity_2m,
+			//			};
+
+			//			WeatherForecastOptions weatherForecastOptions = new()
+			//			{
+			//				Hourly = hourlyOptions,
+			//				Past_Days = PastDays
+			//			};
+
+			//			WeatherForecast weatherForecast = await client.QueryAsync(location, weatherForecastOptions);
+
+			//				var percentage = weatherForecast.Hourly?.Relativehumidity_2m?.Average();
+
+			//				if (percentage == null)
+			//				{
+			//					item.Humidity = null;
+			//				}
+			//				else if (percentage >= 0 && percentage <= 25)
+			//				{
+			//					item.Humidity = Humidity.Low;
+			//				}
+			//				else if (percentage > 25 && percentage <= 50)
+			//				{
+			//					item.Humidity = Humidity.Moderate;
+			//				}
+			//				else if (percentage > 50 && percentage <= 75)
+			//				{
+			//					item.Humidity = Humidity.High;
+			//				}
+			//				else if (percentage > 75 && percentage <= 100)
+			//				{
+			//					item.Humidity = Humidity.VeryHigh;
+			//				}
+			//			}
+
+			//			return regions;
+			//		}
 		}
 	}
 }

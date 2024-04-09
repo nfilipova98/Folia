@@ -1,10 +1,11 @@
 ﻿namespace Plants.Services.RegionService
 {
+	using Data.Models.ApplicationUser;
 	using ViewModels;
 
 	public interface IRegionService
 	{
 		Task<IEnumerable<RegionViewModel>> GetAllRegionsAsync();
-		//Task CreateAsync(string cityName, string countryName);
+		Task<IEnumerable<Region>> GetHumidityAsync(IEnumerable<Region> regions);
 	}
 }

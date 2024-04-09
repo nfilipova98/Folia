@@ -1,21 +1,13 @@
 ﻿namespace Plants.Data.Configuration
 {
 	using Models.ApplicationUser;
-	using Services.APIs.OpenMeteoService;
-
+	
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 	public class RegionConfiguration : IEntityTypeConfiguration<Region>
 	{
-		private readonly IOpenMeteoService _openMeteoService;
-
-		public RegionConfiguration(IOpenMeteoService openMeteoService)
-		{
-			_openMeteoService = openMeteoService;
-		}
-
-		private IEnumerable<Region> initialRegions = new Region[]
+		private readonly IEnumerable<Region> initialRegions = new Region[]
 		{
 			new Region
 			{
@@ -178,23 +170,7 @@
 
 		public void Configure(EntityTypeBuilder<Region> builder)
 		{
-			var regions = HumiditySetUp(initialRegions);
-			builder.HasData(regions);
-		}
-
-		private async Task<IEnumerable<Region>> HumiditySetUp(IEnumerable<Region> regions)
-		{
-			foreach (var region in regions)
-			{
-				var humidity = await _openMeteoService.GetHumidityAsync(region.Name);
-
-				if (humidity != null)
-				{
-					region.Humidity = humidity;
-				}
-			}
-
-			return regions;
+			builder.HasData(initialRegions);
 		}
 	}
 }

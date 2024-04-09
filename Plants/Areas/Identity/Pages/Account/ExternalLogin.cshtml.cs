@@ -125,7 +125,8 @@
 				}
 				if (isFirstTime)
 				{
-					return RedirectToAction("FirstLoginView", "User");
+					TempData["IsProfileSetup"] = true;
+					return RedirectToAction("ProfileSetup", "User");
 				}
 
 				return LocalRedirect(returnUrl);

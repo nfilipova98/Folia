@@ -42,7 +42,9 @@
 			CreateMap<PetAddViewModel, Pet>().ReverseMap();
 
 			CreateMap<CommentModel, Comment>();
-			CreateMap<Comment, CommentViewModel>().ForMember(x => x.ApplicationUserName, x => x.MapFrom(x => x.ApplicationUser.UserName));
+			CreateMap<Comment, CommentViewModel>()
+				.ForMember(x => x.ApplicationUserName, x => x.MapFrom(x => x.ApplicationUser.UserName))
+				.ForMember(x => x.ApplicationUserPictureUrl, x => x.MapFrom(x => x.ApplicationUser.UserConfiguration.UserPictureUrl ?? null));
 
 			CreateMap<RegionAddViewModel, Region>().ReverseMap();
 			CreateMap<RegionViewModel, Region>().ReverseMap();

@@ -11,9 +11,9 @@
 			<p></p>
 			<p></p>
 			<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-				<form asp-action="ProfileSetup" method="post" enctype="multipart/form-data">
+				<form method="post" enctype="multipart/form-data">
 					<div class="mb-3">
-						<label asp-for="PetIds"><em>Do you have any pets (Select zero or multiple)</em></label>
+						<label asp-for="PetIds"><em>Do you have any pets (select zero or multiple)</em></label>
 						<select asp-for="PetIds" class="form-control" multiple>
 							@foreach (var animal in Model.Pets)
 							{

@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
-@using Plants.Services.UserService
-@inject IUserService service
+@using Plants.Services.LayoutService
+@inject ILayoutService service
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -18,15 +18,21 @@
 				<a asp-controller="Pet" asp-action="Add">ADD PET</a>
 			}
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button type="submit" class="nav-link btn btn-link text-dark">LOGOUT</button>
+				<button type="submit" class="nav-link btn btn-link text-dark" style="padding-left: 0px; padding-top:5px; padding-bottom:5px; font-family: 'Open Sans', serif; font-size: 18px; font-weight: 500;">LOGOUT</button>
 			</form>
 			@{
-				var userTier = await service.FindUserByIdAsync(User.Id());
+				var userTier = await service.FindUsersTierByIdAsync(User.Id());
+				var userPicture = await service.FindUsersPictureByIdAsync(User.Id());
 
 				if (userTier != null)
 				{
 					var tier = (int)userTier;
 					<a asp-area="Identity" asp-page="/Account/Manage/Email"><img src="~/img/tiers/@(tier).png"></a>
+				}
+				if (userPicture != null)
+				{
+					<img class="rounded-circle shadow-1-strong me-3"
+						 src="@userPicture" width="44" height="44" />
 				}
 			}
 		</div>
