@@ -13,6 +13,8 @@
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
 	using SendGrid.Helpers.Errors.Model;
+	using Plants.ViewModels;
+	using Plants.Data.Models.Enums;
 
 	public class PlantService : IPlantService
 	{
@@ -128,18 +130,39 @@
 
 		public async Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync
 			(string userId,
-			string searchString)
+			string? searchString,
+			bool? kidSafe,
+			bool? petSafe,
+			Lifestyle? lifestyle,
+			Difficulty? difficulty)
 		{
 
 			var plantsToShow = _repository.AllReadOnly<Plant>();
 
-			if (searchString != string.Empty)
+			if (kidSafe != null)
+			{
+				plantsToShow = plantsToShow.Where(x => x.KidSafe == kidSafe);
+			}
+			if (lifestyle != null)
+			{
+				plantsToShow = plantsToShow.Where(x => x.Lifestyle == lifestyle);
+			}
+			if (difficulty != null)
+			{
+				plantsToShow = plantsToShow.Where(x => x.Difficulty == difficulty);
+			}
+			if (petSafe != null)
+			{
+				plantsToShow = plantsToShow.Where(x => x.Pets.Count == 0);
+			}
+			if (searchString != null)
 			{
 				string normalizedSearchTerm = searchString.ToLower();
 
 				plantsToShow = plantsToShow
 				   .Where(x => x.Name.ToLower().Contains(normalizedSearchTerm) ||
-									  x.ScientificName.ToLower().Contains(normalizedSearchTerm));
+									  x.ScientificName.ToLower().Contains(normalizedSearchTerm) ||
+									  x.Description.ToLower().Contains(normalizedSearchTerm));
 			}
 
 			var plants = await plantsToShow

@@ -1,11 +1,12 @@
 ﻿namespace Plants.Services.PlantService
 {
 	using Models;
+	using Plants.Data.Models.Enums;
+	using Plants.ViewModels;
 
 	public interface IPlantService
     {
 		Task<bool> ExistsAsync(int id);
-        Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync(string userId, string searchString);
 		Task<IEnumerable<int>> GetPetIds(int id);
 		Task<IEnumerable<T>> Pagination<T>(IEnumerable<T> model, int page);
 		Task CreatePlantAsync(string fileUrl, PlantEditOrAddViewModel model);
@@ -17,5 +18,12 @@
 		Task LikeButton(int id, bool isLiked, string userId);
 		Task<string> UploadFileAsync(ImageModel file);
 		Task DeleteFileAsync(string url, int plantId);
+		Task<IEnumerable<PlantAllViewModel>> GetAllPlantsAsync
+			(string userId, 
+			string? searchString, 
+			bool? kidSafe, 
+			bool? petSafe, 
+			Lifestyle? lifestyle, 
+			Difficulty? difficulty);
 	}
 }

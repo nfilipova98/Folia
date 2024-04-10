@@ -41,7 +41,7 @@
 		[DisplayName("Is Trending")]
 		public bool IsTrending { get; set; }
 
-		[MinLength(PlantDescriptionMinLenght, ErrorMessage = "ddd")]
+		[MinLength(PlantDescriptionMinLenght, ErrorMessage = StringLenghtPlantDescriptionErrorMessage)]
 		[Required(ErrorMessage = RequiredErrorMessage)]
 		public string Description { get; set; } = string.Empty;
 

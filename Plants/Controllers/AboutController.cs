@@ -7,18 +7,17 @@
 
 	public class AboutController : BaseController
 	{
-		private IAboutService _countsService;
+		private IAboutService _service;
 
 		public AboutController(IAboutService countsService)
 		{
-			_countsService = countsService;
+			_service = countsService;
 		}
 
 		[AllowAnonymous]
-		//vij dali trqbva da e async
 		public async Task<IActionResult> Index()
 		{
-			var data = _countsService.GetCounts();
+			var data = _service.GetCounts();
 
 			return View(data);
 		}

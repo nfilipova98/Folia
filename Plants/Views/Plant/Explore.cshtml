@@ -15,55 +15,61 @@
 		<div class="container">
 			<div class="row">
 				<div class="search-bar" style="padding-bottom: 15px; padding-top: 15px;">
-					<div class="row">
-						<div class="col-md-3">
-							<label asp-for="KidSafe"><em>KID SAFE</em></label>
-							<select asp-for="KidSafe" class="form-select">
-								<option value="true">True</option>
-								<option value="false">False</option>
-							</select>
+					<form asp-controller="Plant" asp-action="Explore" method="get">
+						<div class="row">
+							<div class="col-md-3">
+								<label for="difficulty"><em>CARE INTENSITY</em>:</label>
+								<select asp-for="Difficulty" class="form-select">
+									@foreach (Difficulty value in Enum.GetValues(typeof(Difficulty)))
+									{
+										<option value="@value">@value.GetDisplayName()</option>
+									}
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="lifestyle"><em>CHOOSE YOUR LIFESTYLE</em>:</label>
+								<select asp-for="@Model.Lifestyle" class="form-select">
+									@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
+									{
+										<option value="@value">@value.GetDisplayName()</option>
+									}
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label asp-for="PetSafe"><em>PET-FRIENDLY</em></label>
+								<select asp-for="PetSafe" class="form-select">
+									<option value="true">True</option>
+									<option value="false">False</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label asp-for="KidSafe"><em>KID-FRIENDLY</em></label>
+								<select asp-for="KidSafe" class="form-select">
+									<option value="true">True</option>
+									<option value="false">False</option>
+								</select>
+							</div>
 						</div>
 						<div class="col-md-3">
-							<label for="difficulty"><em>DIFFICULTY</em>:</label>
-							<select asp-for="Difficulty" class="form-select">
-								@foreach (Difficulty value in Enum.GetValues(typeof(Difficulty)))
+							<label asp-for="RegionId"><em>SELECT A REGION</em></label>
+							<select asp-for="RegionId" class="form-control">
+								@foreach (var region in Model.Regions)
 								{
-									<option value="@value">@value.GetDisplayName()</option>
+									<option value="@region.Id">@region.Name</option>
 								}
 							</select>
+							<span asp-validation-for="RegionId" class="text-danger"></span>
 						</div>
-						<div class="col-md-3">
-							<label for="lifestyle"><em>LIFESTYLE</em>:</label>
-							<select asp-for="@Model.Lifestyle" class="form-select">
-								@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
-								{
-									<option value="@value">@value.GetDisplayName()</option>
-								}
-							</select>
-						</div>
-						<div class="col-md-3">
-							<label asp-for="PetIds"><em>SELECT ZERO OR MULTIPLE:</em></label>
-							<select asp-for="PetIds" class="form-control" multiple>
-								@foreach (var animal in Model.Pets)
-								{
-									<option value="@animal.Id">@animal.Name</option>
-								}
-							</select>
-							<span asp-validation-for="PetIds" class="text-danger"></span>
-						</div>
-					</div>
-					<p></p>
-					<div class="row no-gutters justify-content">
-						<div class="col-12 col-sm-6 col-md-8">
-							<form method="post">
+						<p></p>
+						<div class="row no-gutters justify-content">
+							<div class="col-12 col-sm-6 col-md-8">
 								<input asp-for="SearchTerm" class="form-control" placeholder="Search..." />
-							</form>
+							</div>
+							<div class="col-6 col-md-4">
+								<button type="submit">Search</button>
+							</div>
 						</div>
-						<div class="col-6 col-md-4">
-							<button type="submit">Search</button>
-						</div>
-					</div>
-
+					</form>
 				</div>
 			</div>
 		</div>

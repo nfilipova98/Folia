@@ -47,6 +47,7 @@
 
 			if (!ModelState.IsValid)
 			{
+				_logger.LogError("CommentController/Index - ModelState was not valid");
 				return View(model);
 			}
 

@@ -32,6 +32,6 @@
 
 		public bool IsLiked { get; set; }
 
-		public ICollection<CommentViewModel?> Comments { get; set; } = new List<CommentViewModel?>();
+        public ICollection<CommentViewModel?> Comments { get; set; } = new List<CommentViewModel?>();
 	}
 }

@@ -9,7 +9,7 @@
 	{
 		public IEnumerable<PlantAllViewModel> AllPlants { get; set; } = new List<PlantAllViewModel>();
 
-		public string? SearchTerm { get; set; } = string.Empty;
+		public string? SearchTerm { get; set; }
 
 		public Lifestyle? Lifestyle { get; set; }
 
@@ -18,10 +18,10 @@
 		[DisplayName("Kid Safe")]
 		public bool? KidSafe { get; set; }
 
-		public IEnumerable<int>? PetIds { get; set; } = new List<int>();
+		public bool? PetSafe { get; set; }
 
-		public IEnumerable<PetViewModel>? Pets { get; set; } = new List<PetViewModel>();
+		public int? RegionId { get; set; }
 
-		//public string Location { get; set; }
+		public IEnumerable<RegionViewModel>? Regions { get; set; } = new List<RegionViewModel>();
 	}
 }

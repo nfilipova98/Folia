@@ -1,9 +1,10 @@
 ﻿namespace Plants.Controllers
 {
 	using Models;
+	using static Services.Constants.GlobalConstants.AdminConstants;
 	using Services.PetService;
 	using Services.PlantService;
-	using static Services.Constants.GlobalConstants.AdminConstants;
+	using Services.RegionService;
 	using Utilities;
 	using ViewModels;
 
@@ -18,12 +19,14 @@
 	{
 		private readonly IPlantService _plantService;
 		private readonly IPetService _petService;
+		private readonly IRegionService _regionService;
 		private readonly ILogger _logger;
 
-		public PlantController(IPlantService plantService, IPetService petService, ILogger<PlantController> logger)
+		public PlantController(IPlantService plantService, IPetService petService, IRegionService regionService, ILogger<PlantController> logger)
 		{
 			_plantService = plantService;
 			_petService = petService;
+			_regionService = regionService;
 			_logger = logger;
 		}
 
@@ -67,13 +70,21 @@
 		{
 			string userId = User.Id();
 
-			var plants = await _plantService.GetAllPlantsAsync(userId, model.SearchTerm);
+			var regions = await _regionService.GetAllRegionsAsync();
+			var plants = await _plantService.GetAllPlantsAsync
+				(userId, 
+				model.SearchTerm, 
+				model.KidSafe, 
+				model.PetSafe, 
+				model.Lifestyle, 
+				model.Difficulty);
 
 			var plantsToShow = new PlantsAllViewModel
 			{
 				ItemsCount = plants.Count(),
-				PageNumber = id
-			};
+				PageNumber = id,
+				Regions = regions
+			};	
 
 			var plantsPagination = await _plantService.Pagination(plants, id);
 
@@ -262,7 +273,6 @@
 			return RedirectToAction(nameof(Explore));
 		}
 
-		//vij za tier change-a kak da stane
 		[HttpPost]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)

@@ -9,10 +9,12 @@
 	public class ContactsController : BaseController
 	{
 		private readonly IContactsService _contactsService;
+		private readonly ILogger _logger;
 
-		public ContactsController(IContactsService contactsService)
+		public ContactsController(IContactsService contactsService, ILogger<ContactsController> logger)
 		{
 			_contactsService = contactsService;
+			_logger = logger;
 		}
 
 		[AllowAnonymous]
@@ -30,10 +32,18 @@
 		{
 			if (!ModelState.IsValid)
 			{
+				_logger.LogError("ContactsController/SendMessage - ModelState was not valid");
 				return View(model);
 			}
 
-			await _contactsService.SendEmail(model);
+			try
+			{
+				await _contactsService.SendEmail(model);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 
 			return RedirectToAction(nameof(Index));
 		}

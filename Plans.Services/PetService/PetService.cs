@@ -6,6 +6,7 @@
 
 	using AutoMapper;
 	using Microsoft.EntityFrameworkCore;
+	using SendGrid.Helpers.Errors.Model;
 
 	public class PetService : IPetService
 	{
@@ -37,7 +38,7 @@
 
 			if (model != null)
 			{
-				//already exist
+				throw new InvalidOperationException();
 			}
 
 			var pet = new Pet()

@@ -10,10 +10,12 @@
 	public class PetController : BaseController
 	{
 		private readonly IPetService _petService;
+		private readonly ILogger _logger;
 
-		public PetController(IPetService petService)
+		public PetController(IPetService petService, ILogger<PetController> logger)
 		{
 			_petService = petService;
+			_logger = logger;
 		}
 
 		[HttpGet]
@@ -31,10 +33,19 @@
 		{
 			if (!ModelState.IsValid)
 			{
+				_logger.LogError("PetController/Add - ModelState was not valid");
 				return View(model);
 			}
 
-			await _petService.CreateAsync(model.Name);
+			try
+			{
+				await _petService.CreateAsync(model.Name);
+			}
+			catch (InvalidOperationException ioEx)
+			{
+				_logger.LogError(ioEx, "PetController/Add - Pet already exists");
+				return BadRequest();
+			}
 
 			return RedirectToAction("Index", "Home");
 		}
