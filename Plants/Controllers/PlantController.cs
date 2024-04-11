@@ -64,6 +64,7 @@
 		}
 
 		//sloji logger i greshki
+		//dobavi za regionite
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Explore(PlantsAllViewModel model, int id = 1)

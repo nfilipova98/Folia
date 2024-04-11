@@ -1,6 +1,7 @@
 ﻿namespace Plants.Services.PlantService
 {
 	using Data.Models.ApplicationUser;
+	using Data.Models.Enums;
 	using Data.Models.Pet;
 	using Data.Models.Plant;
 	using Models;
@@ -13,8 +14,6 @@
 	using System.Threading.Tasks;
 	using Microsoft.EntityFrameworkCore;
 	using SendGrid.Helpers.Errors.Model;
-	using Plants.ViewModels;
-	using Plants.Data.Models.Enums;
 
 	public class PlantService : IPlantService
 	{

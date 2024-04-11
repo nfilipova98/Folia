@@ -27,7 +27,7 @@
 						<select asp-for="@Model.Difficulty" class="form-select">
 							@foreach (Difficulty value in Enum.GetValues(typeof(Difficulty)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>
@@ -36,7 +36,7 @@
 						<select asp-for="@Model.Lifestyle" class="form-select">
 							@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>
@@ -45,7 +45,7 @@
 						<select asp-for="@Model.Humidity" class="form-select">
 							@foreach (Humidity value in Enum.GetValues(typeof(Humidity)))
 							{
-								<option value="@value">@value</option>
+								<option value="@value">@value.GetDisplayName()</option>
 							}
 						</select>
 					</div>

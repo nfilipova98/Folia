@@ -14,7 +14,7 @@
 	<div class="site-content-warp" style="padding-left: 0; padding-bottom: 10px; justify-content:">
 		<div class="container">
 			<div class="row">
-				<div class="search-bar" style="padding-bottom: 15px; padding-top: 15px;">
+				<div style="padding-bottom: 15px; padding-top: 15px;">
 					<form asp-controller="Plant" asp-action="Explore" method="get">
 						<div class="row">
 							<div class="col-md-3">
@@ -28,7 +28,7 @@
 							</div>
 							<div class="col-md-3">
 								<label for="lifestyle"><em>CHOOSE YOUR LIFESTYLE</em>:</label>
-								<select asp-for="@Model.Lifestyle" class="form-select">
+								<select asp-for="Lifestyle" class="form-select">
 									@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
 									{
 										<option value="@value">@value.GetDisplayName()</option>
@@ -50,23 +50,27 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-md-3">
-							<label asp-for="RegionId"><em>SELECT A REGION</em></label>
-							<select asp-for="RegionId" class="form-control">
-								@foreach (var region in Model.Regions)
-								{
-									<option value="@region.Id">@region.Name</option>
-								}
-							</select>
-							<span asp-validation-for="RegionId" class="text-danger"></span>
+						<p></p>
+						<div class="row justify-content">
+							<div class="col-md-6">
+								<label asp-for="RegionId"><em>SELECT A REGION</em></label>
+								<select asp-for="RegionId" class="form-control">
+									@foreach (var region in Model.Regions)
+									{
+										<option value="@region.Id">@region.Name</option>
+									}
+								</select>
+								<span asp-validation-for="RegionId" class="text-danger"></span>
+							</div>
+							<div class="col-md-6">
+								<label asp-for="RegionId"><em>SEARCH</em></label>
+								<input asp-for="SearchTerm" class="form-control" placeholder="Type something..." />
+							</div>
 						</div>
 						<p></p>
-						<div class="row no-gutters justify-content">
-							<div class="col-12 col-sm-6 col-md-8">
-								<input asp-for="SearchTerm" class="form-control" placeholder="Search..." />
-							</div>
-							<div class="col-6 col-md-4">
-								<button type="submit">Search</button>
+						<div class="row d-flex justify-content-center">
+							<div class="col-md-6 d-flex justify-content-center">
+								<input class="btn mb-3" type="submit" style="background-color: #d8c269" value="Search" />
 							</div>
 						</div>
 					</form>

@@ -27,7 +27,7 @@
 									{
 										<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
 									}
-									<a asp-controller="Comment" asp-action="Index"><img src="~/img/icons/see-more.png"></a>
+									<a asp-controller="Comment" asp-action="Index" asp-route-id="@item.Id"><img src="~/img/icons/see-more.png"></a>
 								</div>
 							</div>
 							<p style="padding-left:30px;">@item.ScientificName</p>
