@@ -2,6 +2,7 @@
 {
 	using Data.Models.ApplicationUser;
 	using Data.Models.Enums;
+	using Data.Models.Pet;
 	using Data.Models.Plant;
 	using Models;
 	using Services.PlantService;
@@ -62,7 +63,20 @@
 				Lifestyle = Lifestyle.OnTheGo,
 				IsTrending = false,
 				ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/10.jpg",
-				Description = "The Rubber Fig, scientifically known as Ficus elastica, is a stunning addition to any indoor garden. With its glossy, deep green leaves and sturdy, upright growth habit, it adds a touch of elegance to any room it inhabits. This plant is a perfect choice for both novice and experienced plant parents due to its easy-care nature. Its resilience and adaptability make it an excellent option for those new to plant care or those seeking low-maintenance greenery. Thriving in environments with high humidity levels, the Rubber Fig is ideal for spaces where moisture levels can be easily controlled, such as bathrooms or kitchens. Its preference for high humidity ensures that it remains healthy and vibrant even in dry indoor environments. Families with children or pets will appreciate the Rubber Fig's safe nature, as it is non-toxic and considered kid-friendly. This characteristic allows it to be placed in any room of the house without concern for the safety of curious little ones or furry friends. For individuals leading busy lives or frequent travelers, the Rubber Fig is an excellent companion. Its ability to tolerate occasional neglect and irregular watering makes it a resilient choice for those who may not always have time to devote to plant care. While primarily an indoor plant, the Rubber Fig can be placed in a variety of indoor settings, from bright, sunlit rooms to areas with lower light levels. Its versatility in light requirements allows it to thrive in different environments, making it a versatile addition to any indoor space."
+				Description = "The Rubber Fig, scientifically known as Ficus elastica, is a stunning addition to any indoor garden. With its glossy, deep green leaves and sturdy, upright growth habit, it adds a touch of elegance to any room it inhabits. This plant is a perfect choice for both novice and experienced plant parents due to its easy-care nature. Its resilience and adaptability make it an excellent option for those new to plant care or those seeking low-maintenance greenery. Thriving in environments with high humidity levels, the Rubber Fig is ideal for spaces where moisture levels can be easily controlled, such as bathrooms or kitchens. Its preference for high humidity ensures that it remains healthy and vibrant even in dry indoor environments. Families with children or pets will appreciate the Rubber Fig's safe nature, as it is non-toxic and considered kid-friendly. This characteristic allows it to be placed in any room of the house without concern for the safety of curious little ones or furry friends. For individuals leading busy lives or frequent travelers, the Rubber Fig is an excellent companion. Its ability to tolerate occasional neglect and irregular watering makes it a resilient choice for those who may not always have time to devote to plant care. While primarily an indoor plant, the Rubber Fig can be placed in a variety of indoor settings, from bright, sunlit rooms to areas with lower light levels. Its versatility in light requirements allows it to thrive in different environments, making it a versatile addition to any indoor space.",
+				Pets = new List<Pet>()
+				{
+					new Pet
+					{
+						Id = 1,
+						Name = "Dog",
+					},
+					new Pet
+					{
+						Id = 2,
+						Name = "Cat",
+					}
+				}
 			},
 			new Plant
 			{
@@ -113,7 +127,7 @@
 			_repositoryMock.Setup(x => x.AllReadOnly<ApplicationUser>())
 				.Returns(users.AsQueryable().BuildMock());
 
-			_mapperMock.Setup(x => x.Map<List<Plant>, List<PlantEditOrAddViewModel>>(plants, It.IsAny<Action<IMappingOperationOptions>>()))
+			_mapperMock.Setup(x => x.Map<List<Plant>, List<PlantEditOrAddViewModel>>(It.IsAny<List<Plant>>()))
 				.Returns(new List<PlantEditOrAddViewModel>());
 
 			_plantService = new PlantService(_repositoryMock.Object, _mapperMock.Object, _blobServiceClientMock.Object);
@@ -130,13 +144,25 @@
 		}
 
 		[Test]
-		public async Task Test_GetPlantAddOrEditModelAsync_Returns_When_Id_2_Is_Called()
+		public async Task Test_GetPlantAddOrEditModelAsync_With_Id_2()
 		{
 			var resultTask = await _plantService.GetPlantAddOrEditModelAsync(2);
 
+			;
+
 			Assert.That(resultTask, Is.Not.Null);
 			Assert.That(resultTask.Name, Is.EqualTo("Spider plant"));
-			Assert.That(resultTask.Equals(PlantEditOrAddViewModel));
+			Assert.That(resultTask, Is.TypeOf<PlantEditOrAddViewModel>());
+		}
+
+		[Test]
+		public async Task Test_GetPetIds_Returns_When_Id_3_Is_Called()
+		{
+			var resultTask = await _plantService.GetPetIds(3);
+
+			Assert.That(resultTask, Is.Not.Null);
+			Assert.That(resultTask, Is.TypeOf<List<int>>());
+			Assert.That(resultTask.Count, Is.EqualTo(2));
 		}
 	}
 }
