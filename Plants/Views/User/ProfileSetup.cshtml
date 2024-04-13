@@ -1,4 +1,4 @@
-﻿@model FirstLoginViewModel
+﻿@model ProfileViewModel
 
 @{
 	ViewData["Title"] = "Profile Setup";
@@ -17,7 +17,20 @@
 						<select asp-for="PetIds" class="form-control" multiple>
 							@foreach (var animal in Model.Pets)
 							{
-								<option value="@animal.Id">@animal.Name</option>
+								bool isSelected = false;
+
+								@foreach (var item in Model.PetIds)
+								{
+									if (item == animal.Id)
+									{
+										<option value="@animal.Id" selected="@animal">@animal.Name</option>
+										isSelected = true;
+									}
+								}
+								if (!isSelected)
+								{
+									<option value="@animal.Id">@animal.Name</option>
+								}
 							}
 						</select>
 						<span asp-validation-for="PetIds" class="text-danger"></span>
@@ -50,8 +63,11 @@
 						<span asp-validation-for="RegionId" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
-						<input type="file" asp-for="ImageModel.FormFile" class="form-label" />
 						<span asp-validation-for="ImageModel.FormFile" class="text-danger"></span>
+						<p></p>
+						<label asp-for="ImageModel.FormFile"><em>Upload a profile picture</em></label>
+						<p></p>
+						<input type="file" asp-for="ImageModel.FormFile" class="form-label" />
 					</div>
 					<div class="mb-3">
 						<input class="btn mb-2 w-100 p-3 fw-bold" type="submit" style="background-color: #d8c269" value="CONFIRM" />

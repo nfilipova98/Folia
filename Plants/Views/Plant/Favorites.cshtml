@@ -25,7 +25,7 @@
 								<div style="display: flex; justify-content: space-between;">
 									@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
 									{
-										<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
+										<a class="favorite-btn clicked" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
 									}
 									<a asp-controller="Comment" asp-action="Index" asp-route-id="@item.Id"><img src="~/img/icons/see-more.png"></a>
 								</div>

@@ -1,10 +1,9 @@
 ﻿namespace Plants.Services.PlantService
 {
-	using Models;
-	using Plants.Data.Models.Enums;
-	using Plants.ViewModels;
+	using Data.Models.Enums;
+	using ViewModels;
 
-	public interface IPlantService
+    public interface IPlantService
     {
 		Task<bool> ExistsAsync(int id);
 		Task<IEnumerable<int>> GetPetIds(int id);
@@ -24,6 +23,7 @@
 			bool? kidSafe, 
 			bool? petSafe, 
 			Lifestyle? lifestyle, 
-			Difficulty? difficulty);
+			Difficulty? difficulty,
+			int? regionId);
 	}
 }

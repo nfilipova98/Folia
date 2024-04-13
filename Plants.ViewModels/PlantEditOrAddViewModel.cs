@@ -1,18 +1,18 @@
-﻿namespace Plants.Models
+﻿namespace Plants.ViewModels
 {
-	using Data.Models.Enums;
+    using Data.Models.Enums;
     using static Services.Constants.GlobalConstants.ErrorMessages;
     using static Services.Constants.GlobalConstants.PlantConstants;
-	using ViewModels;
+    using ViewModels;
 
     using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel;
+    using System.ComponentModel;
 
-	[Serializable]
+    [Serializable]
     public class PlantEditOrAddViewModel
     {
         [Required(ErrorMessage = RequiredErrorMessage)]
-		[StringLength(PlantNameMaxLenght, MinimumLength = PlantNameMinLenght,
+        [StringLength(PlantNameMaxLenght, MinimumLength = PlantNameMinLenght,
             ErrorMessage = StringLenghtErrorMessage)]
         public string Name { get; set; } = string.Empty;
 
@@ -30,25 +30,25 @@
         [Required(ErrorMessage = RequiredErrorMessage)]
         public Lifestyle Lifestyle { get; set; }
 
-		[Required(ErrorMessage = RequiredErrorMessage)]
-		[DisplayName("Kid Safe")]
+        [Required(ErrorMessage = RequiredErrorMessage)]
+        [DisplayName("Kid Safe")]
         public bool KidSafe { get; set; }
 
         [Required(ErrorMessage = RequiredErrorMessage)]
         public bool Outdoor { get; set; }
 
         [Required(ErrorMessage = RequiredErrorMessage)]
-		[DisplayName("Is Trending")]
-		public bool IsTrending { get; set; }
+        [DisplayName("Is Trending")]
+        public bool IsTrending { get; set; }
 
-		[MinLength(PlantDescriptionMinLenght, ErrorMessage = StringLenghtPlantDescriptionErrorMessage)]
-		[Required(ErrorMessage = RequiredErrorMessage)]
-		public string Description { get; set; } = string.Empty;
+        [MinLength(PlantDescriptionMinLenght, ErrorMessage = StringLenghtPlantDescriptionErrorMessage)]
+        [Required(ErrorMessage = RequiredErrorMessage)]
+        public string Description { get; set; } = string.Empty;
 
-		public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public IEnumerable<int>? PetIds { get; set; } = new List<int>();
 
         public IEnumerable<PetViewModel>? Pets { get; set; } = new List<PetViewModel>();
-	}
+    }
 }

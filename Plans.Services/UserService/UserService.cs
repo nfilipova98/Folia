@@ -1,20 +1,18 @@
 ﻿namespace Plants.Services.UserService
 {
-	using Data.Models.ApplicationUser;
-	using Data.Models.Pet;
-	using static Constants.GlobalConstants.ApiConstants;
-	using Models;
-	using RepositoryService;
-	using ViewModels;
+    using Data.Models.ApplicationUser;
+    using Data.Models.Pet;
+    using static Constants.GlobalConstants.ApiConstants;
+    using RepositoryService;
+    using ViewModels;
 
-	using AutoMapper;
-	using Azure.Storage.Blobs;
-	using SendGrid.Helpers.Errors.Model;
-	using System;
-	using Microsoft.EntityFrameworkCore;
-	using System.ComponentModel;
+    using AutoMapper;
+    using Azure.Storage.Blobs;
+    using SendGrid.Helpers.Errors.Model;
+    using System;
+    using Microsoft.EntityFrameworkCore;
 
-	public class UserService : IUserService
+    public class UserService : IUserService
 	{
 		private IRepositoryService _repository;
 		private readonly IMapper _mapper;
@@ -27,7 +25,7 @@
 			_blobServiceClient = blobServiceClient;
 		}
 
-		public async Task<FirstLoginViewModel> GetModels()
+		public async Task<ProfileViewModel> GetModels(string? userId)
 		{
 			var cities = _repository.AllReadOnly<Region>().OrderBy(x => x.Name);
 			var pets = _repository.AllReadOnly<Pet>().OrderBy(x => x.Name);
@@ -35,12 +33,24 @@
 			var citiesViewModels = _mapper.Map<IEnumerable<RegionViewModel>>(cities);
 			var petsViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
 
-			var model = new FirstLoginViewModel()
+			var model = new ProfileViewModel()
 			{
 				Regions = citiesViewModels,
 				Pets = petsViewModels,
 			};
 
+			if (userId != null)
+			{
+				var userConfg = await _repository
+					.AllReadOnly<UserConfiguration>()
+					.Include(x => x.Pets)
+					.FirstOrDefaultAsync(x => x.ApplicationUserId == userId);
+
+				if (userConfg != null)
+				{
+					_mapper.Map(userConfg, model);
+				}
+			}
 			return model;
 		}
 
@@ -59,42 +69,61 @@
 			return blobClient.Uri.ToString();
 		}
 
-		public async Task AddUserInformation(FirstLoginViewModel model, string url, string userId)
+		public async Task AddUserInformation(ProfileViewModel model, string url, string userId)
 		{
-			var user = await _repository
-				.AllReadOnly<ApplicationUser>()
-				.Include(x => x.UserConfiguration)
-				.FirstOrDefaultAsync(x => x.Id == userId);
+			var userConfiguration = await _repository
+				.All<UserConfiguration>()
+				.Include(x => x.Pets)
+				.FirstOrDefaultAsync(x => x.ApplicationUserId == userId);
 
 			var region = await _repository
 				.FindByIdAsync<Region>(model.RegionId);
 
-			if (user.UserConfigurationIsNull == false)
+			using var transaction = _repository.CreateTransaction();
+
+			if (userConfiguration != null && userConfiguration.UserPictureUrl != null)
 			{
-				if (user.UserConfiguration.UserPictureUrl != null)
-				{
-					await DeleteFileAsync(user.UserConfiguration.UserPictureUrl, user.Id);
-				}
+				await DeleteFileAsync(userConfiguration.UserPictureUrl, userConfiguration.ApplicationUserId);
 			}
-			if (user != null && region != null)
+			if (userConfiguration != null && region != null)
 			{
-				var userConfiguration = _mapper.Map<UserConfiguration>(model);
+				if (userConfiguration == null)
+				{
+					userConfiguration = new UserConfiguration();
+				}
 
-				userConfiguration.Region = region;
-				userConfiguration.ApplicationUser = user;
-				userConfiguration.UserPictureUrl = url;
+				_mapper.Map(model, userConfiguration);
 
-				user.UserConfiguration = userConfiguration;
-				user.UserConfigurationIsNull = false;
+				if (!string.IsNullOrEmpty(url))
+				{
+					userConfiguration.UserPictureUrl = url;
+				}
 
-				//vij ako veche go ima kak da go opravq
+				var petIds = model.PetIds;
 
-				_repository.UpdateAsync(user);
-				await _repository.SaveChangesAsync();
-				user.UsersConfigurationId = userConfiguration.Id;
+				var pets = await _repository
+					.All<Pet>()
+					.Where(x => petIds.Contains(x.Id))
+					.ToListAsync();
+
+				if (userConfiguration.Id != default)
+				{
+					userConfiguration.Pets.Clear();
+					await _repository.SaveChangesAsync();
+					userConfiguration.Pets = pets;
+
+					_repository.Update(userConfiguration);
+				}
+				else
+				{
+					//userConfiguration.UserConfigurationIsNull = false;
+					userConfiguration.Pets = pets;
+					await _repository.AddAsync(userConfiguration);
+				}
 			}
 
 			await _repository.SaveChangesAsync();
+			await transaction.CommitAsync();
 		}
 
 		public async Task DeleteFileAsync(string url, string userId)

@@ -1,13 +1,13 @@
 ﻿namespace Plants.Controllers
 {
-	using Services.PetService;
-	using static Services.Constants.GlobalConstants.AdminConstants;
-	using ViewModels;
+    using Services.PetService;
+    using static Services.Constants.GlobalConstants.AdminConstants;
+    using ViewModels;
 
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-	public class PetController : BaseController
+    public class PetController : BaseController
 	{
 		private readonly IPetService _petService;
 		private readonly ILogger _logger;

@@ -1,8 +1,9 @@
 ﻿namespace Plants.Services.ContactsService
 {
-	using ViewModels;
+    using Plants.ViewModels;
+    using ViewModels;
 
-	public interface IContactsService
+    public interface IContactsService
 	{
 		Task SendEmail(ContactViewModel model);
 	}

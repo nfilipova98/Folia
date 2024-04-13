@@ -1,10 +1,10 @@
 ﻿namespace Plants.Services.ContactsService
 {
-	using APIs.EmailSenderService;
-	using static Constants.GlobalConstants.AdminConstants;
-	using ViewModels;
+    using APIs.EmailSenderService;
+    using static Constants.GlobalConstants.AdminConstants;
+    using ViewModels;
 
-	public class ContactsService : IContactsService
+    public class ContactsService : IContactsService
 	{
 		private readonly ICustomEmailSender _emailSender;
 

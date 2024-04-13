@@ -1,14 +1,13 @@
 ﻿namespace Plants.Services.PetService
 {
-	using Data.Models.Pet;
-	using ViewModels;
-	using RepositoryService;
+    using Data.Models.Pet;
+    using ViewModels;
+    using RepositoryService;
 
-	using AutoMapper;
-	using Microsoft.EntityFrameworkCore;
-	using SendGrid.Helpers.Errors.Model;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
 
-	public class PetService : IPetService
+    public class PetService : IPetService
 	{
 		private IRepositoryService _repository;
 		private readonly IMapper _mapper;

@@ -1,14 +1,14 @@
 ﻿namespace Plants.Services.APIs.EmailSenderService
 {
-	using Models;
-	using static Constants.GlobalConstants.AdminConstants;
+    using static Constants.GlobalConstants.AdminConstants;
+    using ViewModels;
 
-	using Microsoft.Extensions.Logging;
-	using Microsoft.Extensions.Options;
-	using SendGrid;
-	using SendGrid.Helpers.Mail;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using SendGrid;
+    using SendGrid.Helpers.Mail;
 
-	public class EmailSender : ICustomEmailSender
+    public class EmailSender : ICustomEmailSender
 	{
 		private readonly ILogger _logger;
 

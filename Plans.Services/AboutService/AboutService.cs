@@ -1,12 +1,12 @@
 ﻿namespace Plants.Services.AboutService
 {
-	using Data.Models.ApplicationUser;
+    using Data.Models.ApplicationUser;
     using Data.Models.Comment;
-	using Data.Models.Plant;
-	using Models;
-	using RepositoryService;
+    using Data.Models.Plant;
+    using RepositoryService;
+    using ViewModels;
 
-	using AutoMapper;
+    using AutoMapper;
 
     public class AboutService : IAboutService
 	{

@@ -4,10 +4,9 @@ namespace Plants.Web
     using Data;
     using Data.Models.ApplicationUser;
     using Data.Seeding;
-	using Models;
     using Services.AboutService;
     using Services.APIs.EmailSenderService;
-	using Services.RegionService;
+    using Services.RegionService;
     using Services.CommentService;
     using Services.ContactsService;
     using Services.Mapping;
@@ -20,9 +19,10 @@ namespace Plants.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-	using Plants.Services.LayoutService;
+    using Plants.Services.LayoutService;
+    using Plants.ViewModels;
 
-	public class Program
+    public class Program
     {
         public static void Main(string[] args)
         {

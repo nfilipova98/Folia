@@ -1,7 +1,7 @@
 namespace Plants.Controllers
 {
-	using Models;
 	using Services.PlantService;
+	using ViewModels;
 
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;

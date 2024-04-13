@@ -1,4 +1,4 @@
-﻿namespace Plants.Models
+﻿namespace Plants.ViewModels
 {
     public class AuthMessageSenderOptions
     {

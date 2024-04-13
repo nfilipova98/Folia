@@ -1,15 +1,14 @@
 ﻿namespace Plants.Services.Mapping
 {
-	using Data.Models.Comment;
-	using Data.Models.Pet;
-	using Data.Models.Plant;
-	using Models;
-	using ViewModels;
+    using Data.Models.ApplicationUser;
+    using Data.Models.Comment;
+    using Data.Models.Pet;
+    using Data.Models.Plant;
+    using ViewModels;
 
-	using AutoMapper;
-	using Plants.Data.Models.ApplicationUser;
+    using AutoMapper;
 
-	public class AutoMapperProfile : Profile
+    public class AutoMapperProfile : Profile
 	{
 		public AutoMapperProfile()
 		{
@@ -49,7 +48,11 @@
 			CreateMap<RegionAddViewModel, Region>().ReverseMap();
 			CreateMap<RegionViewModel, Region>().ReverseMap();
 
-			CreateMap<FirstLoginViewModel, UserConfiguration>();
+			CreateMap<ProfileViewModel, UserConfiguration>()
+				.ReverseMap()
+				.ForMember(x => x.Pets, x => x.Ignore())
+				.ForMember(x => x.Regions, x => x.Ignore())
+				.ForMember(x => x.PetIds, x => x.MapFrom(x => x.Pets.Select(x => x.Id)));
 		}
 	}
 }

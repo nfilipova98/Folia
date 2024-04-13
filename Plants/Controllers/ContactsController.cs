@@ -1,12 +1,12 @@
 ﻿namespace Plants.Controllers
 {
-	using Services.ContactsService;
-	using ViewModels;
+    using Services.ContactsService;
+    using ViewModels;
 
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-	public class ContactsController : BaseController
+    public class ContactsController : BaseController
 	{
 		private readonly IContactsService _contactsService;
 		private readonly ILogger _logger;

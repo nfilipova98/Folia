@@ -1,29 +1,32 @@
 ﻿namespace Plants.Services.PlantService
 {
-	using Data.Models.ApplicationUser;
+    using Data.Models.ApplicationUser;
 	using Data.Models.Enums;
-	using Data.Models.Pet;
-	using Data.Models.Plant;
-	using Models;
-	using RepositoryService;
-	using static Constants.GlobalConstants.ApiConstants;
-	using static Services.Constants.GlobalConstants.Paging;
+    using Data.Models.Pet;
+    using Data.Models.Plant;
+    using RepositoryService;
+    using static Constants.GlobalConstants.ApiConstants;
+    using static Services.Constants.GlobalConstants.Paging;
+    using Services.RegionService;
+    using ViewModels;
 
-	using AutoMapper;
-	using Azure.Storage.Blobs;
-	using System.Threading.Tasks;
-	using Microsoft.EntityFrameworkCore;
-	using SendGrid.Helpers.Errors.Model;
+    using AutoMapper;
+    using Azure.Storage.Blobs;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
+    using SendGrid.Helpers.Errors.Model;
 
 	public class PlantService : IPlantService
 	{
 		private readonly IRepositoryService _repository;
+		private readonly IRegionService _regionService;
 		private readonly IMapper _mapper;
 		private readonly BlobServiceClient _blobServiceClient;
 
-		public PlantService(IRepositoryService repository, IMapper mapper, BlobServiceClient blobServiceClient)
+		public PlantService(IRepositoryService repository, IRegionService regionService, IMapper mapper, BlobServiceClient blobServiceClient)
 		{
 			_repository = repository;
+			_regionService = regionService;
 			_mapper = mapper;
 			_blobServiceClient = blobServiceClient;
 		}
@@ -133,7 +136,8 @@
 			bool? kidSafe,
 			bool? petSafe,
 			Lifestyle? lifestyle,
-			Difficulty? difficulty)
+			Difficulty? difficulty,
+			int? regionId)
 		{
 
 			var plantsToShow = _repository.AllReadOnly<Plant>();
@@ -153,6 +157,22 @@
 			if (petSafe != null)
 			{
 				plantsToShow = plantsToShow.Where(x => x.Pets.Count == 0);
+			}
+			if (regionId != null)
+			{
+				var region = await _repository
+					.FindByIdAsync<Region>(regionId.Value);
+
+				string regionName = region.Name;
+
+				var humidityPercentage = await _regionService.GetHumidityAsync(regionName);
+
+				var humidity = HumidityFromPercentage(humidityPercentage);
+
+				if (humidity != null)
+				{
+					plantsToShow = plantsToShow.Where(x => x.Humidity == humidity);
+				}
 			}
 			if (searchString != null)
 			{
@@ -220,7 +240,7 @@
 				throw new NotFoundException();
 			}
 
-			_repository.UpdateAsync(plant);
+			_repository.Update(plant);
 			await _repository.SaveChangesAsync();
 		}
 
@@ -255,6 +275,30 @@
 		{
 			var blobContainerClient = _blobServiceClient.GetBlobContainerClient(BlobContainerName);
 			return blobContainerClient.GetBlobClient(fileName);
+		}
+
+		private Humidity? HumidityFromPercentage(double? percentage)
+		{
+			if (percentage == null)
+			{
+				return null;
+			}
+			else if (percentage >= 0 && percentage <= 25)
+			{
+				return Humidity.Low;
+			}
+			else if (percentage > 25 && percentage <= 50)
+			{
+				return Humidity.Moderate;
+			}
+			else if (percentage > 50 && percentage <= 75)
+			{
+				return Humidity.High;
+			}
+			else
+			{
+				return Humidity.VeryHigh;
+			}
 		}
 	}
 }

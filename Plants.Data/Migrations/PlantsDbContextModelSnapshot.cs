@@ -17,7 +17,7 @@ namespace Plants.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -326,10 +326,6 @@ namespace Plants.Data.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int")
                         .HasComment("Country identifier");
-
-                    b.Property<int?>("Humidity")
-                        .HasColumnType("int")
-                        .HasComment("Region humidity");
 
                     b.Property<string>("Name")
                         .IsRequired()

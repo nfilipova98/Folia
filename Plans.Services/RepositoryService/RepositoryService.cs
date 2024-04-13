@@ -3,6 +3,7 @@
 	using Data;
 
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore.Storage;
 
 	public class Repository : IRepositoryService
 	{
@@ -49,7 +50,7 @@
 			return await _context.SaveChangesAsync();
 		}
 
-		public void UpdateAsync<T>(T entity) where T : class
+		public void Update<T>(T entity) where T : class
 		{
 			var entry = _context.Entry(entity);
 
@@ -64,6 +65,11 @@
 		public void Delete<T>(T entity) where T : class
 		{
 			DbSet<T>().Remove(entity);
+		}
+
+		public IDbContextTransaction CreateTransaction()
+		{
+			return _context.Database.BeginTransaction();
 		}
 	}
 }

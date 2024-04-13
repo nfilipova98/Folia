@@ -1,15 +1,16 @@
 ﻿namespace Plants.Services.RegionService
 {
-	using Data.Models.ApplicationUser;
-	using RepositoryService;
-	using ViewModels;
+    using Data.Models.ApplicationUser;
+    using RepositoryService;
+    using static Constants.GlobalConstants.ApiConstants;
+    using ViewModels;
 
-	using AutoMapper;
-	using Microsoft.EntityFrameworkCore;
-	using System.Collections.Generic;
-	using OpenMeteo;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using OpenMeteo;
 
-	public class RegionService : IRegionService
+    public class RegionService : IRegionService
 	{
 		private IRepositoryService _repository;
 		private readonly IMapper _mapper;
@@ -32,50 +33,26 @@
 			return model;
 		}
 
-		public Task<IEnumerable<Region>> GetHumidityAsync(IEnumerable<Region> regions)
+		public async Task<double?> GetHumidityAsync(string region)
 		{
-			throw new NotImplementedException();
-			//OpenMeteoClient client = new();
+			OpenMeteoClient client = new();
 
-			//			HourlyOptions hourlyOptions = new()
-			//			{
-			//				HourlyOptionsParameter.relativehumidity_2m,
-			//			};
+			HourlyOptions hourlyOptions = new()
+			{
+				HourlyOptionsParameter.relativehumidity_2m,
+			};
 
-			//			WeatherForecastOptions weatherForecastOptions = new()
-			//			{
-			//				Hourly = hourlyOptions,
-			//				Past_Days = PastDays
-			//			};
+			WeatherForecastOptions weatherForecastOptions = new()
+			{
+				Hourly = hourlyOptions,
+				Past_Days = PastDays
+			};
 
-			//			WeatherForecast weatherForecast = await client.QueryAsync(location, weatherForecastOptions);
+			WeatherForecast weatherForecast = await client.QueryAsync(region, weatherForecastOptions);
 
-			//				var percentage = weatherForecast.Hourly?.Relativehumidity_2m?.Average();
+			var percentage = weatherForecast?.Hourly?.Relativehumidity_2m?.Average();
 
-			//				if (percentage == null)
-			//				{
-			//					item.Humidity = null;
-			//				}
-			//				else if (percentage >= 0 && percentage <= 25)
-			//				{
-			//					item.Humidity = Humidity.Low;
-			//				}
-			//				else if (percentage > 25 && percentage <= 50)
-			//				{
-			//					item.Humidity = Humidity.Moderate;
-			//				}
-			//				else if (percentage > 50 && percentage <= 75)
-			//				{
-			//					item.Humidity = Humidity.High;
-			//				}
-			//				else if (percentage > 75 && percentage <= 100)
-			//				{
-			//					item.Humidity = Humidity.VeryHigh;
-			//				}
-			//			}
-
-			//			return regions;
-			//		}
+			return percentage;
 		}
 	}
 }

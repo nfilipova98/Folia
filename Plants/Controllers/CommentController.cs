@@ -1,15 +1,15 @@
 ﻿namespace Plants.Controllers
 {
-	using Utilities;
-	using Services.CommentService;
-	using ViewModels;
+    using Utilities;
+    using Services.CommentService;
+    using ViewModels;
 
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Authorization;
-	using System.Security.Claims;
-	using SendGrid.Helpers.Errors.Model;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using System.Security.Claims;
+    using SendGrid.Helpers.Errors.Model;
 
-	public class CommentController : BaseController
+    public class CommentController : BaseController
 	{
 		private ICommentService _service;
 		private ILogger _logger;

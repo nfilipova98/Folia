@@ -1,8 +1,8 @@
 ﻿namespace Plants.Services.AboutService
 {
-	using Models;
+    using ViewModels;
 
-	public interface IAboutService
+    public interface IAboutService
 	{
 		AboutViewModel GetCounts();
 	}

@@ -1,21 +1,21 @@
 ﻿namespace Plants.Controllers
 {
-	using Models;
-	using static Services.Constants.GlobalConstants.AdminConstants;
-	using Services.PetService;
-	using Services.PlantService;
-	using Services.RegionService;
-	using Utilities;
-	using ViewModels;
+    using static Services.Constants.GlobalConstants.AdminConstants;
+    using static Services.Constants.GlobalConstants.ErrorMessages;
+    using Services.PetService;
+    using Services.PlantService;
+    using Services.RegionService;
+    using Utilities;
+    using ViewModels;
 
-	using Azure;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-	using Newtonsoft.Json;
-	using SendGrid.Helpers.Errors.Model;
-	using System.Security.Claims;
+    using Azure;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+    using SendGrid.Helpers.Errors.Model;
+    using System.Security.Claims;
 
-	public class PlantController : BaseController
+    public class PlantController : BaseController
 	{
 		private readonly IPlantService _plantService;
 		private readonly IPetService _petService;
@@ -64,7 +64,6 @@
 		}
 
 		//sloji logger i greshki
-		//dobavi za regionite
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Explore(PlantsAllViewModel model, int id = 1)
@@ -78,7 +77,8 @@
 				model.KidSafe, 
 				model.PetSafe, 
 				model.Lifestyle, 
-				model.Difficulty);
+				model.Difficulty,
+				model.RegionId);
 
 			var plantsToShow = new PlantsAllViewModel
 			{
@@ -142,6 +142,12 @@
 		{
 			var url = string.Empty;
 
+			if (file.FormFile == null)
+			{
+				_logger.LogError("PlantController/UploadFile - No file upload");
+				ModelState.AddModelError(nameof(ImageModel.FormFile), string.Format(RequiredErrorMessage, "Image"));
+				return View();
+			}
 			if (file == null || file.FormFile == null || file.FormFile.Length == 0
 				|| !file.FormFile.ContentType.StartsWith("image"))
 			{

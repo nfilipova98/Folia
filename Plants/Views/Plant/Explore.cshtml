@@ -39,14 +39,14 @@
 								<label asp-for="PetSafe"><em>PET-FRIENDLY</em></label>
 								<select asp-for="PetSafe" class="form-select">
 									<option value="true">True</option>
-									<option value="false">False</option>
+									<option selected value="false">False</option>
 								</select>
 							</div>
 							<div class="col-md-3">
 								<label asp-for="KidSafe"><em>KID-FRIENDLY</em></label>
 								<select asp-for="KidSafe" class="form-select">
 									<option value="true">True</option>
-									<option value="false">False</option>
+									<option selected value="false">False</option>
 								</select>
 							</div>
 						</div>
@@ -89,7 +89,7 @@
 							<div style="display: flex; justify-content: space-between;">
 								@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
 								{
-									<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
+									<a class="favorite-btn clicked" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
 								}
 								else
 								{
@@ -116,36 +116,38 @@
 
 @section scripts {
 	<script>
-		$(document).on('click', '.favorite-btn', function () {
-			$(this).toggleClass('clicked');
-			var $img = $(this).find('img');
+		$(document).ready(function () {
+			$('.favorite-btn').on('click', function () {
+				$(this).toggleClass('clicked');
+				var $img = $(this).find('img');
 
-			if ($(this).hasClass('clicked')) {
-				$img.attr('src', '/img/icons/heart-filled.png');
-			} else {
-				$img.attr('src', '/img/icons/heart-outline.png');
-			}
-
-			var isLiked = $(this).hasClass('clicked');
-			var plantName = $(this).closest('.portfolio-item').find('h5').text();
-			var plantId = $(this).data("id");
-
-			$.ajax({
-				url: '@Url.Action("LikeButton", "Plant")',
-				method: 'POST',
-				headers: {
-					"RequestVerificationToken": '@GetAntiXsrfRequestToken()'
-				},
-				data: {
-					id: plantId,
-					isLiked: isLiked
-				},
-				success: function (response) {
-					alert(plantName + (isLiked ? " added to favorites." : " removed from favorites."));
-				},
-				error: function (request, status, error) {
-					alert("Fail");
+				if ($(this).hasClass('clicked')) {
+					$img.attr('src', '/img/icons/heart-filled.png');
+				} else {
+					$img.attr('src', '/img/icons/heart-outline.png');
 				}
+
+				var isLiked = $(this).hasClass('clicked');
+				var plantName = $(this).closest('.portfolio-item').find('h5').text();
+				var plantId = $(this).data("id");
+
+				$.ajax({
+					url: '@Url.Action("LikeButton", "Plant")',
+					method: 'POST',
+					headers: {
+						"RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+					},
+					data: {
+						id: plantId,
+						isLiked: isLiked
+					},
+					success: function (response) {
+						alert(plantName + (isLiked ? " added to favorites." : " removed from favorites."));
+					},
+					error: function (request, status, error) {
+						alert("Fail");
+					}
+				});
 			});
 		});
 	</script>

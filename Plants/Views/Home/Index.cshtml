@@ -51,7 +51,7 @@
 									<p>@plant.ScientificName</p>
 									@if (User.Identity?.IsAuthenticated == true && plant.IsLiked)
 									{
-										<a class="favorite-btn" data-id="@plant.Id"><img src="~/img/icons/heart-filled.png"></a>
+										<a class="favorite-btn clicked" " data-id="@plant.Id"><img src="~/img/icons/heart-filled.png"></a>
 									}
 									else
 									{

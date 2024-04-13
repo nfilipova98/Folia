@@ -1,10 +1,10 @@
-﻿namespace Plants.Models
+﻿namespace Plants.ViewModels
 {
-	public class AboutViewModel
-	{
-		public int PlantsCount { get; set; }
-		public int UsersCount { get; set; }
-		public int CommentsCount { get; set; }
-		public int CitiesCount { get; set; }
-	}
+    public class AboutViewModel
+    {
+        public int PlantsCount { get; set; }
+        public int UsersCount { get; set; }
+        public int CommentsCount { get; set; }
+        public int CitiesCount { get; set; }
+    }
 }

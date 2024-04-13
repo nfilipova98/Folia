@@ -1,17 +1,16 @@
 ﻿namespace Plants.Services.CommentService
 {
-	using Data.Models.ApplicationUser;
-	using Data.Models.Comment;
-	using Data.Models.Plant;
-	using Models;
-	using RepositoryService;
-	using ViewModels;
+    using Data.Models.ApplicationUser;
+    using Data.Models.Comment;
+    using Data.Models.Plant;
+    using RepositoryService;
+    using ViewModels;
 
-	using AutoMapper;
-	using Microsoft.EntityFrameworkCore;
-	using SendGrid.Helpers.Errors.Model;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore;
+    using SendGrid.Helpers.Errors.Model;
 
-	public class CommentService : ICommentService
+    public class CommentService : ICommentService
 	{
 		private IRepositoryService _repository;
 		private readonly IMapper _mapper;

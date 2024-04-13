@@ -1,5 +1,9 @@
 ﻿namespace Plants.Services.RepositoryService
 {
+	using Microsoft.EntityFrameworkCore.Storage;
+	using System;
+	using System.Collections.Generic;
+
 	public interface IRepositoryService
 	{
 		IQueryable<T> All<T>() where T : class;
@@ -8,7 +12,8 @@
 		Task<T?> FindByIdAsync<T>(int id) where T : class;
 		Task<T?> FindByIdAsync<T>(string id) where T : class;
 		Task<int> SaveChangesAsync();
-		void UpdateAsync<T>(T entity) where T : class;
+		void Update<T>(T entity) where T : class;
 		void Delete<T>(T entity) where T : class;
+		IDbContextTransaction CreateTransaction();
 	}
 }

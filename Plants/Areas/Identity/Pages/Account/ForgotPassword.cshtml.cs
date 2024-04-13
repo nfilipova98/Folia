@@ -1,12 +1,12 @@
 ﻿namespace Plants.Areas.Identity.Pages.Account
 {
 	using Data.Models.ApplicationUser;
+	using Services.APIs.EmailSenderService;
 
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.RazorPages;
 	using Microsoft.AspNetCore.WebUtilities;
-	using Plants.Services.APIs.EmailSenderService;
 	using System.ComponentModel.DataAnnotations;
 	using System.Text;
 	using System.Text.Encodings.Web;
