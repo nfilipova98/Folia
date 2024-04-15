@@ -1,6 +1,7 @@
 ﻿namespace Plants.ViewModels
 {
     using Data.Models.Enums;
+
     using System.ComponentModel;
 
     public class PlantsAllViewModel : PagingViewModel
@@ -20,6 +21,6 @@
 
         public int? RegionId { get; set; }
 
-        public IEnumerable<RegionViewModel>? Regions { get; set; } = new List<RegionViewModel>();
+        public IEnumerable<RegionViewModel> Regions { get; set; } = new List<RegionViewModel>();
     }
 }

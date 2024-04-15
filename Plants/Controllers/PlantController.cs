@@ -1,21 +1,21 @@
 ﻿namespace Plants.Controllers
 {
-    using static Services.Constants.GlobalConstants.AdminConstants;
-    using static Services.Constants.GlobalConstants.ErrorMessages;
-    using Services.PetService;
-    using Services.PlantService;
-    using Services.RegionService;
-    using Utilities;
-    using ViewModels;
+	using Services.PetService;
+	using Services.PlantService;
+	using Services.RegionService;
+	using static Services.Constants.GlobalConstants.AdminConstants;
+	using static Services.Constants.GlobalConstants.ErrorMessages;
+	using Utilities;
+	using ViewModels;
 
-    using Azure;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json;
-    using SendGrid.Helpers.Errors.Model;
-    using System.Security.Claims;
+	using Azure;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
+	using Newtonsoft.Json;
+	using SendGrid.Helpers.Errors.Model;
+	using System.Security.Claims;
 
-    public class PlantController : BaseController
+	public class PlantController : BaseController
 	{
 		private readonly IPlantService _plantService;
 		private readonly IPetService _petService;
@@ -38,29 +38,19 @@
 		{
 			string userId = User.Id();
 
-			if (userId == null)
-			{
-				return View("NoPlantsInFavorites");
-			}
-
 			var plants = await _plantService.GetFavoritePlantsAsync(userId);
 
-			if (plants.Any())
+			var model = new PlantsAllViewModelFavorites
 			{
-				var model = new PlantsAllViewModelFavorites
-				{
-					ItemsCount = plants.Count(),
-					PageNumber = id
-				};
+				ItemsCount = plants.Count(),
+				PageNumber = id
+			};
 
-				var plantsToShow = await _plantService.Pagination(plants, id);
+			var plantsToShow = await _plantService.Pagination(plants, id);
 
-				model.AllPlants = plantsToShow;
+			model.AllPlants = plantsToShow;
 
-				return View(model);
-			}
-
-			return View("NoPlantsInFavorites");
+			return View(model);
 		}
 
 		//sloji logger i greshki
@@ -72,11 +62,11 @@
 
 			var regions = await _regionService.GetAllRegionsAsync();
 			var plants = await _plantService.GetAllPlantsAsync
-				(userId, 
-				model.SearchTerm, 
-				model.KidSafe, 
-				model.PetSafe, 
-				model.Lifestyle, 
+				(userId,
+				model.SearchTerm,
+				model.KidSafe,
+				model.PetSafe,
+				model.Lifestyle,
 				model.Difficulty,
 				model.RegionId);
 
@@ -85,7 +75,7 @@
 				ItemsCount = plants.Count(),
 				PageNumber = id,
 				Regions = regions
-			};	
+			};
 
 			var plantsPagination = await _plantService.Pagination(plants, id);
 
@@ -281,6 +271,7 @@
 		}
 
 		[HttpPost]
+		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
 		public async Task<IActionResult> LikeButton(int id, bool isLiked)
 		{
@@ -288,7 +279,7 @@
 
 			if (userId == null)
 			{
-				return BadRequest();
+				return Unauthorized("User must be logged");
 			}
 
 			try

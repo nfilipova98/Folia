@@ -1,6 +1,7 @@
 ﻿namespace Plants.ViewModels
 {
     using Data.Models.Enums;
+
     public class ProfileViewModel
     {
         public string ApplicationUserId { get; set; } = string.Empty!;

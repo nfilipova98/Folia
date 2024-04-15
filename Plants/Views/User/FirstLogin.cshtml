@@ -1,0 +1,44 @@
+﻿@model ProfileViewModel
+@{
+	ViewData["Title"] = "First Time Login";
+	Layout = "_BlankLayout";
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalCenterTitle" style="font-family:'Playfair Display';">
+					Let's set up your profile. 🌱
+				</h3>
+				<input type="button" value="x" onclick="window.location='@Url.Action("Index", "Home")'" style="background-color: transparent; margin-left:20px" />
+			</div>
+			<div class="modal-header">
+				<h6 style="font-weight: bold;">
+					This will help us improve your experience.
+					Ready to get started?
+				</h6>
+			</div>
+			<div class="modal-body">
+				<form asp-action="ProfileSetup" method="post" enctype="multipart/form-data">
+					<div class="comments-list">
+						<partial name="_ProfileLoginPartial" />
+					</div>
+					<div class="modal-footer">
+						<div class="col-lg-12" style="font-family:'Playfair Display'; display: flex; justify-content: center;">
+							<button class="site-btn">Submit</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$('#myModal').modal('show');
+	</script>
+
+	<partial name="_ValidationScriptsPartial" />
+}

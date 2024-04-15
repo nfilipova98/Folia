@@ -1,20 +1,20 @@
 ﻿namespace Plants.Services.PlantService
 {
-    using Data.Models.ApplicationUser;
+	using Data.Models.ApplicationUser;
 	using Data.Models.Enums;
-    using Data.Models.Pet;
-    using Data.Models.Plant;
-    using RepositoryService;
-    using static Constants.GlobalConstants.ApiConstants;
-    using static Services.Constants.GlobalConstants.Paging;
-    using Services.RegionService;
-    using ViewModels;
+	using Data.Models.Pet;
+	using Data.Models.Plant;
+	using RepositoryService;
+	using static Constants.GlobalConstants.ApiConstants;
+	using static Services.Constants.GlobalConstants.Paging;
+	using Services.RegionService;
+	using ViewModels;
 
-    using AutoMapper;
-    using Azure.Storage.Blobs;
-    using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
-    using SendGrid.Helpers.Errors.Model;
+	using AutoMapper;
+	using Azure.Storage.Blobs;
+	using System.Threading.Tasks;
+	using Microsoft.EntityFrameworkCore;
+	using SendGrid.Helpers.Errors.Model;
 
 	public class PlantService : IPlantService
 	{
@@ -30,8 +30,6 @@
 			_mapper = mapper;
 			_blobServiceClient = blobServiceClient;
 		}
-
-		//vij za greshkite kak se pravi
 
 		public async Task<bool> ExistsAsync(int id)
 		{
@@ -50,6 +48,7 @@
 		public async Task<string> UploadFileAsync(ImageModel file)
 		{
 			var fileName = Guid.NewGuid().ToString();
+
 			using var fileStream = file.FormFile.OpenReadStream();
 
 			var blobClient = GetBlobClient(fileName);
@@ -66,7 +65,7 @@
 		{
 			var petIds = model.PetIds;
 
-			var pets = await _repository.AllReadOnly<Pet>()
+			var pets = await _repository.All<Pet>()
 				.Where(x => petIds.Contains(x.Id))
 				.ToListAsync();
 
@@ -74,7 +73,6 @@
 			plant.ImageUrl = fileUrl;
 
 			await _repository.AddAsync(plant);
-			await _repository.SaveChangesAsync();
 
 			if (pets.Count != 0)
 			{
@@ -82,9 +80,9 @@
 				{
 					plant.Pets.Add(item);
 				}
-
-				await _repository.SaveChangesAsync();
 			}
+
+			await _repository.SaveChangesAsync();
 		}
 
 		public async Task<PlantDeleteViewModel> DeleteAsync(int id)
@@ -119,11 +117,11 @@
 			await _repository.SaveChangesAsync();
 		}
 
-		public async Task<IEnumerable<int>> GetPetIds(int id)
+		public async Task<IEnumerable<int>> GetPetIds(int plantId)
 		{
 			var petIds = _repository
 				.AllReadOnly<Plant>()
-				.Where(plant => plant.Id == id)
+				.Where(plant => plant.Id == plantId)
 				.SelectMany(plant => plant.Pets.Select(pet => pet.Id))
 				.ToList();
 
@@ -180,8 +178,7 @@
 
 				plantsToShow = plantsToShow
 				   .Where(x => x.Name.ToLower().Contains(normalizedSearchTerm) ||
-									  x.ScientificName.ToLower().Contains(normalizedSearchTerm) ||
-									  x.Description.ToLower().Contains(normalizedSearchTerm));
+									  x.ScientificName.ToLower().Contains(normalizedSearchTerm));
 			}
 
 			var plants = await plantsToShow
@@ -233,12 +230,26 @@
 		public async Task EditAsync(int id, PlantEditOrAddViewModel model)
 		{
 			var plant = await _repository
-				.FindByIdAsync<Plant>(id);
+				.All<Plant>()
+				.Include(x => x.Pets)
+				.FirstOrDefaultAsync(x => x.Id == id);
 
 			if (plant == null)
 			{
 				throw new NotFoundException();
 			}
+
+			model.ImageUrl = plant.ImageUrl;
+			_mapper.Map(model, plant);
+
+			var petIds = model.PetIds;
+
+			var pets = await _repository
+					.All<Pet>()
+					.Where(x => petIds.Contains(x.Id))
+					.ToListAsync();
+
+			plant.Pets = pets;
 
 			_repository.Update(plant);
 			await _repository.SaveChangesAsync();

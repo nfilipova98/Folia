@@ -1,6 +1,5 @@
 ﻿namespace Plants.Services.PetService
 {
-    using Plants.ViewModels;
     using ViewModels;
 
     public interface IPetService

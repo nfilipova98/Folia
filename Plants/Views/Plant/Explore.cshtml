@@ -20,6 +20,7 @@
 							<div class="col-md-3">
 								<label for="difficulty"><em>CARE INTENSITY</em>:</label>
 								<select asp-for="Difficulty" class="form-select">
+									<option value="null">...</option>
 									@foreach (Difficulty value in Enum.GetValues(typeof(Difficulty)))
 									{
 										<option value="@value">@value.GetDisplayName()</option>
@@ -29,6 +30,7 @@
 							<div class="col-md-3">
 								<label for="lifestyle"><em>CHOOSE YOUR LIFESTYLE</em>:</label>
 								<select asp-for="Lifestyle" class="form-select">
+									<option value="null">...</option>
 									@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
 									{
 										<option value="@value">@value.GetDisplayName()</option>
@@ -38,15 +40,17 @@
 							<div class="col-md-3">
 								<label asp-for="PetSafe"><em>PET-FRIENDLY</em></label>
 								<select asp-for="PetSafe" class="form-select">
+									<option value="null">...</option>
+									<option value="false">False</option>
 									<option value="true">True</option>
-									<option selected value="false">False</option>
 								</select>
 							</div>
 							<div class="col-md-3">
 								<label asp-for="KidSafe"><em>KID-FRIENDLY</em></label>
 								<select asp-for="KidSafe" class="form-select">
+									<option value="null">...</option>
+									<option value="false">False</option>
 									<option value="true">True</option>
-									<option selected value="false">False</option>
 								</select>
 							</div>
 						</div>
@@ -55,12 +59,12 @@
 							<div class="col-md-6">
 								<label asp-for="RegionId"><em>SELECT A REGION</em></label>
 								<select asp-for="RegionId" class="form-control">
+									<option value="null">...</option>
 									@foreach (var region in Model.Regions)
 									{
 										<option value="@region.Id">@region.Name</option>
 									}
 								</select>
-								<span asp-validation-for="RegionId" class="text-danger"></span>
 							</div>
 							<div class="col-md-6">
 								<label asp-for="RegionId"><em>SEARCH</em></label>
@@ -68,9 +72,15 @@
 							</div>
 						</div>
 						<p></p>
-						<div class="row d-flex justify-content-center">
-							<div class="col-md-6 d-flex justify-content-center">
-								<input class="btn mb-3" type="submit" style="background-color: #d8c269" value="Search" />
+						<div class="container">
+							<div class="row">
+								<div class="col-md-6 text-md-right">
+									<input class="btn mb-3" type="submit" style="background-color: #d8c269" value="Search" />
+								</div>
+
+								<div class="col-md-6">
+									<button class="btn mb-3" onclick="clearSelections()" style="background-color: #d8c269">Clear</button>
+								</div>
 							</div>
 						</div>
 					</form>
@@ -78,40 +88,54 @@
 			</div>
 		</div>
 		<div class="row">
-			@foreach (var item in Model.AllPlants)
+			@if (Model.AllPlants.Any())
 			{
-				<div class="col-md-4">
-					<div class="portfolio-item">
-						<img src="@item.ImageUrl" alt="#">
-						<p></p>
-						<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
-							<h5 class="text-left">@item.Name</h5>
-							<div style="display: flex; justify-content: space-between;">
-								@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
-								{
-									<a class="favorite-btn clicked" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
-								}
-								else
-								{
-									<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-outline.png"></a>
-								}
-								@if (User.IsInRole(Admin))
-								{
-									<a asp-controller="Plant" asp-action="Edit" asp-route-id="@item.Id"><img src="~/img/icons/edit.png"></a>
-									<a asp-controller="Plant" asp-action="Delete" asp-route-id="@item.Id"><img src="~/img/icons/delete.png"></a>
-								}
-								<a asp-controller="Comment" asp-action="Index" asp-route-id="@item.Id"><img src="~/img/icons/see-more.png"></a>
+				foreach (var item in Model.AllPlants)
+				{
+					<div class="col-md-4">
+						<div class="portfolio-item">
+							<img src="@item.ImageUrl" alt="#">
+							<p></p>
+							<div style="display: flex; justify-content: space-between; padding-left:30px; padding-right:30px;">
+								<h5 class="text-left">@item.Name</h5>
+								<div style="display: flex; justify-content: space-between;">
+									@if (User.Identity?.IsAuthenticated == true && item.IsLiked)
+									{
+										<a class="favorite-btn clicked" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
+									}
+									else
+									{
+										<a class="favorite-btn" data-id="@item.Id"><img src="~/img/icons/heart-outline.png"></a>
+									}
+									@if (User.IsInRole(Admin))
+									{
+										<a asp-controller="Plant" asp-action="Edit" asp-route-id="@item.Id"><img src="~/img/icons/edit.png"></a>
+										<a asp-controller="Plant" asp-action="Delete" asp-route-id="@item.Id"><img src="~/img/icons/delete.png"></a>
+									}
+									<a asp-controller="Comment" asp-action="Index" asp-route-id="@item.Id"><img src="~/img/icons/see-more.png"></a>
+								</div>
 							</div>
+							<p style="padding-left:30px;">@item.ScientificName</p>
 						</div>
-						<p style="padding-left:30px;">@item.ScientificName</p>
 					</div>
+				}
+				<partial name="_PagingPartial" />
+				<p></p>
+			}
+			else
+			{
+				<p></p>
+				<p></p>
+				<p></p>
+				<div class="col-md-12 text-center">
+					<h2 style="font-family:'Playfair Display';">Oops no results found</h2>
 				</div>
 			}
 		</div>
 	</div>
 </div>
 
-<partial name="_PagingPartial" />
+
 <partial name="_ValidationScriptsPartial" />
 
 @section scripts {
@@ -145,10 +169,25 @@
 						alert(plantName + (isLiked ? " added to favorites." : " removed from favorites."));
 					},
 					error: function (request, status, error) {
-						alert("Fail");
+						if (request.responseText == "User must be logged") {
+
+							window.location.href = '@Url.Action("Login", "Account", new { area = "Identity" })';
+						}
+						else {
+							alert("Fail");
+						}
 					}
 				});
 			});
 		});
+
+		function clearSelections() {
+			document.querySelectorAll('select').forEach(function (select) {
+				select.value = "null";
+			});
+			var searchInput = document.querySelector('input[name="SearchTerm"]');
+			searchInput.value = "";
+			searchInput.placeholder = "Type something...";
+		}
 	</script>
 }

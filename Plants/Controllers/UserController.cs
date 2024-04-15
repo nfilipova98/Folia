@@ -1,7 +1,7 @@
 ﻿namespace Plants.Controllers
 {
-    using Services.RegionService;
     using Services.PetService;
+    using Services.RegionService;
     using Services.UserService;
     using ViewModels;
 
@@ -38,9 +38,8 @@
 
 			if (isProfileSetup == true)
 			{
-				return View("FirstLoginView", model);
+				return View("FirstLogin", model);
 			}
-
 
 			return View(model);
 		}
@@ -93,7 +92,7 @@
 			}
 			catch (Exception)
 			{
-
+				//vij tuk za exception
 				throw;
 			}
 

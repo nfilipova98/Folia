@@ -1,0 +1,60 @@
+﻿@model ProfileViewModel
+
+<div class="mb-3">
+	<div class="mb-3">
+		<label asp-for="PetIds"><em>Do you have any pets? (select zero or multiple)</em></label>
+		<select asp-for="PetIds" class="form-control" multiple>
+			@foreach (var animal in Model.Pets)
+			{
+				bool isSelected = false;
+
+				@foreach (var item in Model.PetIds)
+				{
+					if (item == animal.Id)
+					{
+						<option value="@animal.Id" selected="@animal">@animal.Name</option>
+						isSelected = true;
+					}
+				}
+				if (!isSelected)
+				{
+					<option value="@animal.Id">@animal.Name</option>
+				}
+			}
+		</select>
+		<span asp-validation-for="PetIds" class="text-danger"></span>
+	</div>
+</div>
+<div class="mb-3">
+	<label asp-for="Kids"><em>Do you have kids?</em></label>
+	<select asp-for="Kids" class="form-select">
+		<option value="true">Yes</option>
+		<option value="false">No</option>
+	</select>
+	<span asp-validation-for="Kids" class="text-danger"></span>
+</div>
+<div class="mb-3">
+	<label for="lifestyle"><em>Choose your lifestyle</em>:</label>
+	<select asp-for="@Model.Lifestyle" class="form-select">
+		@foreach (Lifestyle value in Enum.GetValues(typeof(Lifestyle)))
+		{
+			<option value="@value">@value.GetDisplayName()</option>
+		}
+	</select>
+</div>
+<div class="mb-3">
+	<label asp-for="RegionId"><em>Choose the region you live in</em></label>
+	<select asp-for="RegionId" class="form-control">
+		@foreach (var region in Model.Regions)
+		{
+			<option value="@region.Id">@region.Name</option>
+		}
+	</select>
+	<span asp-validation-for="RegionId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+	<span asp-validation-for="ImageModel.FormFile" class="text-danger"></span>
+	<p></p>
+	<label asp-for="ImageModel.FormFile"><em>Upload a profile picture</em></label>
+	<input type="file" asp-for="ImageModel.FormFile" class="form-label" />
+</div>

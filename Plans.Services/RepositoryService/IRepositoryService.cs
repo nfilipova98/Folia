@@ -1,8 +1,6 @@
 ﻿namespace Plants.Services.RepositoryService
 {
 	using Microsoft.EntityFrameworkCore.Storage;
-	using System;
-	using System.Collections.Generic;
 
 	public interface IRepositoryService
 	{

@@ -3,7 +3,6 @@
 	{
 		new List<string> { "Home", "Index", "Home" },
 		new List<string> { "Plant", "Favorites", "Favorites" },
-		//new List<string> { "Plant", "MyPlants", "My Plants" },
 		new List<string> { "Plant", "Explore", "Explore" },
 		new List<string> { "About", "Index", "About" },
 		new List<string> { "Contacts", "Index", "Contacts" },
@@ -23,6 +22,6 @@
 				string.Equals(actionName, currentAction)
 					? "active" : "";
 
-		<li><a asp-controller="@controllerName" asp-action="@actionName" class="@isActive">@displayName</a></li>
+		<li><a asp-controller="@controllerName" asp-action="@actionName" asp-area="" class="@isActive">@displayName</a></li>
 	}
 }

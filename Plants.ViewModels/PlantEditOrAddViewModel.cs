@@ -3,7 +3,6 @@
     using Data.Models.Enums;
     using static Services.Constants.GlobalConstants.ErrorMessages;
     using static Services.Constants.GlobalConstants.PlantConstants;
-    using ViewModels;
 
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel;

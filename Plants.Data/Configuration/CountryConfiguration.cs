@@ -1,9 +1,9 @@
 ﻿namespace Plants.Data.Configuration
 {
+	using Models.ApplicationUser;
+
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Metadata.Builders;
-	
-	using Models.ApplicationUser;
 
 	public class CountryConfiguration : IEntityTypeConfiguration<Country>
 	{

@@ -1,6 +1,5 @@
 ﻿namespace Plants.Data.Models.ApplicationUser
 {
-    using Enums;
     using static Services.Constants.GlobalConstants.RegionConstants;
 
 	using Microsoft.EntityFrameworkCore;

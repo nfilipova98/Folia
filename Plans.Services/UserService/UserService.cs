@@ -1,18 +1,18 @@
 ﻿namespace Plants.Services.UserService
 {
-    using Data.Models.ApplicationUser;
-    using Data.Models.Pet;
-    using static Constants.GlobalConstants.ApiConstants;
-    using RepositoryService;
-    using ViewModels;
+	using Data.Models.ApplicationUser;
+	using Data.Models.Pet;
+	using static Constants.GlobalConstants.ApiConstants;
+	using RepositoryService;
+	using ViewModels;
 
-    using AutoMapper;
-    using Azure.Storage.Blobs;
-    using SendGrid.Helpers.Errors.Model;
-    using System;
-    using Microsoft.EntityFrameworkCore;
+	using AutoMapper;
+	using Azure.Storage.Blobs;
+	using Microsoft.EntityFrameworkCore;
+	using SendGrid.Helpers.Errors.Model;
+	using System;
 
-    public class UserService : IUserService
+	public class UserService : IUserService
 	{
 		private IRepositoryService _repository;
 		private readonly IMapper _mapper;
@@ -71,23 +71,26 @@
 
 		public async Task AddUserInformation(ProfileViewModel model, string url, string userId)
 		{
-			var userConfiguration = await _repository
-				.All<UserConfiguration>()
-				.Include(x => x.Pets)
-				.FirstOrDefaultAsync(x => x.ApplicationUserId == userId);
+			var user = await _repository
+				.All<ApplicationUser>()
+				.Include(x => x.UserConfiguration)
+				.ThenInclude(x => x.Pets)
+				.FirstOrDefaultAsync(x => x.Id == userId);
 
 			var region = await _repository
 				.FindByIdAsync<Region>(model.RegionId);
 
+			var userConfiguration = user?.UserConfiguration;
+
 			using var transaction = _repository.CreateTransaction();
 
-			if (userConfiguration != null && userConfiguration.UserPictureUrl != null)
+			if (user != null && userConfiguration.UserPictureUrl != null)
 			{
 				await DeleteFileAsync(userConfiguration.UserPictureUrl, userConfiguration.ApplicationUserId);
 			}
-			if (userConfiguration != null && region != null)
+			if (user != null && region != null)
 			{
-				if (userConfiguration == null)
+				if (user == null)
 				{
 					userConfiguration = new UserConfiguration();
 				}
@@ -106,7 +109,7 @@
 					.Where(x => petIds.Contains(x.Id))
 					.ToListAsync();
 
-				if (userConfiguration.Id != default)
+				if (user.Id != default)
 				{
 					userConfiguration.Pets.Clear();
 					await _repository.SaveChangesAsync();
@@ -116,9 +119,9 @@
 				}
 				else
 				{
-					//userConfiguration.UserConfigurationIsNull = false;
+					user.UserConfigurationIsNull = false;
 					userConfiguration.Pets = pets;
-					await _repository.AddAsync(userConfiguration);
+					await _repository.AddAsync(user);
 				}
 			}
 
