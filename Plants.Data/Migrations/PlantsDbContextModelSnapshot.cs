@@ -518,7 +518,7 @@ namespace Plants.Data.Migrations
                     b.Property<int>("Lifestyle")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RegionId")
+                    b.Property<int>("RegionId")
                         .HasColumnType("int")
                         .HasComment("Region identifier");
 
@@ -825,7 +825,7 @@ namespace Plants.Data.Migrations
                         new
                         {
                             Id = 14,
-                            Description = "The Heart of Jesus, scientifically known as Caladium bicolor, is a captivating and ornamental plant prized for its vibrant and colorful foliage. With its heart-shaped leaves splashed with hues of green, pink, red, and white, this plant adds a pop of tropical flair to indoor environments. Caring for the Heart of Jesus requires a moderate level of attention, placing it in the medium difficulty category. While not overly demanding, it thrives in environments with high humidity levels and consistent moisture. Providing adequate humidity through regular misting or placing the plant on a pebble tray can help maintain its lush foliage. Thriving in environments with high humidity levels, the Heart of Jesus is best suited for indoor cultivation, where humidity levels can be controlled more easily. Its preference for humidity ensures that it remains vibrant and healthy, even in indoor environments with drier air. While the Heart of Jesus adds beauty to indoor spaces, it's important to note that it is not considered safe for consumption and may cause irritation if ingested. Therefore, caution should be exercised, particularly in households with young children or pets. For individuals with active lifestyles or frequent travelers, the Heart of Jesus may require additional attention to humidity levels to thrive indoors. While it may not be the most suitable choice for those who travel frequently, its stunning foliage makes it a worthwhile addition to indoor environments for those willing to provide the necessary care. Whether displayed as a centerpiece on tabletops, shelves, or used to add color and texture to indoor gardens, the Heart of Jesus brings a touch of tropical beauty and sophistication to any indoor space.",
+                            Description = "Name: Caladium bicolor (Heart of Jesus)\r\nCare Level: Medium difficulty.\r\nRequires moderate attention.\r\nThrives in environments with high humidity levels and consistent moisture. Maintain humidity through regular misting or using a pebble tray.\r\nSuitability: Best suited for indoor cultivation.\r\nSuitable for individuals willing to provide necessary care for its stunning green foliage.",
                             Difficulty = 1,
                             Humidity = 2,
                             ImageUrl = "https://softuniproject.blob.core.windows.net/publicimages/9.jpg",
@@ -954,7 +954,9 @@ namespace Plants.Data.Migrations
 
                     b.HasOne("Plants.Data.Models.ApplicationUser.Region", "Region")
                         .WithMany("Users")
-                        .HasForeignKey("RegionId");
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 

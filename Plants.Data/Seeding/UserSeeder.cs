@@ -14,7 +14,7 @@
 			var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
 			await SeedAdminAsync(userManager, "nfilipova98@gmail.com");
-			await SeedUserAsync(userManager, "1@gmail.com");
+			await SeedUserAsync(userManager, "testUser@gmail.com");
 		}
 
 		private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, string email)
