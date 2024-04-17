@@ -2,6 +2,10 @@
 @{
 	ViewData["Title"] = "Comments";
 	Layout = "_BlankLayout";
+
+	var origin = TempData["origin"].ToString();
+	TempData.Keep("origin");
+	;
 }
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -9,11 +13,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalCenterTitle" style="font-family:'Playfair Display';">@Model.PlantName</h5>
-				<input type="button" value="x" onclick="window.history.back()" style="background-color: transparent; margin-left:20px" />
+				<input type="button" value="x" onclick="window.location='@Url.Action(origin, "Plant", new {area = ""})'" style="background-color: transparent; margin-left:20px" />
 			</div>
 			<div class="modal-body">
 				<div class="card-body p-4" style="padding-top:0px; padding-bottom:0px;">
-				<p>@Model.PlantDescription</p>
+					<p>@Model.PlantDescription</p>
 				</div>
 				@foreach (var comment in Model.ExistingComments)
 				{
@@ -26,7 +30,7 @@
 										{
 											<img class="rounded-circle shadow-1-strong me-3"
 												 src="@comment.ApplicationUserPictureUrl" width="65" height="65" />
-										
+
 										}
 										else
 										{

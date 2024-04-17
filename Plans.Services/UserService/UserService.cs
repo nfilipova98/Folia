@@ -27,15 +27,15 @@
 
 		public async Task<ProfileViewModel> GetModels(string? userId)
 		{
-			var cities = _repository.AllReadOnly<Region>().OrderBy(x => x.Name);
+			var regions = _repository.AllReadOnly<Region>().OrderBy(x => x.Name);
 			var pets = _repository.AllReadOnly<Pet>().OrderBy(x => x.Name);
 
-			var citiesViewModels = _mapper.Map<IEnumerable<RegionViewModel>>(cities);
+			var regionsViewModels = _mapper.Map<IEnumerable<RegionViewModel>>(regions);
 			var petsViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
 
 			var model = new ProfileViewModel()
 			{
-				Regions = citiesViewModels,
+				Regions = regionsViewModels,
 				Pets = petsViewModels,
 			};
 
@@ -51,6 +51,7 @@
 					_mapper.Map(userConfg, model);
 				}
 			}
+
 			return model;
 		}
 
@@ -84,13 +85,13 @@
 
 			using var transaction = _repository.CreateTransaction();
 
-			if (user != null && userConfiguration.UserPictureUrl != null)
+			if (user != null && userConfiguration?.UserPictureUrl != null && model.ImageModel != null)
 			{
 				await DeleteFileAsync(userConfiguration.UserPictureUrl, userConfiguration.ApplicationUserId);
 			}
 			if (user != null && region != null)
 			{
-				if (user == null)
+				if (userConfiguration == null)
 				{
 					userConfiguration = new UserConfiguration();
 				}
@@ -109,7 +110,7 @@
 					.Where(x => petIds.Contains(x.Id))
 					.ToListAsync();
 
-				if (user.Id != default)
+				if (userConfiguration.Id != default)
 				{
 					userConfiguration.Pets.Clear();
 					await _repository.SaveChangesAsync();
@@ -121,7 +122,7 @@
 				{
 					user.UserConfigurationIsNull = false;
 					userConfiguration.Pets = pets;
-					await _repository.AddAsync(user);
+					await _repository.AddAsync(userConfiguration);
 				}
 			}
 

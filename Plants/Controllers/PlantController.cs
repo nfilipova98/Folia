@@ -30,7 +30,6 @@
 			_logger = logger;
 		}
 
-		//sloji logger i greshki
 		[HttpGet]
 		[AllowAnonymous]
 		[TypeFilter(typeof(TierResultFilterAttribute))]
@@ -53,7 +52,6 @@
 			return View(model);
 		}
 
-		//sloji logger i greshki
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> Explore(PlantsAllViewModel model, int id = 1)

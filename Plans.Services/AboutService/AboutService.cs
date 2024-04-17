@@ -26,7 +26,7 @@
 				PlantsCount = _repository.AllReadOnly<Plant>().Count(),
 				UsersCount = _repository.AllReadOnly<ApplicationUser>().Count(),
 				CommentsCount = _repository.AllReadOnly<Comment>().Count(),
-				CitiesCount = _repository.AllReadOnly<Region>().Count(),
+				RegionsCount = _repository.AllReadOnly<Region>().Count(),
 			};
 
 			var model = _mapper.Map<AboutViewModel>(data);

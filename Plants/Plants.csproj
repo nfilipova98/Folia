@@ -30,7 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Plans.Services\Plants.Services.csproj" />
     <ProjectReference Include="..\Plants.Data.Models\Plants.Data.Models.csproj" />
-    <ProjectReference Include="..\Plants.Data\Plants.Data.csproj" />
     <ProjectReference Include="..\Plants.Services.Constants\Plants.Services.Constants.csproj" />
     <ProjectReference Include="..\Plants.Services.Mapping\Plants.Services.Mapping.csproj" />
     <ProjectReference Include="..\Plants.Services.OpenMeteoApi\Plants.Services.APIs.csproj" />

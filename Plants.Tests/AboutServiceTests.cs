@@ -2,52 +2,34 @@
 {
 	using Data;
 	using Data.Models.ApplicationUser;
+	using Data.Models.Comment;
 	using Data.Models.Enums;
 	using Data.Models.Pet;
 	using Data.Models.Plant;
-	using Services.Mapping;
-	using Services.PlantService;
-	using Services.RegionService;
+	using Services.AboutService;
 	using Services.RepositoryService;
+	using Services.Mapping;
 	using ViewModels;
 
-	using Azure.Storage.Blobs;
 	using AutoMapper;
 	using Microsoft.EntityFrameworkCore;
-	using Moq;
-	using SendGrid.Helpers.Errors.Model;
 
 	[TestFixture]
-	public class PlantsServiceTests
+	public class AboutServiceTests
 	{
 		private IRepositoryService _repository;
-		private Mock<IRegionService> _regionServiceMock;
 		private IMapper _mapper;
-		private Mock<BlobServiceClient> _blobServiceClientMock;
-		private PlantService _plantService;
+		private IAboutService _aboutService;
 		private PlantsDbContext _dbContext;
 
 		private List<Plant> _plants;
-		private List<Pet> _pets;
 		private List<ApplicationUser> _users;
 		private List<Region> _regions;
+		private List<Comment> _comments;
 
 		[OneTimeSetUp]
-		public async Task Setup()
+		public async Task SetUp()
 		{
-			_pets = new List<Pet>()
-			{
-				new Pet 
-				{ 
-					Id = 1,
-					Name = "Rabbit" 
-				},
-				new Pet 
-				{
-					Id = 2,
-					Name = "Bird" 
-				}
-			};
 			_plants = new List<Plant>()
 			{
 				new Plant
@@ -163,30 +145,35 @@
 					CountryId = 1,
 				}
 			};
-
-			_regionServiceMock = new Mock<IRegionService>();
+			_comments = new List<Comment>()
+			{
+				new Comment
+				{
+					Id = 1,
+					Content = "This is a comment",
+					ApplicationUserId = "8d16841e-7c17-44c5-b30d-5f10b43122c8",
+					CreatedOn = DateTime.UtcNow,
+					PlantId = 2
+				},
+			};
 
 			var myProfile = new AutoMapperProfile();
 			var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
 			_mapper = new Mapper(configuration);
 
-			_blobServiceClientMock = new Mock<BlobServiceClient>();
-
 			var options = new DbContextOptionsBuilder<PlantsDbContext>()
 		   .UseInMemoryDatabase(databaseName: "PlantInMemoryDb" + Guid.NewGuid().ToString())
-		   .Options;
+			.Options;
 
 			_dbContext = new PlantsDbContext(options);
-
 			_dbContext.AddRange(_plants);
-			_dbContext.AddRange(_pets);
 			_dbContext.AddRange(_users);
 			_dbContext.AddRange(_regions);
+			_dbContext.AddRange(_comments);
 			await _dbContext.SaveChangesAsync();
 
 			_repository = new Repository(_dbContext);
-			_plantService = new PlantService(_repository, _regionServiceMock.Object, _mapper, _blobServiceClientMock.Object);
-
+			_aboutService = new AboutService(_repository, _mapper);
 		}
 
 		[OneTimeTearDown]
@@ -197,261 +184,15 @@
 		}
 
 		[Test]
-		public async Task Test_ExistsAsync_Returns_Correct_Result()
+		public async Task Test_GetCounts_ShouldReturnCorrectCounts()
 		{
-			var result = await _plantService.ExistsAsync(1);
-			var falseResult = await _plantService.ExistsAsync(0);
+			var result = _aboutService.GetCounts();
 
-			Assert.That(result, Is.EqualTo(true));
-			Assert.That(falseResult, Is.EqualTo(false));
-		}
-
-		[Test]
-		public async Task Test_GetPlantAddOrEditModelAsync()
-		{
-			const int plantId = 2;
-			var plant = _plants.First(x => x.Id == plantId);
-			var result = await _plantService.GetPlantAddOrEditModelAsync(plantId);
-
-			Assert.That(result, Is.Not.Null);
-			Assert.That(result.Name, Is.EqualTo(plant.Name));
-			Assert.That(result, Is.TypeOf<PlantEditOrAddViewModel>());
-		}
-
-		[Test]
-		public async Task Test_GetPetIds_Returns_Expected_Ids()
-		{
-			const int plantId = 1;
-			var result = await _plantService.GetPetIds(plantId);
-			var expectedPets = _plants.First(x => x.Id == plantId).Pets;
-
-			Assert.That(result, Is.Not.Null);
-			Assert.That(result, Is.TypeOf<List<int>>());
-			Assert.That(result.Count, Is.EqualTo(expectedPets.Count));
-			Assert.That(result.First(), Is.EqualTo(expectedPets.First().Id));
-			Assert.That(result.Last(), Is.EqualTo(expectedPets.Last().Id));
-		}
-
-		[Test]
-		public async Task Test_CreatePlantAsync()
-		{
-			const string fileUrl = "https://softuniproject.blob.core.windows.net/publicimages/0.jpg";
-			var plantModel = new PlantEditOrAddViewModel()
-			{
-				Name = "TestPlant",
-				ScientificName = "TestScientificName",
-				Difficulty = Difficulty.Easy,
-				Humidity = Humidity.Moderate,
-				KidSafe = true,
-				Lifestyle = Lifestyle.OnTheGo,
-				Description = "TestDescription",
-				IsTrending = false,
-				ImageUrl = fileUrl,
-				PetIds = new List<int> { 3, 2 }
-			};
-
-			await _plantService.CreatePlantAsync(fileUrl, plantModel);
-
-			var expected = _dbContext.Plants.FirstOrDefault(x => x.Name == plantModel.Name);
-
-			Assert.That(expected, Is.Not.Null);
-			Assert.That(expected.Name, Is.EqualTo(plantModel.Name));
-			Assert.That(expected.Pets.Count, Is.EqualTo(plantModel.PetIds.Count()));
-			Assert.That(expected.Pets.Select(p => p.Id), Is.EqualTo(plantModel.PetIds));
-			Assert.That(expected.ImageUrl, Is.EqualTo(plantModel.ImageUrl));
-
-		}
-
-		[Test]
-		public async Task Test_DeleteAsync_Succeeds()
-		{
-			const int plantId = 4;
-			var expectedPlant = _plants.First(x => x.Id == plantId);
-			var result = await _plantService.DeleteAsync(plantId);
-
-			Assert.That(result, Is.Not.Null);
-			Assert.That(result, Is.TypeOf<PlantDeleteViewModel>());
-			Assert.That(result.Id, Is.EqualTo(expectedPlant.Id));
-			Assert.That(result.Name, Is.EqualTo(expectedPlant.Name));
-		}
-
-		[Test]
-		public void Test_DeleteAsync_Throws_Exception()
-		{
-			const int plantId = -1;
-
-			Assert.ThrowsAsync<NotFoundException>(async () => await _plantService.DeleteAsync(plantId));
-		}
-
-		[Test]
-		public async Task Test_GetTrendingPlants_Returns_Correct_Result()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetTrendingPlants(userId);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantHomeViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Where(x => x.IsTrending).Count()));
-			Assert.That(results.Single(x => x.IsLiked).Id, Is.EqualTo(user.LikedPlants.Single().Id));
-		}
-
-		[Test]
-		public async Task Test_GetFavoritePlantsAsync_Returns_Correct_Result()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetFavoritePlantsAsync(userId);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(user.LikedPlants.Count));
-			Assert.That(results.Single(x => x.Id == user.LikedPlants.Single().Id).Id, Is.EqualTo(user.LikedPlants.Single().Id));
-		}
-
-		[Test]
-		public async Task Test_EditAsync_Returns_Correct_Result()
-		{
-			const int plantId = 3;
-			var originalPlant = _dbContext.Plants.First(x => x.Id == plantId);
-
-			var model = new PlantEditOrAddViewModel()
-			{
-				Name = originalPlant.Name,
-				ScientificName = "Changed",
-				Difficulty = originalPlant.Difficulty,
-				Humidity = originalPlant.Humidity,
-				KidSafe = originalPlant.KidSafe,
-				Lifestyle = originalPlant.Lifestyle,
-				Description = originalPlant.Description,
-				IsTrending = originalPlant.IsTrending,
-				ImageUrl = originalPlant.ImageUrl,
-			};
-
-			await _plantService.EditAsync(plantId, model);
-			var expected = _dbContext.Plants.First(x => x.Id == plantId);
-
-			Assert.That(expected.ScientificName, Is.EqualTo(model.ScientificName));
-		}
-
-		[Test]
-		public void Test_EditAsync_Throws_Exception()
-		{
-			const int plantId = -1;
-			var model = new PlantEditOrAddViewModel();
-
-			Assert.ThrowsAsync<NotFoundException>(async () => await _plantService.EditAsync(plantId, model));
-		}
-
-		[TestCase(1, false)]
-		[TestCase(2, true)]
-		public async Task Test_LikeButton_Returns_Correct_Result(int plantId, bool isLiked)
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var originalCount = user.LikedPlants.Count;
-
-			await _plantService.LikeButton(plantId, isLiked, userId);
-
-			var expected = _dbContext
-				.Users
-				.Include(x => x.LikedPlants)
-				.First(x => x.Id == userId);
-
-			Assert.That(expected.LikedPlants.Count, Is.EqualTo(originalCount + (isLiked ? 1 : -1)));
-
-			if (isLiked)
-			{
-				Assert.That(expected.LikedPlants.Any(x => x.Id == plantId), Is.True);
-			}
-			else
-			{
-				Assert.That(expected.LikedPlants.All(x => x.Id != plantId), Is.True);
-			}
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, null, null, null, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count));
-			Assert.That(results.Single(x => x.Id == user.LikedPlants.Single().Id).Id, Is.EqualTo(user.LikedPlants.Single().Id));
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_SearchTerm()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, "Buddhist Pine", null, null, null, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(1));
-			Assert.That(results.Single().Name, Is.EqualTo("Buddhist Pine"));
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_KidSafe()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, true, null, null, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count(x => x.KidSafe)));
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_PetSafe()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-			var countResult = _plants.Where(x => !x.Pets.Any()).Count();
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, null, true, null, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(countResult));
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_Lifestyle()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, null, null, Lifestyle.SemiActive, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count(x => x.Lifestyle == Lifestyle.SemiActive)));
-		}
-
-		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_Difficulty()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, null, null, null, Difficulty.Easy, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count(x => x.Difficulty == Difficulty.Easy)));
+			Assert.That(_plants.Count, Is.EqualTo(result.PlantsCount));
+			Assert.That(_users.Count, Is.EqualTo(result.UsersCount));
+			Assert.That(_comments.Count, Is.EqualTo(result.CommentsCount));
+			Assert.That(_regions.Count, Is.EqualTo(result.RegionsCount));
+			Assert.That(result, Is.TypeOf<AboutViewModel>());
 		}
 	}
 }

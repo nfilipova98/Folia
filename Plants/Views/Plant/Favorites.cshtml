@@ -29,6 +29,9 @@
 										{
 											<a class="favorite-btn clicked" data-id="@item.Id"><img src="~/img/icons/heart-filled.png"></a>
 										}
+										@{
+											TempData["origin"] = "Favorites";
+										}
 										<a asp-controller="Comment" asp-action="Index" asp-route-id="@item.Id"><img src="~/img/icons/see-more.png"></a>
 									</div>
 								</div>

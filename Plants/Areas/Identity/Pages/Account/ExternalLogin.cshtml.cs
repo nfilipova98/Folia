@@ -126,7 +126,7 @@
 				if (isFirstTime)
 				{
 					TempData["IsProfileSetup"] = true;
-					return RedirectToAction("ProfileSetup", "User");
+					return RedirectToAction("ProfileSetup", "User", new {area = ""});
 				}
 
 				return LocalRedirect(returnUrl);

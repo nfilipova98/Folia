@@ -14,7 +14,7 @@
 			var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
 			await SeedAdminAsync(userManager, "nfilipova98@gmail.com");
-			await SeedUserAsync(userManager, "testuser@gmail.com");
+			await SeedUserAsync(userManager, "1@gmail.com");
 		}
 
 		private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, string email)
@@ -31,11 +31,11 @@
 					IsFirstTimeLogin = false,
 					UserConfigurationIsNull = true,
 					TierPoints = 100,
-					EmailConfirmed = true,
+					EmailConfirmed = true
 				};
 
 				var passwordHasher = new PasswordHasher<ApplicationUser>();
-				var password = passwordHasher.HashPassword(user, "r$Sr#&rZn#eHAzS4");
+				var password = "r$Sr#&rZn#eHAzS4";
 
 				var result = await userManager.CreateAsync(user, password);
 
@@ -62,12 +62,12 @@
 					IsFirstTimeLogin = true,
 					UserConfigurationIsNull = false,
 					TierPoints = 0,
-					EmailConfirmed = true,
+					EmailConfirmed = true
 				};
 
 				var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-				var password = passwordHasher.HashPassword(user, "JQXp4$PGmtNC384+");
+				var password = "Aa123456.";
 				var result = await userManager.CreateAsync(user, password);
 
 				if (!result.Succeeded)

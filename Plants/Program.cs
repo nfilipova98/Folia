@@ -63,11 +63,6 @@ namespace Plants.Web
 			services.Configure<AuthMessageSenderOptions>(configuration);
 
 			services.AddAuthentication()
-			.AddFacebook(facebookOptions =>
-			{
-				facebookOptions.AppId = configuration["Authentication:Facebook:AppId"];
-				facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-			})
 			.AddGoogle(googleOptions =>
 			{
 				googleOptions.ClientId = configuration["Authentication:Google:ClientId"];

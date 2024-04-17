@@ -31,5 +31,15 @@
 
 			return user?.UserConfiguration?.UserPictureUrl ?? null;
 		}
+
+		public async Task<UserConfiguration?> GetUserConfiguration(string userId)
+		{
+			var user = await _repository
+				.AllReadOnly<ApplicationUser>()
+				.Include(x => x.UserConfiguration)
+				.FirstOrDefaultAsync(x => x.Id == userId);
+
+			return user?.UserConfiguration ?? null;
+		}
 	}
 }

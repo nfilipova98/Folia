@@ -13,14 +13,14 @@
 
 		[Comment("User identifier")]
 		[Required]
-		public string ApplicationUserId { get; set; }
+		public string ApplicationUserId { get; set; } = string.Empty;
         public ApplicationUser ApplicationUser { get; set; } = null!;
 
 		[Comment("Region identifier")]
-		public int? RegionId { get; set; }
-        public Region? Region { get; set; }
+		public int RegionId { get; set; }
+        public Region Region { get; set; } = null!;
 
-        public bool Kids { get; set; }
+		public bool Kids { get; set; }
 
 		[Comment("Profile picture")]
 		public string? UserPictureUrl { get; set; }
@@ -30,6 +30,6 @@
         /// <summary>
         /// List of the User's pets
         /// </summary>
-        public ICollection<Pet> Pets { get; set; } = new HashSet<Pet>();
+        public ICollection<Pet>? Pets { get; set; } = new HashSet<Pet>();
     }
 }

@@ -1,15 +1,15 @@
 ﻿namespace Plants.Controllers
 {
-    using Services.PetService;
-    using Services.RegionService;
-    using Services.UserService;
-    using ViewModels;
+	using Services.PetService;
+	using Services.RegionService;
+	using Services.UserService;
+	using ViewModels;
 
-    using Azure;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+	using Azure;
+	using Microsoft.AspNetCore.Mvc;
+	using System.Security.Claims;
 
-    public class UserController : BaseController
+	public class UserController : BaseController
 	{
 		private IUserService _service;
 		private IPetService _petService;
@@ -57,7 +57,7 @@
 				_logger.LogError("UserController/ProfileSetup - ModelState was not valid");
 				model.Pets = await _petService.GetAllPetsAsync();
 				model.Regions = await _regionService.GetAllRegionsAsync();
-				
+
 				return View(model);
 			}
 
@@ -86,15 +86,7 @@
 				}
 			}
 
-			try
-			{
-				await _service.AddUserInformation(model, url, userId);
-			}
-			catch (Exception)
-			{
-				//vij tuk za exception
-				throw;
-			}
+			await _service.AddUserInformation(model, url, userId);
 
 			return RedirectToAction("Index", "Home");
 		}
