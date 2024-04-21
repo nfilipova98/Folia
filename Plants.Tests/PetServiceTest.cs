@@ -73,16 +73,6 @@
 			}
 
 			[Test]
-			public async Task Test_GetAllPetsAsync_ShouldReturnAllPets()
-			{
-				var result = await _petService.GetAllPetsAsync();
-
-				Assert.That(result, Is.Not.Null);
-				Assert.That(_pets.Count(), Is.EqualTo(result.Count()));
-				Assert.That(result, Is.TypeOf<List<PetViewModel>>());
-			}
-
-			[Test]
 			public async Task Test_CreateAsync_Should_Create_Pet()
 			{
 				const string petName = "Fish";
@@ -101,6 +91,18 @@
 				const string petName = "Dog";
 
 				Assert.ThrowsAsync<InvalidOperationException>(async () => await _petService.CreateAsync(petName));
+			}
+
+			[Test]
+			public async Task Test_GetAllPetsAsync_ShouldReturnAllPets()
+			{
+				var result = await _petService.GetAllPetsAsync();
+
+				var expected = _dbContext.Pets.ToList();
+
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result, Is.TypeOf<List<PetViewModel>>());
+				Assert.That(result.Count(), Is.EqualTo(expected.Count()));
 			}
 		}
 	}

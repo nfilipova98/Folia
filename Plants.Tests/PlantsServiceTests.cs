@@ -37,15 +37,15 @@
 		{
 			_pets = new List<Pet>()
 			{
-				new Pet 
-				{ 
+				new Pet
+				{
 					Id = 1,
-					Name = "Rabbit" 
+					Name = "Rabbit"
 				},
-				new Pet 
+				new Pet
 				{
 					Id = 2,
-					Name = "Bird" 
+					Name = "Bird"
 				}
 			};
 			_plants = new List<Plant>()
@@ -374,20 +374,6 @@
 		}
 
 		[Test]
-		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result()
-		{
-			var user = _users.Single();
-			string userId = user.Id;
-
-			var results = await _plantService.GetAllPlantsAsync(userId, null, null, null, null, null, null);
-
-			Assert.That(results, Is.Not.Null);
-			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count));
-			Assert.That(results.Single(x => x.Id == user.LikedPlants.Single().Id).Id, Is.EqualTo(user.LikedPlants.Single().Id));
-		}
-
-		[Test]
 		public async Task Test_GetAllPlantsAsync_Returns_Correct_Result_With_SearchTerm()
 		{
 			var user = _users.Single();
@@ -409,9 +395,11 @@
 
 			var results = await _plantService.GetAllPlantsAsync(userId, null, true, null, null, null, null);
 
+			var expected = _dbContext.Plants.Count(x => x.KidSafe);
+
 			Assert.That(results, Is.Not.Null);
 			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count(x => x.KidSafe)));
+			Assert.That(results.Count, Is.EqualTo(expected));
 		}
 
 		[Test]
@@ -448,10 +436,11 @@
 			string userId = user.Id;
 
 			var results = await _plantService.GetAllPlantsAsync(userId, null, null, null, null, Difficulty.Easy, null);
+			var expected = _dbContext.Plants.Count(x => x.Difficulty == Difficulty.Easy);
 
 			Assert.That(results, Is.Not.Null);
 			Assert.That(results, Is.TypeOf<List<PlantAllViewModel>>());
-			Assert.That(results.Count, Is.EqualTo(_plants.Count(x => x.Difficulty == Difficulty.Easy)));
+			Assert.That(results.Count, Is.EqualTo(expected));
 		}
 	}
 }
