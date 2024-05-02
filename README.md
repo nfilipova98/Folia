@@ -1,5 +1,5 @@
 # 🌷 Folia
-Welcome to **Folia** - your ultimate destination for plant enthusiasts! Whether you're a seasoned gardener or a newbie plant parent, Folia is your go-to resource for discovering the finest selection of plants tailored to your unique space and lifestyle requirements.
+Welcome to **Folia** - your ultimate destination for plant enthusiasts! Whether you're a seasoned gardener or a newbie plant parent, **Folia** is your go-to resource for discovering the finest selection of plants tailored to your unique space and lifestyle requirements.
 
 ## Features
 - **Personalized Search:** Find the perfect plants for your space with our search and filter features. Filter plants based on maintenance difficulty, lifestyle preferences such as pet-friendliness.
