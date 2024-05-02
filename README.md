@@ -9,7 +9,7 @@ Welcome to **Folia** - your ultimate destination for plant enthusiasts! Whether 
 - **Feedback Form:** Have feedback or suggestions? We'd love to hear from you! Use our feedback email form to share your thoughts, report issues, or request features.
 
 ## Build
-You can build and run the project using Visual Studio, using the **Debug > Start Without Debugging** option 
+You can build and run the project using Visual Studio, using the **Debug > Start Without Debugging** option.
 
 ## Technologies
 - .NET 8
